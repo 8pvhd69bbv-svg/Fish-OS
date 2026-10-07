@@ -17,6 +17,8 @@
 .quickmenu{position:fixed;right:18px;bottom:18px;z-index:30;width:min(360px,calc(100vw - 36px));background:#0b1715f8;border:1px solid #39514a;border-radius:18px;padding:12px;box-shadow:var(--shadow);display:none}.quickmenu.open{display:block}.quickmenu h3{margin:4px 4px 10px}.quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.quickgrid button{background:#12221e;border:1px solid var(--line);padding:12px;border-radius:10px;text-align:left}.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;background:#e7eee9;color:#07100f;padding:11px 14px;border-radius:10px;font-weight:700;transition:.2s;z-index:40}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:900px){.shell{display:block}.side{display:none}.main{padding:16px 14px 90px}.top{padding:0 12px}.search{width:42vw}.stats{grid-template-columns:repeat(2,1fr)}.stats .stat:last-child{grid-column:span 2}.grid{grid-template-columns:repeat(2,1fr)}.columns{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}.hero{align-items:start;flex-direction:column}.quick{width:100%}}
 @media(max-width:430px){.brand{font-size:13px}.brand small{font-size:7px}.search{width:38vw}.grid{gap:8px}.door{min-height:118px;padding:14px}.door h3{font-size:14px}.stat b{font-size:23px}}
+
+.detailview{display:none}.detailview.active{display:block}.detailgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.subcard{background:linear-gradient(145deg,#10201c,#0b1715);border:1px solid var(--line);border-radius:16px;padding:18px}.subcard h3{margin:0 0 6px}.subcard p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.subcard button{margin-top:14px;background:#14231f;border:1px solid var(--line);border-radius:9px;padding:9px 11px}.crumb{font-size:10px;letter-spacing:.15em;color:var(--accent);margin-bottom:6px}.empty{padding:38px;text-align:center;color:var(--muted);border:1px dashed #294039;border-radius:16px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;letter-spacing:.12em;color:var(--muted)}.field input,.field textarea,.field select{background:#0a1512;border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--text);outline:none}.field textarea{min-height:120px;resize:vertical}.formactions{display:flex;gap:8px;margin-top:16px}.primary{background:var(--accent);color:#10130f;border:0;border-radius:10px;padding:11px 15px;font-weight:900}.secondary{background:#0d1917;border:1px solid var(--line);border-radius:10px;padding:11px 15px}.saved{margin-top:14px;padding:12px;border-radius:10px;background:#12221e;border:1px solid #345249;color:#b9d4c9}.clickhint{font-size:10px;color:#6f8980;margin-top:10px}@media(max-width:900px){.detailgrid,.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -71,16 +73,68 @@
 <section class="page" id="resources"><div class="pagehead"><div><h2>Resources</h2><p>Your external fishing internet, organized.</p></div><button class="back" data-page="home">← Home</button></div><div class="grid"><button class="door" onclick="toast('ONX ready')"><div class="ico">🗺</div><h3>ONX</h3><p>Maps and access.</p></button><button class="door" onclick="toast('Google Earth ready')"><div class="ico">🌎</div><h3>Google Earth</h3><p>Research maps.</p></button><button class="door" onclick="toast('ODFW ready')"><div class="ico">🐟</div><h3>ODFW</h3><p>Oregon regulations and information.</p></button><button class="door" onclick="toast('Fly Fishing Forum ready')"><div class="ico">💬</div><h3>Fly Fishing Forum</h3><p>Community research.</p></button><button class="door" onclick="toast('Slide Inn ready')"><div class="ico">🛒</div><h3>Slide Inn</h3><p>Fly shop.</p></button><button class="door" onclick="toast('YouTube ready')"><div class="ico">▶</div><h3>YouTube</h3><p>Video research.</p></button><button class="door" onclick="toast('Instagram ready')"><div class="ico">◎</div><h3>Instagram</h3><p>Fishing media.</p></button><button class="door" onclick="toast('Fishing Calendar ready')"><div class="ico">📅</div><h3>Fishing Calendar</h3><p>External calendar resource.</p></button></div></section>
 <section class="page" id="media"><div class="pagehead"><div><h2>Photos / Video</h2><p>Media stays where it belongs; Fish OS knows where it is.</p></div><button class="back" data-page="home">← Home</button></div><div class="grid"><button class="door"><div class="ico">📷</div><h3>Photo Dump</h3><p>Existing photo archive.</p></button><button class="door"><div class="ico">🎥</div><h3>Fishing Video</h3><p>Existing video library.</p></button><button class="door"><div class="ico">🐟</div><h3>Fish Photos</h3><p>Connected to fish log.</p></button><button class="door"><div class="ico">🪶</div><h3>Fly Photos</h3><p>Connected to fly patterns.</p></button></div></section>
 <section class="page" id="ai"><div class="pagehead"><div><h2>AI Archive</h2><p>Important fishing conversations become part of Fish OS.</p></div><button class="back" data-page="home">← Home</button></div><div class="card list"><div class="row"><div class="badge">PROJECT</div><div class="rowmain"><b>Fly Lord</b><small>Fishing calendar / journal / research system</small></div></div><div class="row"><div class="badge">RESEARCH</div><div class="rowmain"><b>Alaska / Katmai</b><small>Trip research, species, lodge, tactics</small></div></div><div class="row"><div class="badge">RESEARCH</div><div class="rowmain"><b>Baja / La Paz</b><small>Roosterfish trip research and results</small></div></div><div class="row"><div class="badge">RESEARCH</div><div class="rowmain"><b>Destination Planning</b><small>Louisiana · Christmas Island · Mongolia · future trips</small></div></div></div></section>
+<section class="detailview" id="workspace"><div class="pagehead"><div><div class="crumb" id="workspaceCrumb">FISH OS</div><h2 id="workspaceTitle">Workspace</h2><p id="workspaceDesc">Explore this part of your fishing system.</p></div><button class="back" id="workspaceBack">← Back</button></div><div id="workspaceBody"></div></section>
 </main></div>
 <div class="quickmenu" id="quick"><h3>＋ Quick Add</h3><div class="quickgrid"><button onclick="toast('New fish entry')">🐟 Log Fish</button><button onclick="toast('New journal entry')">📓 Journal Note</button><button onclick="toast('New trip')">🎣 Add Trip</button><button onclick="toast('New location')">📍 Add Location</button><button onclick="toast('New research')">🔬 Add Research</button><button onclick="toast('New fly pattern')">🪶 Add Fly</button><button onclick="toast('New gear')">🎒 Add Gear</button><button onclick="toast('New purchase')">🧾 Add Purchase</button></div></div>
 <div class="toast" id="toast"></div>
 <script>
 const pages=[...document.querySelectorAll('.page')], nav=[...document.querySelectorAll('[data-page]')];
-function show(id){pages.forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.side [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
+const workspace=document.getElementById('workspace');
+let historyStack=[];
+function show(id,push=true){
+  pages.forEach(p=>p.classList.toggle('active',p.id===id));
+  workspace.classList.remove('active');
+  document.querySelectorAll('.side [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  if(push) historyStack.push(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
-const quick=document.getElementById('quick');document.getElementById('quickOpen').onclick=()=>quick.classList.toggle('open');document.getElementById('menuBtn').onclick=()=>{document.querySelector('.side').style.display=getComputedStyle(document.querySelector('.side')).display==='none'?'block':'none'};
+function openWorkspace(title,desc,body,crumb=title){
+  pages.forEach(p=>p.classList.remove('active')); workspace.classList.add('active');
+  document.getElementById('workspaceCrumb').textContent='FISH OS // '+crumb.toUpperCase();
+  document.getElementById('workspaceTitle').textContent=title;
+  document.getElementById('workspaceDesc').textContent=desc||'Explore this part of your fishing system.';
+  document.getElementById('workspaceBody').innerHTML=body;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function back(){
+  const prior=historyStack.length>1?historyStack[historyStack.length-2]:'home';
+  historyStack=historyStack.slice(0,-1); show(prior,false);
+}
+document.getElementById('workspaceBack').onclick=back;
+// Every secondary door becomes explorable. No dead buttons.
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.door'); if(!b || b.dataset.page) return;
+  const title=b.querySelector('h3')?.textContent || 'Workspace';
+  const desc=b.querySelector('p')?.textContent || '';
+  const body=`<div class="detailgrid"><div class="subcard"><div class="ico">◈</div><h3>Overview</h3><p>This is the working area for <b>${title}</b>. The structure is ready; detailed records can be connected later.</p><div class="clickhint">PROTOTYPE AREA</div></div><div class="subcard"><div class="ico">＋</div><h3>Add / Capture</h3><p>Create a new item here when we turn this section into a live database.</p><button onclick="quickForm('${title.replace(/'/g,"\\'")}')">＋ Add something</button></div><div class="subcard"><div class="ico">↗</div><h3>Connections</h3><p>Related trips, locations, fish, flies, gear, research, photos, maps, and source documents will connect here.</p><button onclick="toast('Connections layer coming next')">Explore connections</button></div></div><div class="sectiontitle"><h2>WORKBENCH</h2><span>Structure first. Data second.</span></div><div class="empty">No detailed records loaded into this workspace yet.</div>`;
+  openWorkspace(title,desc,body,title);
+});
+const quick=document.getElementById('quick');
+document.getElementById('quickOpen').onclick=()=>quick.classList.toggle('open');
+document.getElementById('menuBtn').onclick=()=>{document.querySelector('.side').style.display=getComputedStyle(document.querySelector('.side')).display==='none'?'block':'none'};
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
-const search=document.getElementById('search');search.addEventListener('keydown',e=>{if(e.key==='Enter'){const q=search.value.trim().toLowerCase();if(!q)return;const hit=pages.find(p=>p.innerText.toLowerCase().includes(q));if(hit)show(hit.id);else toast('No matching section yet');}});
+function quickForm(type){
+ quick.classList.remove('open');
+ const fields={
+  'Log Fish':['Species','Location','Size / weight','Fly / lure','Notes'],
+  'Journal Note':['Date','Location','Conditions','Observation','Notes'],
+  'Add Trip':['Trip name','Location','Dates','Target species','Notes'],
+  'Add Location':['Location name','Water type','Region','Target species','Notes'],
+  'Add Research':['Topic','Source','Category','URL / document','Notes'],
+  'Add Fly':['Pattern','Category','Size','Materials','Notes'],
+  'Add Gear':['Item','Category','Brand / model','Status','Notes'],
+  'Add Purchase':['Item','Store','Date','Cost','Notes']
+ }[type]||['Name','Category','Notes'];
+ const rows=fields.map((f,i)=>`<div class="field ${i===fields.length-1?'full':''}"><label>${f.toUpperCase()}</label>${f==='Notes'?'<textarea placeholder="Capture details…"></textarea>':'<input placeholder="'+f+'">'}</div>`).join('');
+ openWorkspace(type,'Quick capture — nothing is permanently connected yet.',`<div class="card" style="padding:18px"><div class="formgrid">${rows}</div><div class="formactions"><button class="primary" onclick="saveDraft('${type.replace(/'/g,"\\'")}')">Save to prototype</button><button class="secondary" onclick="show('home')">Cancel</button></div><div id="saveMsg"></div></div>`,'QUICK ADD');
+}
+function saveDraft(type){document.getElementById('saveMsg').innerHTML='<div class="saved">Saved as a prototype draft. The database connection layer comes next.</div>';toast(type+' saved');}
+[...quick.querySelectorAll('button')].forEach(b=>b.addEventListener('click',()=>quickForm(b.textContent.replace(/^\S+\s/,'').trim())));
+const search=document.getElementById('search');
+search.addEventListener('keydown',e=>{if(e.key==='Enter'){const q=search.value.trim().toLowerCase();if(!q)return;const hit=pages.find(p=>p.innerText.toLowerCase().includes(q));if(hit){historyStack=[hit.id];show(hit.id,false)}else{const doors=[...document.querySelectorAll('.door')].find(b=>b.innerText.toLowerCase().includes(q));if(doors)doors.click();else toast('No matching section yet')}}});
+window.addEventListener('popstate',()=>back());
+historyStack=['home'];
 </script>
 </div>
 </body>

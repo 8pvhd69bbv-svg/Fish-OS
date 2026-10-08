@@ -24,7 +24,7 @@ function decorate(){
  let toggle=bar.querySelector('#f59-checklist-lock');
  if(!toggle){toggle=document.createElement('button');toggle.id='f59-checklist-lock';toggle.className='btn';toggle.type='button';const add=[...bar.querySelectorAll('button')].find(btn=>/add species/i.test(btn.textContent));if(add)add.after(toggle);else bar.prepend(toggle)}
  const isLocked=locked();
- toggle.textContent=isLocked?'UNLOCK CHECKLIST':'LOCK CHECKLIST';
+ toggle.textContent=isLocked?'EDIT SPECIES CHECKLIST — UNLOCK':'FINISH EDITING — LOCK';
  toggle.title=isLocked?'Enable species caught/target checkboxes temporarily':'Prevent accidental species caught/target changes';
  toggle.setAttribute('aria-pressed',String(!isLocked));
  toggle.onclick=()=>window.fishos59SetChecklistLocked(!locked());

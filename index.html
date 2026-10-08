@@ -177,7 +177,7 @@ function currentHash(){return (location.hash||'#home').slice(1)||'home'}
 function back(){let target=history.state&&history.state.page;if(target){state.page=target;render();window.scrollTo(0,0);return}if(state.stack.length){state.page=state.stack.pop();render();return}state.page='home';render()}
 function go(p){if(p===state.page)return;state.stack.push(state.page);state.page=p;history.pushState({page:p},'',`#${p}`);render();window.scrollTo(0,0)}
 function render(){side();mobile();window.fieldContext=state.page.startsWith('trip-')?window.fieldContext||{}:{};let p=state.page,body='';if(p==='home')body=home();else if(p==='trips')body=trips();else if(p==='trip-katmai')body=tripDetail('katmai');else if(p.startsWith('trip-'))body=tripDetail(p);else if(p==='journal')body=journal();else if(p==='fish-list')body=fishList();else if(p.startsWith('species-'))body=speciesDetail(p);else if(p.startsWith('journal-entry'))body=shell('Journal Entry','Field note workspace.',`<div class="card"><h3>Field note</h3><p>Open and expand the original journal record here. This is where photos, fish measurements, conditions, flies and exact location become linked records.</p></div>`);else if(p==='locations')body=locations();else if(p.startsWith('location-'))body=locationDetail(p);else if(p==='calendar')body=calendar();else if(p==='calendar-help')body=calendarHelp();else if(p==='maps')body=maps();else if(p==='fly-tying')body=flies();else if(p==='fly-patterns')body=flyPatterns();else if(p.startsWith('fly-'))body=flyDetail(p);else if(p==='gear')body=gear();else if(p==='rod-list')body=rodList();else if(p.startsWith('rod-'))body=rodDetail(p.slice(4));else if(p==='inventory')body=inventory();else if(p==='buy-list')body=buyList();else if(p==='purchases'||p.startsWith('purchase-'))body=purchases();else if(p==='research'||p==='podcasts'||p==='todo')body=research();else if(p==='why-i-fish')body=why();else if(p.startsWith('resource-'))body=resourceDetail(p);else if(p==='resources')body=resources();else if(p==='destinations'||p==='destinations-top'||p==='destinations-bust')body=destinations();else if(p.startsWith('destination-'))body=destinationDetail(p);else if(p==='knots')body=knots();else if(p.startsWith('knot-'))body=knotDetail(p);else if(p==='casting')body=casting();else if(p==='packing')body=packing();else if(p==='account')body=account();else if(p==='custom-icons'||p==='icons')body=customIcons();else if(p==='upload-guide')body=uploadGuide();else body=home();document.getElementById('main').innerHTML=body;if(p==='maps'||p==='home')setTimeout(initFishMap,30)}
-function search(q){q=q.trim().toLowerCase();let box=document.getElementById('searchResults');if(!q){box.classList.remove('show');return}let arr=[];const add=(type,title,page,hay)=>{if(title&&String(hay??title).toLowerCase().includes(q))arr.push([type,String(title),page])};const routeFor=k=>({trips:'trips',journal:'journal',locations:'locations',rivers:'locations',flies:'fly-patterns',destinations:'destinations',rods:'gear',buy_rods:'gear',knots:'knots',packing:'packing',buy:'purchases',master_note:'why-i-fish'}[k]||'research');const label=k=>({trips:'Trip',journal:'Journal',locations:'Water',rivers:'Water',flies:'Fly',destinations:'Destination',rods:'Rod',knots:'Knot',packing:'Packing',buy:'Purchase',species:'Species',fish:'Species'}[k]||'Fish OS');const walk=(v,key='DATA')=>{if(v==null)return;if(typeof v==='string'){if(v.toLowerCase().includes(q))add(label(key),v,routeFor(key),v);return}if(Array.isArray(v)){v.forEach((x,i)=>{if(typeof x==='string')add(label(key),x,routeFor(key),x);else if(x&&typeof x==='object'){let title=x.id||x.name||x.title||x.place||x.location||`Record ${i+1}`,page=key==='trips'?`trip-${slug(x.id||title)}`:routeFor(key);add(label(key),title,page,JSON.stringify(x));walk(x,key)}});return}if(typeof v==='object')Object.entries(v).forEach(([k,x])=>walk(x,k))};walk(DATA);let seen=new Set();arr=arr.filter(x=>{let k=x[0]+'|'+x[1]+'|'+x[2];if(seen.has(k))return false;seen.add(k);return true});box.innerHTML=arr.slice(0,40).map(x=>`<div class="result" onclick="go('${x[2]}');document.getElementById('searchResults').classList.remove('show')"><span class="tag">${esc(x[0])}</span> ${esc(x[1])}</div>`).join('')||'<div class="result muted">No indexed result.</div>';box.classList.add('show')}
+function search(q){return window.search(q)}
 function localISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function updateClock(){let el=document.getElementById('liveClock');if(el){let n=new Date();el.textContent=n.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit',second:'2-digit'})+' '+n.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}}
 
@@ -1479,4 +1479,61 @@ window.fishos42NewWindow=()=>openModal('ADD FISHING WINDOW',`<div class="form"><
 window.fishos42SaveWindow=()=>{const date=document.getElementById('f42date').value,title=document.getElementById('f42name').value.trim();if(!date||!title){alert('Enter a date and fishery.');return}DATA.calendar_entries=arr42(DATA.calendar_entries);if(DATA.calendar_entries.some(x=>x.date===date&&norm42(x.title||x.name)===norm42(title))){alert('This fishing window already exists.');return}DATA.calendar_entries.push({date,title,priority:document.getElementById('f42priority').value,notes:document.getElementById('f42notes').value,source:'Manual fishing window'});persistData();closeModal();render()};
 const originalRender42=window.render;window.render=function(){if(state.page==='locations'){try{side();if(typeof mobile==='function')mobile();if(typeof topAuth==='function')topAuth();document.getElementById('main').innerHTML=locations42();return}catch(e){console.error('Locations dedup view',e)}}originalRender42.apply(this,arguments);if(state.page==='tracking'){const el=document.getElementById('main');if(el&&!el.querySelector('#f42tracking')){const block=document.createElement('div');block.id='f42tracking';block.innerHTML=`<div class="card f42-note"><h3>JOURNAL SIZE MENTIONS</h3><p>Review ${journalSuggestions42().length} possible measurements from existing journal records. Do not count them as landed fish until verified.</p><button class="btn" onclick="fishos42JournalReview()">REVIEW</button></div>`;el.appendChild(block)}}};
 })();</script>
+
+<script id="fishos-v45-search-dashboard">
+/* V45: concise search hits and recorded fishing mileage on dashboard. */
+(function(){
+ const escText=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const slugText=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+ const routes={trips:'trips',journal:'journal',locations:'locations',rivers:'locations',flies:'fly-patterns',destinations:'destinations',rods:'rod-list',packing:'packing',buy:'purchases',knots:'knots',species:'fish-tracker',fish:'fish-tracker',trip_sessions:'tracking'};
+ const labels={trips:'Trip',journal:'Journal',locations:'Water',rivers:'Water',flies:'Fly',destinations:'Destination',rods:'Rod',packing:'Packing',buy:'Purchase',knots:'Knot',species:'Species',fish:'Fish',trip_sessions:'Session'};
+ window.search=function(query){
+  const q=String(query??'').trim().toLowerCase(),box=document.getElementById('searchResults');if(!box)return;
+  if(!q){box.classList.remove('show');box.innerHTML='';return;}
+  const hits=[],seen=new Set();
+  function add(type,title,page,content){
+   const text=String(content??'').replace(/\s+/g,' ').trim(),at=text.toLowerCase().indexOf(q);if(at<0)return;
+   const key=type+'|'+title+'|'+page;if(seen.has(key))return;seen.add(key);
+   let from=Math.max(0,at-65);let excerpt=text.slice(from,from+250);if(from)excerpt='…'+excerpt.slice(0,249);if(from+250<text.length)excerpt=excerpt.slice(0,249)+'…';
+   hits.push({type,title:String(title??'Untitled').slice(0,100),page,excerpt:excerpt.slice(0,250)});
+  }
+  function scan(value,kind='DATA',depth=0){
+   if(value==null||depth>6||hits.length>=250)return;
+   if(Array.isArray(value)){value.forEach((v,i)=>{
+    if(typeof v==='string')add(labels[kind]||'Fish OS',v,routes[kind]||'research',v);
+    else if(v&&typeof v==='object'){
+     const title=String(v.id||v.name||v.title||v.place||v.location||'Record '+(i+1));
+     const page=kind==='trips'?'trip-'+slugText(v.id||title):(routes[kind]||'research');
+     const content=Object.values(v).filter(x=>typeof x==='string'||typeof x==='number').join(' • ');
+     add(labels[kind]||'Fish OS',title,page,title+' • '+content);
+     Object.entries(v).forEach(([k,nested])=>{if(nested&&typeof nested==='object')scan(nested,k,depth+1)});
+    }
+   });return;}
+   if(value&&typeof value==='object')Object.entries(value).forEach(([k,v])=>scan(v,k,depth+1));
+   else if(typeof value==='string')add(labels[kind]||'Fish OS',value,routes[kind]||'research',value);
+  }
+  scan(typeof DATA!=='undefined'?DATA:{});
+  box.innerHTML=hits.slice(0,30).map(h=>'<div class="result" data-fishos-search-hit="1"><span class="tag">'+escText(h.type)+'</span> <b>'+escText(h.title)+'</b><div class="muted small">'+escText(h.excerpt)+'</div></div>').join('')||'<div class="result muted">No indexed result.</div>';
+  box.querySelectorAll('[data-fishos-search-hit]').forEach((el,i)=>el.addEventListener('click',()=>{go(hits[i].page);box.classList.remove('show')}));
+  box.classList.add('show');
+ };
+ function addStats(){
+  if(typeof state==='undefined'||state.page!=='home'||typeof DATA==='undefined')return;
+  const stats=document.querySelector('#main .dashstats');if(!stats)return;
+  const sessions=Array.isArray(DATA.trip_sessions)?DATA.trip_sessions:[],trips=Array.isArray(DATA.trips)?DATA.trips:[];
+  const sum=(rows,fields)=>rows.reduce((total,row)=>{if(!row||typeof row!=='object')return total;for(const f of fields){if(row[f]!==undefined&&row[f]!==null&&row[f]!==''){const v=Number(row[f]);return total+(Number.isFinite(v)&&v>=0?v:0)}}return total},0);
+  const fields=['miles_fished','milesFished','distance_fished_miles','distanceMiles','miles'];
+  const withMiles=rows=>rows.filter(row=>row&&fields.some(f=>row[f]!==undefined&&row[f]!==null&&row[f]!==''));
+  const milesRecords=withMiles(sessions).length?withMiles(sessions):withMiles(trips);
+  const miles=milesRecords.length?sum(milesRecords,fields):null;
+  let el=stats.querySelector('[data-fishos-mileage]');if(!el){el=document.createElement('div');el.className='stat link';el.dataset.fishosMileage='1';el.addEventListener('click',()=>go('tracking'));el.innerHTML='<b></b><span>Miles logged</span>';stats.appendChild(el)}
+  el.querySelector('b').textContent=miles===null?'—':miles.toFixed(1);
+  const hoursEl=Array.from(stats.querySelectorAll('.stat')).find(x=>/Hours fished/i.test(x.textContent));
+  if(hoursEl){const rows=sessions.some(x=>x&&x.hours!=null)?sessions:trips;const recorded=rows.some(x=>x&&x.hours!==undefined&&x.hours!==null&&x.hours!=='');hoursEl.querySelector('b').textContent=recorded?sum(rows,['hours']).toFixed(1):'—'}
+ }
+ const priorRender=window.render;
+ if(typeof priorRender==='function')window.render=function(...args){const r=priorRender.apply(this,args);addStats();return r};
+ addStats();
+})();
+</script>
 </body></html>

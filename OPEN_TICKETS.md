@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V55 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V56 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -103,3 +103,11 @@
 - FISH-008/FISH-020 still need map display/regression testing. Distinguish 51 rows from 15 unique named groups; approximate markers must not be presented as exact fishing locations.
 - FISH-022 CLOSED on explicit user confirmation; later packing refinements are separate work.
 - V55 website code includes dashboard version chip, playable standalone Stillwater mini-game, new Outfitters category, newest-first Trips, and additional local SVG icons. `index.html` and matching `Fish_OS_V55.html` are in GitHub. Browser QA still needed.
+
+## V56 — rollout data durability (2026-10-08)
+- P0: Created `public.fishos_data_revisions` with owner-scoped read-only RLS and trigger on `fishos_user_data` INSERT/UPDATE of changed JSON data. Existing account was seeded with one initial snapshot. Trigger active and row count verified; does not cover private file bytes, separate cloud outages or offline backup.
+- P0: Upload page includes portable private JSON + file metadata export, separate private storage file download, and entire accessible revision-history JSON download. The HTML deploy was committed, but these controls must be browser-tested while signed in. Browser multi-download permission may be required. No files or secrets published on GitHub.
+- FISH-042: added prominent dashboard build chip for V56, in addition to prior subtle label. Await live confirmation.
+- FISH-004/FISH-015/FISH-017/FISH-026: PARTIAL; no verified independent Media-drive backup or restoration test; do not close. FISH-029/FISH-030: second-user login and isolation require actual human test; RLS predicates checked.
+- FISH-022 remains CLOSED based on user's observed success.
+- V56 source: `index.html` and same `Fish_OS_V56.html` archive. No private data overwritten.

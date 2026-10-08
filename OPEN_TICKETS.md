@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V52 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V53 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -80,3 +80,14 @@
 - RULE-003: Every HTML release includes both `index.html` and identical `Fish_OS_VNN.html`.
 - RULE-004: Never publish private master backups, personal records, photos, credentials, or secrets to GitHub Pages.
 - RULE-005: No made-up fishing catches, measurements, coordinates, weather, flows, regulations or dates. Keep estimates labeled.
+
+## V53 — P0 implementation / needs real-browser verification
+- FISH-029: FishOS-branded sign-in; Supabase project URL and public publishable key preconfigured; advanced account diagnostics retained at account-settings. **Only public client key is shipped; user password and service-role keys are not embedded**. Test password/magic link, remembered sessions, logout, and separate user.
+- FISH-041: Secure optional FishOS AI gateway and UI. Edge Function `fishos-ai` deployed with verify_jwt=true and user validation in endpoint; the OpenAI API key **is not configured**, so AI answering is currently blocked pending server-side secret setup. No private account records transmitted automatically. Add rate limits, spend controls and model validation before enabling production.
+- FISH-042: Show release version on Dashboard on all future versions: V53 badge attached to active home renderer. Update VERSION constant in each new release; verify page display.
+- FISH-023: Stillwater concept moved to active dedicated route and visible Resources/References sidebar link; not playable.
+- FISH-021/FISH-024: Replaced inactive link-render overrides with active catalog page supporting add/edit and explicit saved category; verify data persistence before closure.
+- FISH-022: Active packing page replaced with item weights, quantities, top total and edit; baseline amounts labeled as estimates, not measured. Verify saved values and page interactions.
+- FISH-033: Added local versioned SVG assets `icons/fish.svg`, `icons/map.svg`, `icons/rod.svg`. No remote icon pack dependency.
+- DATA P0: No master restore test or automatic offline Media-drive backup implemented. FISH-004/015/017/026 remain open. Supabase RLS exists; auth security advisor found leaked password protection disabled — consider enabling in Supabase dashboard.
+- V53 files: `index.html` and identical `Fish_OS_V53.html` archive. GitHub repository updated, Edge Function deployed. Browser/authenticated regression testing **not completed**. All tickets remain open except user-closed FISH-007.

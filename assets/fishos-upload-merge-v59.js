@@ -4,7 +4,7 @@ function page(){
  const main=document.getElementById('main');if(!main||!['upload','uploads','upload-guide'].includes(state.page))return;
  const cards=[...main.querySelectorAll('.card')];
  const title=c=>String(c.querySelector(':scope > .titlebar')?.textContent||'').trim().toUpperCase();
- const files=cards.find(c=>title(c)==='PRIVATE FISH OS FILES'||title(c)==='YOUR PRIVATE FILES'||title(c)==='PRIVATE FILES');
+ const files=cards.find(c=>/^(PRIVATE FISH OS FILES|YOUR PRIVATE FILES|PRIVATE FILES)(?:\s|$)/.test(title(c))&&!title(c).includes('PRIVATE FILE CATALOG'));
  const catalog=cards.find(c=>title(c)==='PRIVATE FILE CATALOG');
  if(!catalog)return;
  if(files&&files!==catalog){

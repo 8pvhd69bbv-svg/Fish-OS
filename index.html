@@ -59,7 +59,17 @@ html,body{background:#cfd0ca;color:var(--text);font-family:Tahoma,Verdana,Arial,
 .authdiag{font:11px/1.45 ui-monospace,Consolas,monospace;background:#eef1eb;border:2px inset #aaa;padding:10px;white-space:pre-wrap}
 @media(max-width:760px){.flyinventory{grid-template-columns:1fr 75px 95px 1fr 65px}.destination-location-map{height:280px}}
 </style>
-</head><body><div class="app"><header class="top"><button class="topbtn" id="menuBtn" aria-label="menu">☰</button><div class="brand">FISH OS<small>FLYS FOR FISH</small></div><div class="topgrow"></div><input id="search" class="search" placeholder="Search Fish OS…"><button class="topbtn" id="searchBtn">SEARCH</button><div id="liveClock" class="topclock" title="Live Fish OS clock"></div><button class="topbtn account" id="accountBtn">LOG IN</button><div id="searchResults" class="searchresults"></div></header><div class="shell" id="shell"><aside class="side" id="side"></aside><main class="main" id="main"></main></div><nav class="mobilebar" id="mobilebar"></nav></div>
+<style id="fishos-v29-style">
+#fishAIBar{position:fixed;bottom:20px;right:20px;z-index:99990;display:flex;gap:6px}
+#fishAIBar button,.fishAIButton{background:#a7d639;color:#172114;border:2px outset #d5efa1;padding:9px 13px;font-weight:800;cursor:pointer;font-family:inherit}
+#fishAIPanel{position:fixed;z-index:99991;bottom:68px;right:20px;width:min(410px,calc(100vw - 25px));max-height:min(78vh,730px);background:#e4e7dc;color:#1d251a;border:3px ridge #8a9c80;box-shadow:0 12px 32px #0009;display:none;flex-direction:column}
+#fishAIPanel.open{display:flex}#fishAIPanel header{padding:12px;background:#394c35;color:#e6ffcf;font-weight:800;display:flex;justify-content:space-between}
+#fishAIHistory{overflow:auto;min-height:150px;max-height:45vh;padding:12px;background:#f4f4ed;white-space:pre-wrap;font-size:13px}
+#fishAIPanel textarea{width:100%;box-sizing:border-box;min-height:70px;padding:8px}#fishAIPanel .fishControls{padding:10px;display:flex;gap:6px;flex-wrap:wrap}
+#fishAIStatus{font-size:12px;padding:4px 10px;color:#445}#fishAIFieldActions{position:fixed;bottom:18px;left:18px;z-index:99989;display:none;gap:4px;flex-wrap:wrap;background:#e5e9e0;border:1px solid #63725d;padding:7px}
+#fishAIFieldActions.visible{display:flex}#fishAIFieldActions button{font-size:11px;padding:7px;cursor:pointer}
+@media(max-width:600px){#fishAIBar{bottom:75px;right:8px}#fishAIPanel{bottom:120px;right:5px;width:calc(100vw - 10px)}#fishAIFieldActions{bottom:125px;left:4px;right:4px}}
+</style></head><body><div class="app"><header class="top"><button class="topbtn" id="menuBtn" aria-label="menu">☰</button><div class="brand">FISH OS<small>FLYS FOR FISH</small></div><div class="topgrow"></div><input id="search" class="search" placeholder="Search Fish OS…"><button class="topbtn" id="searchBtn">SEARCH</button><div id="liveClock" class="topclock" title="Live Fish OS clock"></div><button class="topbtn account" id="accountBtn">LOG IN</button><div id="searchResults" class="searchresults"></div></header><div class="shell" id="shell"><aside class="side" id="side"></aside><main class="main" id="main"></main></div><nav class="mobilebar" id="mobilebar"></nav></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script>
 function slug(v){return String(v??'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 
@@ -706,4 +716,139 @@ function home(){return shell('Fish OS','Private fishing command center.','<div c
  const oldGo=window.go;window.go=function(p){if(p===state.page){render();return}return oldGo(p)};
 })();
 </script>
-</body></html>
+
+<script>
+/* V27: route restoration. Private records remain in authenticated Supabase only. */
+(function(){
+ const E=window.esc||((v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
+ const S=window.slug||((v)=>String(v??'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+ const A=x=>Array.isArray(x)?x:[];
+ const H=(t,sub,body)=>window.shell(t,sub,body);
+ const toText=x=>typeof x==='string'?x:(x?.name||x?.title||x?.id||x?.place||x?.country||'Record');
+ const desc=x=>typeof x==='string'?'':(x?.notes||x?.description||x?.observed||x?.region||'');
+ const card=(title,meta,actions='')=>'<div class="card"><h3>'+E(title)+'</h3><p class="small muted">'+E(meta||'')+'</p>'+actions+'</div>';
+ const tiles=(arr,fn)=>arr.length?'<div class="grid g2">'+arr.map(fn).join('')+'</div>':'<div class="empty">No entries in this collection yet.</div>';
+ const trips=()=>A(DATA.trips),journals=()=>A(DATA.journal);
+ const dateOf=t=>String(t.start_date||t.date||'');
+ const pages={};
+ pages.home=()=>{
+  const t=trips(),j=journals(),r=A(DATA.rods),sessions=A(DATA.trip_sessions),fish=A(DATA.fish),waters=new Set([...t.map(x=>x.place||x.location),...A(DATA.locations).map(x=>x.name)].filter(Boolean));
+  const hours=sessions.reduce((n,x)=>n+(Number(x.hours)||0),0)+t.reduce((n,x)=>n+(Number(x.hours)||0),0);
+  const completed=t.filter(x=>String(x.status||'').toLowerCase()==='completed').length;
+  const next=t.filter(x=>{let d=x.start_date||x.date;return x.status!=='Completed'&&(!/^\d{4}-\d{2}-\d{2}$/.test(d)||d>=new Date().toISOString().slice(0,10))}).sort((a,b)=>dateOf(a).localeCompare(dateOf(b)))[0];
+  const stats=[[t.length,'Trips','trips'],[sessions.length||completed,'Days / sessions','tracking'],[hours?hours.toFixed(1):'—','Hours fished','tracking'],[waters.size,'Waters','locations'],[fish.length,'Fish logged','fish-tracker'],[A(state.fishCaught).length,'Species caught','fish-tracker'],[r.length,'Rods','rod-list']];
+  const ds=[['GOAL','Trip Planner','Research target fisheries and create trip plans.','trips'],['RESEARCH','World Destination Atlas','Fishing destinations and regional research.','destinations'],['FIELD','Journal','Observations and trip-linked fishing records.','journal'],['MAP','Maps & Locations','Waters, saved locations and fishing pins.','maps'],['GEAR','Rod Inventory','Individual rods, reels, fly lines and more.','rod-list'],['FLIES','Fly Pattern Index','Browse patterns and tying materials.','fly-patterns'],['PACK','Packing','Trip-specific loadouts and weights.','packing'],['TRACK','Tracking','Days, hours, sessions and catches.','tracking'],['LIBRARY','Resources','Your saved links and reference resources.','resources']];
+  return '<div class="hero"><div><div class="eyebrow">PRIVATE FISHING COMMAND CENTER</div><h1>FISH OS</h1><p>A wormhole into the FLYS FOR FISH world: trips, waters, flies, gear, research and destinations.</p></div><button class="btn gold" onclick="quick()">+ QUICK ADD</button></div>'+ 
+   '<div class="stats dashstats">'+stats.map(x=>'<div class="stat link" onclick="go(\''+x[2]+'\')"><b>'+E(x[0])+'</b><span>'+E(x[1])+'</span></div>').join('')+'</div>'+
+   '<div class="dashboard-next"><div><div class="kicker">NEXT TRIP / TIME AWARE</div><h2>'+E(next?.id||'No upcoming trip')+'</h2><p>'+E(next?[dateOf(next),next.place||'',next.status||''].filter(Boolean).join(' • '):'Create a trip to populate this panel')+'</p></div><div><button class="btn gold" onclick="go(\''+(next?'trip-'+S(next.id):'trips')+'\')">OPEN</button> <button class="btn" onclick="go(\'calendar\')">CALENDAR</button></div></div>'+
+   '<div class="dashsection v16dash" style="margin-top:14px">'+window.doors(ds.map(x=>({k:x[0],t:x[1],d:x[2],page:x[3]})))+'</div>';
+ };
+ pages.trips=()=>H('Trips','Private trip workspaces, dates, field notes and packing.',
+ '<div class="toolbar"><button class="btn gold" onclick="tripForm()">+ ADD TRIP</button><button class="btn" onclick="go(\'calendar\')">CALENDAR</button><button class="btn" onclick="go(\'packing\')">PACKING</button></div>'+tiles(trips(),(t,i)=>card(t.id||t.title||'Trip '+(i+1),[t.date||t.start_date,t.place||t.location,t.status].filter(Boolean).join(' • '),'<div class="toolbar"><button class="btn" onclick="go(\'trip-'+S(t.id||t.title||'trip-'+i)+'\')">OPEN</button><button class="btn" onclick="selectTripPack('+i+')">PACK</button><button class="btn" onclick="deleteFishTrip('+i+')">DELETE</button></div>')));
+ pages.journal=()=>H('Journal','Personal fishing entries saved to your account.',
+ '<div class="toolbar"><button class="btn gold" onclick="journalForm()">+ NEW ENTRY</button></div>'+tiles(journals(),(j,i)=>card(j.title||j.id||'Journal '+(i+1),[j.date,j.location,j.observed,j.result,j.notes,A(j.species).join(', ')].filter(Boolean).join(' • '))));
+ pages.locations=()=>H('Locations','Private fishing water index and map.',
+ '<div class="card"><div id="fishMap" class="map" style="min-height:390px"></div></div><div class="toolbar"><button class="btn" onclick="go(\'maps\')">FULL MAPS</button><button class="btn" onclick="go(\'trips\')">TRIPS</button></div>'+tiles(A(DATA.locations),(x,i)=>card(toText(x),[x.region,A(x.tags).join(' · '),A(x.holes).join(', ')].filter(Boolean).join(' • '),'<button class="btn" onclick="go(\'location-'+S(toText(x))+'\')">OPEN LOCATION</button>')));
+ pages.maps=()=>H('Maps','Fishing waters and private saved pins.','<div class="card"><div id="fishMap" class="map" style="min-height:500px"></div></div><div class="toolbar"><button class="btn" onclick="go(\'locations\')">LOCATIONS</button></div>');
+ pages.calendar=()=>{
+  const now=new Date(),first=new Date(now.getFullYear(),now.getMonth()+Number(state.calendarOffset||0),1),year=first.getFullYear(),month=first.getMonth(),days=new Date(year,month+1,0).getDate(),offset=first.getDay();
+  const events=[...trips(),...A(DATA.calendar_entries)].map(x=>({name:x.title||x.id||x.name||'Trip',date:String(x.start_date||x.date||'').slice(0,10),place:x.place||x.location||''}));
+  const cells=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>'<div class="card" style="padding:7px;text-align:center">'+d+'</div>').join('')+Array(offset).fill('<div></div>').join('')+Array.from({length:days},(_,i)=>{const day=i+1,k=year+'-'+String(month+1).padStart(2,'0')+'-'+String(day).padStart(2,'0'),items=events.filter(x=>x.date===k);return '<div class="card" style="min-height:80px;padding:9px"><b>'+day+'</b>'+items.map(x=>'<p class="small">'+E(x.name)+'</p>').join('')+'</div>'}).join('');
+  return H('Calendar','Live month view with trip and dated event records.','<div class="toolbar"><button class="btn" onclick="state.calendarOffset=(state.calendarOffset||0)-1;render()">PREVIOUS</button><b>'+E(first.toLocaleDateString(undefined,{month:'long',year:'numeric'}))+'</b><button class="btn" onclick="state.calendarOffset=(state.calendarOffset||0)+1;render()">NEXT</button><button class="btn gold" onclick="tripForm()">+ TRIP</button></div><div class="grid" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px">'+cells+'</div>');
+ };
+ pages['fly-patterns']=()=>{const types=['All','Streamer','Dry Fly','Nymph','Emerger','Saltwater','Warmwater','Egg / Worm','Other'],which=window.flyFilter||'All',typeOf=x=>{if(typeof window.flyType==='function')return window.flyType(x);if(typeof x==='object')return x.type||x.category||'Other';return 'Other'},rows=A(DATA.flies).map((x,i)=>({name:toText(x),type:typeOf(x),i,x})).filter(x=>which==='All'||x.type===which);return H('Fly Pattern Index','Tying patterns and saved fly records.','<div class="toolbar"><button class="btn gold" onclick="flyForm()">+ ADD PATTERN</button><button class="btn" onclick="go(\'fly-tying\')">MATERIALS</button></div><div class="flytabs">'+types.map(x=>'<button class="flytab '+(which===x?'active':'')+'" onclick="window.flyFilter='+JSON.stringify(x).replace(/"/g,'&quot;')+';render()">'+E(x)+'</button>').join('')+'</div>'+tiles(rows,x=>card(x.name,x.type,'<button class="btn" onclick="go(\'fly-'+S(x.name)+'\')">OPEN</button>')))};
+ pages.research=()=>H('Research','Field research, destinations, resources and reference library.',
+ '<div class="grid g3">'+[['DESTINATIONS','destinations'],['RESOURCES','resources'],['PODCAST NOTES','podcasts'],['LOCATIONS','locations'],['FLY PATTERNS','fly-patterns'],['MAPS','maps']].map(x=>'<div class="door" onclick="go(\''+x[1]+'\')"><h3>'+x[0]+'</h3><p>Open research collection</p></div>').join('')+'</div>'+tiles(A(DATA.links),(x,i)=>card(toText(x),[x.url,x.notes,x.tags].filter(Boolean).join(' • '))));
+ pages.destinations=()=>{const raw=A(DATA.destinations).length?A(DATA.destinations):A(DATA.legacy_v21?.destinations);return H('Destinations','Destination atlas and private priority research.','<div class="toolbar"><button class="btn gold" onclick="destinationForm()">+ DESTINATION</button></div>'+tiles(raw,(x,i)=>card(toText(x),desc(x),'<button class="btn" onclick="go(\'destination-'+S(toText(x))+'\')">OPEN</button>')))};
+ pages.knots=()=>{const groups=[['Fly / tippet',['Clinch','Improved Clinch','Trilene','Davey','Palomar','San Diego Jam']],['Leader / tippet',['Double Uni','Blood / Barrel','Improved Blood','Surgeons','Seaguar','Alberto Knot']],['Loops',['Non-slip Mono Loop','Perfection Loop','Micro Perfection Loop','Homer Rhodes Loop','Figure 8']],['Backing / heavy connections',['Arbor Knot','Nail Knot','FG Knot','Bimini Twist','Albright','Haywire Twist']],['Other recorded knots',A(DATA.knots).filter(n=>!['Clinch','Improved Clinch','Trilene','Davey','Palomar','San Diego Jam','Double Uni','Blood / Barrel','Improved Blood','Surgeons','Seaguar','Alberto Knot','Non-slip Mono Loop','Perfection Loop','Micro Perfection Loop','Homer Rhodes Loop','Figure 8','Arbor Knot','Nail Knot','FG Knot','Bimini Twist','Albright','Haywire Twist'].includes(n))]];return H('Knots','Technique index organized by connection purpose; no unverified strength claims.','<div class="grid g2">'+groups.map(([title,items])=>card(title,items.join(' · '),items.map(x=>'<button class="btn" onclick="go(\'knot-'+S(x)+'\')">'+E(x)+'</button>').join(' '))).join('')+'</div>')};
+ window.knotDetail=function(key){const name=A(DATA.knots).find(n=>S(n)===S(key.replace(/^knot-/,'')))||key.replace(/^knot-/,'').replace(/-/g,' ');return H(name,'Knot technique record.',card('Purpose and method','This knot is in your saved knot index. No validated breaking-strength notes were found in the recovered backup.','<button class="btn" onclick="go(\'knots\')">ALL KNOTS</button>'))};
+ function activePack(){state.packingByTrip=state.packingByTrip||{};const key=state.packTripId||'GENERAL';if(key==='GENERAL')return state.packing||(state.packing=defaultTripPack());return state.packingByTrip[key]||(state.packingByTrip[key]=defaultTripPack())}
+ window.selectTripPack=function(i){const t=trips()[i];if(!t)return;state.packTripId=t.id;localStorage.setItem('fishos_pack_trip',t.id);go('packing')};
+ window.deleteFishTrip=function(i){const arr=trips(),t=arr[i];if(!t)return;const name=t.id||t.title||'this trip';if(!confirm('DELETE TRIP: '+name+'?\n\nThis removes only the trip record and its trip-specific packing checklist. Journal entries, fish, photographs, and locations are NOT deleted. This cannot be undone without restoring a backup.'))return;DATA.trips.splice(i,1);if(state.packingByTrip)delete state.packingByTrip[t.id];if(state.packTripId===t.id)state.packTripId='GENERAL';persistData();render()};
+ pages.packing=()=>{const t=trips(),sel=state.packTripId||'GENERAL';if(sel!=='GENERAL'&&!t.some(x=>x.id===sel))state.packTripId='GENERAL';const pack=activePack(),groups=Object.entries(pack),all=groups.flatMap(([k,v])=>A(v)),done=all.filter(x=>x.done).length,weight=all.reduce((n,x)=>n+(Number(x.weight)||0)*(Number(x.qty)||0),0);return H('Packing','Trip-specific checklist with item quantities and estimated weights.',
+ '<div class="packtripbar"><label>TRIP <select onchange="state.packTripId=this.value;localStorage.setItem(\'fishos_pack_trip\',this.value);render()"><option value="GENERAL">GENERAL</option>'+t.map(x=>'<option value="'+E(x.id)+'" '+(state.packTripId===x.id?'selected':'')+'>'+E(x.id)+'</option>').join('')+'</select></label><span class="packweight">'+done+'/'+all.length+' checked • '+weight.toFixed(1)+' oz</span><button class="btn gold" onclick="addPack()">+ ADD ITEM</button><button class="btn" onclick="tripForm()">+ ADD TRIP</button><button class="btn" onclick="addGearPack()">+ ADD GEAR</button></div>'+
+ '<div class="packscreen">'+groups.map(([g,items])=>'<section class="packcat"><h3>'+E(g)+'</h3>'+A(items).map((x,i)=>'<div class="packgear '+(x.done?'done':'')+'"><button class="packcheck" onclick="togglePack('+JSON.stringify(g).replace(/"/g,'&quot;')+','+i+')">'+(x.done?'X':' ')+'</button><span><b>'+E(x.name)+'</b></span><input aria-label="Details" placeholder="Details" value="'+E(x.details||'')+'" onchange="packEdit('+JSON.stringify(g).replace(/"/g,'&quot;')+','+i+',\'details\',this.value)"><input aria-label="Weight oz" title="Weight in ounces" type="number" min="0" step="0.1" value="'+(Number(x.weight)||0)+'" onchange="packEdit('+JSON.stringify(g).replace(/"/g,'&quot;')+','+i+',\'weight\',this.value)"><input aria-label="Quantity" type="number" min="0" value="'+(Number(x.qty)||0)+'" onchange="packEdit('+JSON.stringify(g).replace(/"/g,'&quot;')+','+i+',\'qty\',this.value)"><button class="packdel" onclick="delPack('+JSON.stringify(g).replace(/"/g,'&quot;')+','+i+')">DEL</button></div>').join('')+'</section>').join('')+'</div>')};
+ const oldSaveTrip=window.saveTripForm;window.saveTripForm=function(){oldSaveTrip(); if(state.page.startsWith('trip-')){const name=state.page.replace(/^trip-/,'');const t=trips().find(x=>S(x.id)===name);if(t){state.packTripId=t.id;localStorage.setItem('fishos_pack_trip',t.id)}}};
+ const oldSavePack=window.savePackItem;window.savePackItem=function(){const name=document.getElementById('npName')?.value.trim();if(!name){alert('Enter an item name.');return}oldSavePack();window.syncCloudDebounced?.()};
+ const oldRender=window.render;
+ window.render=function(){const p=state.page;try{
+   if(Object.hasOwn(pages,p)){if(typeof window.side==='function')side();if(typeof window.mobile==='function')mobile();const main=document.getElementById('main');if(main)main.innerHTML=pages[p]();if(p==='maps'||p==='locations')setTimeout(()=>{try{window.initFishMap?.()}catch(err){console.warn(err)}},70);return}
+   if(p.startsWith('knot-')){if(typeof window.side==='function')side();if(typeof window.mobile==='function')mobile();document.getElementById('main').innerHTML=window.knotDetail(p);return}
+   return oldRender();
+  }catch(err){console.error('V27 page failure',p,err);const main=document.getElementById('main');if(main)main.innerHTML=H('Page error','This page failed to render; no saved record was deleted.',card('Error',err.message||String(err),'<button class="btn" onclick="go(\'account\')">ACCOUNT</button>'))}
+ };
+ window.render();
+})();
+</script>
+<script id="fishos-v28-icons-restored">
+(function(){
+  // Restore original complete V18-V21 icon and private-file management page.
+  window.iconUploadHub=function(){const iconsNow=state.customIcons||{};const keys=[['home','Dashboard'],['trip','Trips'],['fish','Fish / Journal'],['map','Maps / Locations'],['fly','Flies / Knots'],['gear','Gear / Account'],['box','Inventory / Packing'],['book','Research / Resources'],['globe','Destinations']];return shell('Custom Icons + Upload Guide','One page for icon overrides, private file uploads and the Fish OS storage workflow.',`<div class="grid g2"><div class="card"><div class="titlebar">CUSTOM ICON PACK</div><div class="dropzone"><input id="iconFiles" type="file" accept="image/*,.svg" multiple onchange="importIcons(this.files)"><div>SELECT CUSTOM ICON FILES</div></div><div class="iconpicker">${keys.map(([k,n])=>`<div class="iconcard"><div class="iconpreview">${iconsNow[k]?`<img src="${iconsNow[k]}" alt="${esc(n)}">`:`<span class="ico" style="width:42px;height:42px">${I(k)}</span>`}</div><div class="iconname">${esc(n)}</div>${iconsNow[k]?`<button class="btn" onclick="clearIcon('${k}')">CLEAR</button>`:''}</div>`).join('')}</div><div class="toolbar"><button class="btn" onclick="exportIcons()">EXPORT ICON PACK</button><button class="btn" onclick="clearAllIcons()">RESET</button></div></div><div class="card"><div class="titlebar">PRIVATE FISH OS FILES</div><p class="muted small">Photos, PDFs, research, scans and other real files belong in the private Supabase Storage bucket — not the public GitHub repository.</p><div class="form"><label>File category<select id="storageCategory"><option value="photos">Photos</option><option value="research">Research / PDFs</option><option value="journal">Journal files</option><option value="video">Video</option><option value="documents">Documents</option><option value="other">Other</option></select></label><label>Trip ID (optional)<input id="storageTrip" placeholder="Optional trip ID"></label><label>Journal ID (optional)<input id="storageJournal" placeholder="Existing journal record ID"></label><label>Notes (optional)<textarea id="storageNotes" placeholder="What is this file?"></textarea><input id="storageFiles" type="file" multiple><button class="btn gold" onclick="uploadFishFiles()">UPLOAD TO PRIVATE STORAGE</button></div><div id="storageStatus" class="small muted" style="margin-top:10px"></div></div></div><div class="card" style="margin-top:12px"><div class="titlebar">UPLOAD GUIDE // HOW THIS WORKS</div><div class="grid g2"><div><h3>Public GitHub</h3><p class="small">Keep <b>index.html</b>, <b>.nojekyll</b>, custom site icons and small public reference assets here. Do not put private photos, research files, passwords or secrets in the repository.</p></div><div><h3>Private Supabase Storage</h3><p class="small">Your actual files live in a private bucket under your account UUID. Fish OS stores metadata in <b>fishos_files</b>, which can later link each file to a trip, journal entry or location.</p></div></div><div class="notice"><b>Storage setup status:</b> Run the supplied <b>fish_os_supabase_setup.sql</b> once in Supabase SQL Editor. Then sign in to Fish OS and this upload panel can use the private bucket.</div></div><div class="card" style="margin-top:12px"><div class="titlebar">RECENT PRIVATE FILES</div><div id="storageList"><div class="muted">Loading file records…</div></div></div>`)};
+  const priorSide=window.side;
+  window.side=function(){priorSide();const el=document.getElementById('side');if(!el||el.querySelector('[data-v28-icons]'))return;
+    const section=document.createElement('div');section.className='navgroup';section.dataset.v28Icons='1';
+    section.innerHTML='<div class="navlabel">CUSTOMIZE</div><button class="nav" onclick="go(\'custom-icons\')">'+I('gear')+'<span>Custom Icons + Upload Guide</span></button>';
+    el.appendChild(section);
+  };
+  const priorRender=window.render;
+  window.render=function(){if(state.page==='custom-icons'||state.page==='custom-icons-upload-guide'||state.page==='upload-guide'){
+    side();mobile();if(typeof topAuth==='function')topAuth();
+    const root=document.getElementById('main');if(root)root.innerHTML=window.iconUploadHub();
+    setTimeout(()=>{if(typeof listFishFiles==='function')listFishFiles().catch(e=>console.warn('Private storage list:',e))},100);
+    return;
+  }return priorRender();};
+  const priorAccount=window.account;
+  window.account=function(){const html=priorAccount();const shortcut='<div class="card" style="margin-top:12px"><div class="titlebar">CUSTOM ICONS + PRIVATE FILES</div><p class="small muted">Manage your custom navigation icons, private photo/document uploads, and storage guide.</p><button class="btn gold" onclick="go(\'custom-icons\')">OPEN CUSTOM ICONS + UPLOAD GUIDE</button></div>';
+    // Insert before last wrapper, preserving account form and private JSON import controls.
+    return html.replace(/<\/div>\s*<\/div>\s*$/,shortcut+'</div></div>');
+  };
+  if(typeof state!=='undefined'&&typeof state.page==='string')render();
+})();
+</script>
+<script id="fishos-v29-ai">
+(function(){
+'use strict';
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const getURL=()=>localStorage.getItem('fishos_ai_worker_url')||'';
+let activeField=null,history=[];
+function inject(){if(document.getElementById('fishAIBar'))return;
+ document.body.insertAdjacentHTML('beforeend',`<div id="fishAIBar"><button type="button" onclick="FishOSAI.toggle()">AI HELP</button></div>
+ <section id="fishAIPanel" role="dialog" aria-label="Fish OS AI" aria-modal="false"><header><span>FISH OS / AI ASSISTANT</span><button type="button" onclick="FishOSAI.toggle()">CLOSE</button></header>
+ <div id="fishAIHistory" aria-live="polite">Ask questions about fishing or selected private records. Your records are sent only when you select “Include my data”.</div>
+ <div style="padding:8px"><label><input type="checkbox" id="fishAIInclude"> Include my private fishing data with this question</label><textarea id="fishAIQuestion" placeholder="Ask Fish OS AI…"></textarea></div>
+ <div class="fishControls"><button class="fishAIButton" onclick="FishOSAI.ask()">ASK AI</button><button onclick="FishOSAI.settings()">SETTINGS</button><button onclick="FishOSAI.clear()">CLEAR CHAT</button></div><div id="fishAIStatus">Requires sign-in and a configured AI Worker.</div></section>
+ <div id="fishAIFieldActions"><button onclick="FishOSAI.field('summarize')">AI SUMMARIZE</button><button onclick="FishOSAI.field('rewrite')">AI REWRITE</button><button onclick="FishOSAI.field('extract')">AI AUTOFILL</button><button onclick="FishOSAI.hideFields()">X</button></div>`);
+}
+function setStatus(msg){const el=document.getElementById('fishAIStatus');if(el)el.textContent=msg}
+function privateContext(){let d=typeof DATA==='object'?DATA:{};const slim={trips:(d.trips||[]).slice(0,35),journal:(d.journal||[]).slice(0,35),fish:(d.fish||[]).slice(0,40),flies:(d.flies||[]).slice(0,50),rods:(d.rods||[]).slice(0,25),locations:(d.locations||[]).slice(0,25)};return JSON.stringify(slim).slice(0,8500)}
+async function callAI(mode,question,text,include){const url=getURL();if(!/^https:\/\/[^\s]+\.workers\.dev(?:\/.*)?$/.test(url)&&!/^https:\/\/[^\s]+$/.test(url))throw Error('Configure HTTPS Worker URL in AI Settings.');
+ const c=await supaClient();if(!c)throw Error('Supabase is not configured.');
+ const {data:{session},error}=await c.auth.getSession();if(error||!session?.access_token)throw Error('Sign into your Supabase account first.');
+ const response=await fetch(url,{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer '+session.access_token},body:JSON.stringify({mode,question,text,context:include?privateContext():''}),signal:AbortSignal.timeout(45000)});
+ let output;try{output=await response.json()}catch{throw Error('Worker returned an invalid response.')}if(!response.ok)throw Error(output.error||'AI backend error '+response.status);return output.answer||'';
+}
+function append(who,text){history.push({who,text});document.getElementById('fishAIHistory').innerHTML=history.slice(-16).map(x=>'<p><b>'+E(x.who)+':</b> '+E(x.text)+'</p>').join('');document.getElementById('fishAIHistory').scrollTop=99999}
+function normalizeJson(s){let v=String(s).replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'').trim();return JSON.parse(v)}
+const journalIds={title:'njTitle',location:'njLocation',date:'njDate',species:'njSpecies',observed:'njObserved',tactics:'njTactics',notes:'njNotes'};
+const tripIds={trip_name:'nfTrip',place:'nfPlace',targets:'nfTargets',start_date:'nfStart',end_date:'nfEnd',notes:'nfNotes'};
+function previewExtract(payload){const allowed={...journalIds,...tripIds};const existing=Object.entries(payload).filter(([k,v])=>allowed[k]&&document.getElementById(allowed[k])&&typeof v==='string'&&v.trim());if(!existing.length){alert('No matching journal or trip fields found on the current form. Open New Journal or New Trip first.');return}
+ let summary=existing.map(([k,v])=>k+': '+v).join('\n');if(!confirm('PROPOSED AI FIELD VALUES\n\n'+summary.slice(0,3500)+'\n\nApply these to the open form? Existing content in those fields will be replaced.'))return;
+ for(const [k,v]of existing){let el=document.getElementById(allowed[k]);if(el?.type==='date'&&!/^\d{4}-\d{2}-\d{2}$/.test(v))continue;el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));}setStatus('Proposed values applied. Review and SAVE manually.');
+}
+window.FishOSAI={
+ toggle(){inject();document.getElementById('fishAIPanel').classList.toggle('open')},
+ clear(){history=[];document.getElementById('fishAIHistory').textContent='Chat cleared.'},
+ settings(){const url=prompt('HTTPS Cloudflare Worker URL. Find this after deploying fish-os-ai. The URL is public; never paste a secret key.',getURL());if(url===null)return;const safe=url.trim().replace(/\/$/,'');if(safe&&!/^https:\/\//.test(safe))return alert('Use an HTTPS address.');localStorage.setItem('fishos_ai_worker_url',safe);setStatus(safe?'AI endpoint saved: '+safe:'AI endpoint removed.');},
+ async ask(){const q=document.getElementById('fishAIQuestion').value.trim(),include=document.getElementById('fishAIInclude').checked;if(!q)return;append('You',q);setStatus('AI request running…');try{let answer=await callAI('chat',q,'',include);append('AI',answer);setStatus('Complete. AI answers may be mistaken.')}catch(e){setStatus(e.message);append('Error',e.message)}},
+ hideFields(){document.getElementById('fishAIFieldActions').classList.remove('visible')},
+ async field(mode){const el=activeField;if(!el||!el.isConnected||!el.value.trim())return alert('Click in a text field containing notes first.');const text=el.value;setStatus('AI analyzing field…');try{const output=await callAI(mode,'',text,false);if(mode==='extract'){previewExtract(normalizeJson(output));return}if(confirm('AI '+mode.toUpperCase()+' PREVIEW:\n\n'+output.slice(0,2600)+'\n\nReplace the current text field with this suggestion?')){el.value=output;el.dispatchEvent(new Event('input',{bubbles:true}));}setStatus('Suggestion ready. Save the form manually.')}catch(e){alert('AI: '+e.message);setStatus(e.message)}},
+ async extractFromNotes(){const el=document.getElementById('njObserved')||document.getElementById('nfNotes');if(!el)return alert('Open a Journal or Trip form.');activeField=el;return this.field('extract')}
+};
+document.addEventListener('focusin',ev=>{let el=ev.target;if(el.matches?.('textarea,input[type="text"],input:not([type])')&&!el.closest('#fishAIPanel')&&!el.closest('#fishAIFieldActions')){activeField=el;document.getElementById('fishAIFieldActions')?.classList.add('visible')}},true);
+// Distinct extraction actions also available on open journal and trip forms; no auto-save.
+const existingJournal=window.journalForm;if(typeof existingJournal==='function')window.journalForm=function(...args){existingJournal.apply(this,args);let el=document.querySelector('#fishModal .modalbody');if(el)el.insertAdjacentHTML('beforeend','<button class="btn" onclick="FishOSAI.extractFromNotes()">AI EXTRACT JOURNAL FIELDS</button>')};
+const existingTrip=window.tripForm;if(typeof existingTrip==='function')window.tripForm=function(...args){existingTrip.apply(this,args);let el=document.querySelector('#fishModal .modalbody');if(el)el.insertAdjacentHTML('beforeend','<button class="btn" onclick="FishOSAI.extractFromNotes()">AI EXTRACT TRIP FIELDS</button>')};
+const oldAccount=window.account;if(typeof oldAccount==='function')window.account=function(...args){let html=oldAccount.apply(this,args);return html+'<div class="card"><h3>AI ASSISTANT / CLOUDFLARE</h3><p>Optional secure AI endpoint. Your account token is verified by Supabase on each request. Private records are sent only when you check “Include my private fishing data”.</p><p class="small">Worker: '+E(getURL()||'Not configured')+'</p><button class="btn" onclick="FishOSAI.settings()">CONFIGURE AI WORKER</button> <button class="btn" onclick="FishOSAI.toggle()">OPEN AI ASSISTANT</button></div>'};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inject);else inject();
+})();
+</script></body></html>

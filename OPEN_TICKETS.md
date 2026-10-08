@@ -1,6 +1,6 @@
 # Fish OS Open Ticket Register
 
-Baseline: V48 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
+Baseline: V49 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
 
 | ID | Ticket | Area | Status | Acceptance / caution |
 |---|---|---|---|---|
@@ -53,3 +53,9 @@ Baseline: V48 (live GitHub HTML); original register baseline V44. All issues bel
 - Search-bar outside-click dismissal remains in V46 onward (FISH-018); user can confirm closure.
 - Authoritative private master and Media-drive synchronization remain open under FISH-004/FISH-015/FISH-017. Do not upload private data to public GitHub Pages.
 - Files: each release has index.html and versioned copy. Tests: GitHub file writes succeeded; no authenticated live browser regression test. No tickets closed.
+
+## V49 release — styling only
+- Added subtle slate blue (#527e99) and fern green (#4f805e) accents for navigation, borders, hover/focus and dashboard statistics. No intended behavior or data changes.
+- Files: `index.html` and matching `Fish_OS_V49.html` created.
+- README updated with architecture, GitHub Pages rules, Supabase privacy, release and ticket management.
+- Automated deployment/browser QA was not completed; previous dashboard/packing/resources issues remain open until user verification. No tickets closed.

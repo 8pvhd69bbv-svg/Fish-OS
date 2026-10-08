@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V53 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V54 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -91,3 +91,8 @@
 - FISH-033: Added local versioned SVG assets `icons/fish.svg`, `icons/map.svg`, `icons/rod.svg`. No remote icon pack dependency.
 - DATA P0: No master restore test or automatic offline Media-drive backup implemented. FISH-004/015/017/026 remain open. Supabase RLS exists; auth security advisor found leaked password protection disabled — consider enabling in Supabase dashboard.
 - V53 files: `index.html` and identical `Fish_OS_V53.html` archive. GitHub repository updated, Edge Function deployed. Browser/authenticated regression testing **not completed**. All tickets remain open except user-closed FISH-007.
+
+## V54 — Remembered login restoration
+- FISH-029: Added automatic Supabase getSession bootstrap and delayed signed-in hydration for returning users; updated dashboard version to V54. Signed-in browser test remains necessary; did not weaken RLS.
+- FISH-042: Dashboard release label V54 is in the active renderer code. No verification against user's session yet.
+- Releases: `index.html` and identical `Fish_OS_V54.html`. FISH-041 AI gateway still lacks server-side OpenAI API key and remains unavailable.

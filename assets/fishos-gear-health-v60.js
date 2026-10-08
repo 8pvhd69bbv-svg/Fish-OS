@@ -28,12 +28,19 @@ function page(){
 const saved=store(),total=sections.reduce((n,s)=>n+items(s[1]).length,0),needs=Object.values(saved).filter(x=>['Poor','Replace'].includes(x.condition)).length;
 const brandCounts=new Map();
 for(const [,cat] of sections)items(cat).forEach((x,i)=>{const label=brand(cat,x,i)||'Unassigned';brandCounts.set(label,(brandCounts.get(label)||0)+1)});
-const brandIndex='<div class="card" style="margin-top:12px"><h3>Gear by Brand</h3><p class="muted">Inventory-linked brands. Select ASSESS to change a brand without rewriting your rod name, model or weight.</p><div class="toolbar">'+[...brandCounts.entries()].sort((a,b)=>b[1]-a[1]).map(([name,count])=>'<span class="tag">'+H(name)+' ('+count+')</span>').join('')+'</div></div>';
+const brandIndex='<div class="card" style="margin-top:12px"><h3>Gear by Brand</h3><p class="muted">Inventory-linked brands. Select ASSESS to change a brand without rewriting your rod name, model or weight.</p><button class="btn" id="fishos60savebrands">SAVE INVENTORY BRANDS TO PRIVATE ACCOUNT</button><div class="toolbar">'+[...brandCounts.entries()].sort((a,b)=>b[1]-a[1]).map(([name,count])=>'<span class="tag">'+H(name)+' ('+count+')</span>').join('')+'</div></div>';
 return shell('Gear Health','Service, condition and replacement tracking linked to your private inventory.',
 '<div class="toolbar"><button class="btn" data-f58nav="tracking">BACK TO TRACKING</button><button class="btn" data-f58nav="inventory">OPEN INVENTORY</button></div><div class="stats"><div class="stat"><b>'+total+'</b><span>Inventory records</span></div><div class="stat"><b>'+needs+'</b><span>Assessments marked Poor / Replace</span></div></div>'+
 sections.map(([title,cat,route])=>{const rows=items(cat);return '<section class="card" style="margin-top:14px"><div class="toolbar"><h3>'+H(title)+' · '+rows.length+'</h3><button class="btn" data-f58nav="'+route+'">OPEN INVENTORY</button></div>'+
 (rows.length?rows.map((x,i)=>{const v=saved[code(cat,x,i)]||{};return '<div class="row"><div><b>'+H(name(cat,x,i))+'</b><div class="meta"><strong>BRAND: '+H(brand(cat,x,i)||'Not assigned')+'</strong> · '+H([v.condition||'Not assessed',v.next_review?'Next review: '+v.next_review:'',v.replacement_year?'Replacement year: '+v.replacement_year:''].filter(Boolean).join(' · '))+'</div></div><button class="btn" data-f58assess="'+cat+':'+i+'">ASSESS</button></div>'}).join(''):'<p class="muted">No '+H(title.toLowerCase())+' in the linked inventory. Nothing has been invented; add items through Inventory first.</p>')+'</section>'}).join(''));
 }
+window.fishos60SaveBrands=function(){
+ if(!state.profile?.loggedIn||!state.privateHydrated){alert('Sign in to your private FishOS account first.');return}
+ const b=brands();let count=0;
+ for(const [,category] of sections){items(category).forEach((item,i)=>{const key=code(category,item,i);if(b[key]!==undefined)return;let inferred='';if(category==='rods'&&Array.isArray(item))inferred=String(item[2]||'').trim();else if(item&&typeof item==='object')inferred=String(item.brand||'').trim();if(inferred){b[key]=inferred;count++}})}
+ if(count&&typeof persistData==='function')persistData();
+ alert(count?'Saved '+count+' inventoried brands as separate private fields.':'No new explicit inventory brand fields to copy.');render();
+};
 window.fishos58Assess=(cat,i)=>{
 const item=items(cat)[i];if(item==null)return;
 const k=code(cat,item,i),v=store()[k]||{};
@@ -48,7 +55,7 @@ if(typeof persistData==='function')persistData();closeModal();window.render();
 };
 function decorate(){
 const main=document.getElementById('main');
-if(main){
+if(main){const saveBrands=main.querySelector('#fishos60savebrands');if(saveBrands)saveBrands.onclick=window.fishos60SaveBrands;
  main.querySelectorAll('[data-f58nav]').forEach(el=>el.onclick=()=>go(el.dataset.f58nav));
  main.querySelectorAll('[data-f58assess]').forEach(el=>el.onclick=()=>{const [cat,i]=el.dataset.f58assess.split(':');window.fishos58Assess(cat,Number(i))});
  if(state.page==='tracking'){

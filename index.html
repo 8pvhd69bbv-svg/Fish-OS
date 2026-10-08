@@ -1160,4 +1160,66 @@ const oldUpload35=window.v34UploadFiles;
 window.v34UploadFiles=async function(){await oldUpload35();await window.v34ListFiles();const status=document.getElementById('v34UploadStatus');if(status&&!/^Upload error:/.test(status.textContent)){status.textContent+=' Catalog refreshed. Use VERIFY beside each uploaded file to confirm the storage object.'}};
 })();
 </script>
+
+<style id="fishos-v36-high-contrast-motion">
+:root{--bg:#bbc2b5;--panel:#f8faf4;--panel2:#fff;--panel3:#e1ead7;--line:#344831;--text:#101b12;--muted:#304634;--gold:#80ce12;--green:#246800;--hot:#af4200;--blue:#164f8c;--shadow:2px 3px 0 #64745b,4px 5px 0 #a2afa0}
+html,body{background:#b9c3b4!important;color:#102015!important}
+.side{background:#c7d2c2!important;border-right:3px solid #263c2c!important}
+.top{background:linear-gradient(#fff,#b8cda9)!important;border-bottom:3px solid #344831!important}
+.card,.stat,.door,.row{background:#fcfef9!important;color:#101b12!important;border:2px solid #52644f!important;box-shadow:var(--shadow)}
+.titlebar,.navlabel{background:linear-gradient(#e8ffd3,#9bd16f)!important;color:#173d09!important;border:1px solid #365d1b!important;font-weight:900!important}
+.nav{color:#152c19!important;border:1px solid transparent!important;font-weight:700!important}
+.nav:hover,.nav:focus-visible{background:#eaffd3!important;color:#092c00!important;border-color:#315c13!important}
+.nav.active{background:linear-gradient(#c8f78c,#83c436)!important;color:#113300!important;border:2px solid #2f6113!important}
+.btn,.topbtn{background:linear-gradient(#fff,#d6dfd0)!important;color:#102512!important;border:2px outset #e8f0e4!important;font-weight:800!important}
+.btn.gold,.btn.primary{background:linear-gradient(#dcff9c,#7cc718)!important;color:#163a00!important;border:2px outset #d7f6ab!important}
+.btn:hover,.topbtn:hover{filter:brightness(1.055);transform:translateY(-1px)}
+.btn:active,.topbtn:active{transform:translateY(1px)}
+input,textarea,select{background:#fff!important;color:#17231a!important;border:2px inset #a4afa0!important}
+.muted,.small.muted{color:#344b39!important}
+a{color:#164f8c} a:hover{color:#103967}
+:focus-visible{outline:3px solid #ad5800!important;outline-offset:2px!important}
+@keyframes fishos36Reveal{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+#main>.hero,#main>.card,#main>.grid,#main>.toolbar,#main>.notice{animation:fishos36Reveal .23s ease-out both}
+.card,.door,.stat,.nav,.btn{transition:background-color .17s ease,border-color .17s ease,filter .17s ease,transform .17s ease}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:760px){#main>.card,#main>.grid{animation-duration:.15s}}
+</style>
+<script id="fishos-v36-system-upload">
+(function(){
+'use strict';
+// Preserve the V35 data functions and only relocate their front-end controls.
+const oldAccount=window.account;
+const oldRender=window.render;
+const oldSide=window.side;
+const oldIconHub=window.iconUploadHub;
+const safe=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function parse(html){const h=document.createElement('div');h.innerHTML=html;return h}
+function title(n){return String(n?.querySelector('.titlebar,h3,h2')?.textContent||'').trim().toUpperCase()}
+function findCard(host,name){return [...host.querySelectorAll('.card')].find(c=>title(c)===name)||null}
+function getOriginalSections(){const h=parse(oldAccount());const coordinate=h.querySelector('#fishosCoordFile')?.closest('.card');const importCard=h.querySelector('#v35ImportCard');return {coordinate:coordinate?.outerHTML||'',importCard:importCard?.outerHTML||''}}
+window.account=function(){const h=parse(oldAccount());for(const id of ['fishosCoordFile','v35ImportCard','storageFiles','storageList']){const n=h.querySelector('#'+id);if(n){const c=n.closest('.card');if(c)c.remove()}}
+for(const c of [...h.querySelectorAll('.card')]){const t=title(c);if(t==='CUSTOM ICONS + PRIVATE FILES'||t==='PRIVATE FISH OS FILES')c.remove()}
+return h.innerHTML};
+function originalPrivateFiles(){if(typeof oldIconHub!=='function')return '';const h=parse(oldIconHub());const card=findCard(h,'PRIVATE FISH OS FILES');return card?.outerHTML||''}
+function iconPage(){const h=parse(oldIconHub());for(const label of ['PRIVATE FISH OS FILES','RECENT PRIVATE FILES']){const c=findCard(h,label);if(c)c.remove()}const heading=h.querySelector('.hero h1');if(heading)heading.textContent='Custom Icons';return h.innerHTML}
+function uploadPage(){const {coordinate,importCard}=getOriginalSections();const privateFiles=originalPrivateFiles();return shell('Upload','One place for private JSON imports, location-coordinate restoration and private files.',
+`<div class="notice"><b>PRIVATE ACCOUNT STORAGE:</b> Your JSON and research files should never be uploaded to public GitHub. Sign in and confirm PRIVATE CLOUD: Saved before importing.</div>
+<div class="grid g2" id="fishos36-import-panels"><div>${importCard||'<div class="card"><h3>Import</h3><p class="muted">Import tool unavailable. Open Account to check private-cloud setup.</p></div>'}</div><div>${coordinate||'<div class="card"><h3>Restore Private Location Coordinates</h3><p class="muted">Coordinate restore unavailable in this build.</p></div>'}</div></div>
+<div class="card" style="margin-top:14px"><div class="titlebar">PRIVATE FISH OS FILES</div><p class="muted small">Upload files of any type allowed by Supabase Storage; keep an editable catalog and verify that each file exists in your private bucket.</p>
+<div class="grid g2"><div class="form"><label>SELECT FILES<input id="v34Files" type="file" multiple></label><label>CATEGORY<select id="v34Category"><option>General</option><option>Destinations</option><option>Species</option><option>Fly Patterns</option><option>Knots</option><option>Maps</option><option>Gear</option><option>Trip Research</option><option>Articles</option><option>Video / Audio</option><option>Other</option></select></label><label>NOTES<textarea id="v34Notes" rows="3" placeholder="File description / location / source"></textarea></label><button class="btn gold" onclick="v34UploadFiles()">UPLOAD TO PRIVATE STORAGE</button><div id="v34UploadStatus" role="status" class="muted small"></div></div>
+<div><label>SEARCH CATALOG<input id="v34Search" placeholder="Filename, category, notes" oninput="v34FilterCatalog(this.value)"></label><button class="btn" onclick="v34ListFiles()">REFRESH PRIVATE FILES</button><div id="v34FileStatus" role="status" class="muted small"></div></div></div>
+<div id="v34FileRows" style="margin-top:14px"><p class="muted">Sign in to load your private file catalog.</p></div></div>
+<div class="card" style="margin-top:14px"><div class="titlebar">UPLOAD GUIDE</div><p>Website code and public icons belong in GitHub. Private fishing files, photos, documents and research belong in the <b>fishos-private</b> Supabase Storage bucket with catalog metadata in <b>fishos_files</b>.</p></div>`)}
+window.side=function(){if(typeof oldSide==='function')oldSide();const el=document.getElementById('side');if(!el)return;
+const groups=[...el.querySelectorAll('.navgroup')];for(const g of groups){const label=g.querySelector('.navlabel')?.textContent?.trim().toUpperCase();const btn=g.querySelector('button');const text=btn?.textContent?.trim().toLowerCase()||'';if(label==='CUSTOMIZE'||label==='CUSTOMIZATION'||label==='SYSTEM'||text==='account'||text.includes('custom icons')||text==='upload')g.remove()}
+const options=[['account','gear','Account'],['upload','box','Upload'],['custom-icons','gear','Custom Icons']];options.forEach(([route,icon,name],i)=>{const g=document.createElement('div');g.className='navgroup';if(i===0){const label=document.createElement('div');label.className='navlabel';label.textContent='SYSTEM';g.appendChild(label)}const b=document.createElement('button');b.className='nav'+(state.page===route?' active':'');b.onclick=()=>go(route);b.innerHTML=I(icon)+'<span>'+name+'</span>';g.appendChild(b);el.appendChild(g)})};
+window.render=function(){const p=state.page;
+if(p==='upload'||p==='custom-icons'||p==='custom-icons-upload-guide'||p==='upload-guide'){
+try{window.side();if(typeof mobile==='function')mobile();if(typeof topAuth==='function')topAuth();const main=document.getElementById('main');if(main)main.innerHTML=p==='upload'?uploadPage():iconPage();if(p==='upload')setTimeout(()=>{if(typeof window.v34ListFiles==='function')window.v34ListFiles()},0)}catch(err){console.error('V36 System view',err);const m=document.getElementById('main');if(m)m.innerHTML='<div class="card"><h3>Page error</h3><p>'+safe(err.message||err)+'</p></div>'}return}
+return oldRender.apply(this,arguments)};
+// Refresh after hydration, preserving the existing navigation & Supabase session.
+try{window.render()}catch(e){console.warn('V36 initial refresh',e)}
+})();
+</script>
 </body></html>

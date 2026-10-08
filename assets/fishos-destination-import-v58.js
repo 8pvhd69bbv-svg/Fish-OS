@@ -7,6 +7,9 @@ function decorate(){
  const box=document.createElement('div');box.className='card';box.id='dest-coordinate-import';box.style.marginTop='14px';
  box.innerHTML='<h3>Private destination coordinates</h3><p>Import approximate reference positions for your own destinations. These are map reference points, not specific fishing spots. Existing saved coordinates are preserved.</p><div class="toolbar"><input id="dest-coordinate-file" type="file" accept=".json,application/json"><button id="dest-coordinate-action" class="btn">REVIEW / IMPORT COORDINATES</button></div><p id="dest-coordinate-status" role="status" class="muted small">Sign in and choose a FishOS destination-coordinates JSON file.</p>';
  const hero=main.querySelector('.hero');if(hero)hero.after(box);else main.prepend(box);
+ const points=DATA.legacy_v21?.destination_map_points||{};const names=Object.keys(points);
+ if(names.length){const summary=document.createElement('div');summary.className='card';summary.innerHTML='<h3>Saved approximate destination references — '+names.length+'</h3><p class="muted">These are regional map references, not exact fishing positions.</p><div class="grid g2">'+names.map(name=>{const x=points[name];if(!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lon)))return '';return '<div class="row"><div><b>'+escape(name)+'</b><div class="meta">'+Number(x.lat).toFixed(3)+', '+Number(x.lon).toFixed(3)+' · approximate</div></div><a class="btn" rel="noopener" target="_blank" href="https://www.openstreetmap.org/?mlat='+encodeURIComponent(x.lat)+'&mlon='+encodeURIComponent(x.lon)+'#map=7/'+encodeURIComponent(x.lat)+'/'+encodeURIComponent(x.lon)+'">MAP</a></div>'}).join('')+'</div>';box.after(summary);}
+
  box.querySelector('#dest-coordinate-action').onclick=async()=>{
  const result=box.querySelector('#dest-coordinate-status');
  try{

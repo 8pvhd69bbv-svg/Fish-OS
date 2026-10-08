@@ -1785,7 +1785,7 @@ let render0=window.render;window.render=function(...a){let res=render0.apply(thi
 <script id="fishos-v53-core">
 (function(){
 'use strict';
-const VER='V54', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
+const VER='V55', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const array=x=>Array.isArray(x)?x:[];
 function boot(){const old=state.supabase||{};if(old.url!==SUPA_URL||!old.key){state.supabase={url:SUPA_URL,key:PUB};localStorage.setItem('fishos_supabase',JSON.stringify(state.supabase));}}
@@ -1795,18 +1795,18 @@ function iconAdd(){const side=document.getElementById('side');if(!side)return;fo
 function loginPage(){
 const current=state.profile?.loggedIn,mail=esc(state.profile?.email||'');
 return shell(current?'My FishOS Account':'Welcome to FishOS','Private fishing records, securely connected to your account.',current?
-'<div class="card"><h3>SIGNED IN</h3><p>'+mail+'</p><p>Cloud status: '+esc(state.cloudStatus||'Checking')+'</p><button class="btn" onclick="logoutSupabase()">SIGN OUT</button><button class="btn" onclick="go(\'upload\')">PRIVATE UPLOADS / BACKUP</button><button class="btn" onclick="go(\'account-settings\')">ADVANCED ACCOUNT TOOLS</button></div>':
+'<div class="card"><h3>SIGNED IN</h3><p>'+mail+'</p><p>Cloud status: '+esc(state.cloudStatus||'Checking')+'</p><button class="btn" onclick="logoutSupabase()">SIGN OUT</button><button class="btn" onclick="go(\'account-settings\')">ADVANCED ACCOUNT TOOLS</button></div>':
 '<div class="card loginbox"><h3>LOG IN</h3><p>Use your FishOS email and password. You do not need to configure the database.</p><div class="form"><label>Email<input type="email" id="pemail" autocomplete="email" placeholder="Email"></label><label>Password<input type="password" id="ppass" autocomplete="current-password"></label><button class="btn gold" onclick="passwordSignIn()">SIGN IN</button><button class="btn" onclick="magicLogin()">EMAIL ME A SIGN-IN LINK</button><p class="muted">No account yet? Ask the FishOS administrator for an invite during testing.</p><p id="f53loginstate" class="muted"></p></div></div>');
 }
 function game(){return shell('Stillwater — Fishing Game','FishOS Arcade / concept', '<div class="f53-game"><div class="eyebrow">FUTURE GAME / OFFLINE CONCEPT</div><h2>STILLWATER</h2><p>Explore water, cast carefully, collect rare fish, and develop a future fish-breeding and growth system.</p><p>Non-playable design preview. No game engine or private-data access.</p></div><div class="card"><h3>THE FISHING LOOP</h3><p>Explore → observe conditions → cast → fight → release or add to game collection. The second arcade-style fish-target game remains a separate prototype.</p></div>')}
 function resources(){
-const data=array(DATA.links),cat=['All','Fly Shop','Regulations','Research'];let active=window.f53category||'All';let query=window.f53search||'';
-const classify=x=>{const stored=String(x.category||'').trim();if(cat.includes(stored)&&stored!=='All')return stored;const s=[x.title,x.name,x.url,x.tags,x.notes].join(' ').toLowerCase();if(/regulat|license|fish and wildlife|fish and game|odfw|wdfw|fwp\.mt|wildlife\.ca\.gov/.test(s))return 'Regulations';if(/fly.?shop|fly.?store|flyfishfood|tridentflyfishing|bigyfly|jstockard|avidmax|the fly shop/.test(s))return 'Fly Shop';return 'Research'};
+const data=array(DATA.links),cat=['All','Fly Shop','Regulations','Research','Outfitters'];let active=window.f53category||'All';let query=window.f53search||'';
+const classify=x=>{const stored=String(x.category||'').trim();if(cat.includes(stored)&&stored!=='All')return stored;const s=[x.title,x.name,x.url,x.tags,x.notes].join(' ').toLowerCase();if(/regulat|license|fish and wildlife|fish and game|odfw|wdfw|fwp\.mt|wildlife\.ca\.gov/.test(s))return 'Regulations';if(/outfitter|fishing guide|guided fishing|fishing lodge|fly fishing lodge|fly fish camp/.test(s))return 'Outfitters';if(/fly.?shop|fly.?store|flyfishfood|tridentflyfishing|bigyfly|jstockard|avidmax|the fly shop/.test(s))return 'Fly Shop';return 'Research'};
 const shown=data.map((x,i)=>({x:typeof x==='string'?{title:x,url:''}:x,i})).filter(z=>(active==='All'||classify(z.x)===active)&&[z.x.title,z.x.url,z.x.notes,z.x.tags].join(' ').toLowerCase().includes(query.toLowerCase()));
 return shell('Resources','Your editable private fishing reference catalog.','<div class="toolbar"><button class="btn gold" onclick="fishos53LinkNew()">+ ADD LINK</button><button class="btn" onclick="go(\'fishing-game\')">STILLWATER GAME</button></div><div class="toolbar">'+cat.map(c=>'<button class="btn '+(active===c?'gold':'')+'" onclick="window.f53category='+JSON.stringify(c).replace(/"/g,'&quot;')+';render()">'+c+'</button>').join('')+'</div><div class="card"><input placeholder="Search your '+data.length+' resource links" value="'+esc(query)+'" oninput="window.f53search=this.value;render()"></div><div class="grid g2">'+shown.map(z=>'<div class="card f53-resource-card"><div class="titlebar">'+esc(classify(z.x))+'</div><h3>'+esc(z.x.title||z.x.url||'Untitled')+'</h3><p>'+esc(z.x.notes||'')+'</p><div class="toolbar"><button class="btn" onclick="fishos53LinkEdit('+z.i+')">EDIT / CATEGORY</button>'+(String(z.x.url||'').startsWith('https://')?'<a class="btn" rel="noopener" target="_blank" href="'+esc(z.x.url)+'">OPEN</a>':'')+'</div></div>').join('')+'</div>');
 }
 window.fishos53LinkNew=()=>window.fishos53LinkEdit(-1);
-window.fishos53LinkEdit=i=>{const x=i<0?{}:DATA.links[i];if(!x)return;const vals=typeof x==='string'?{title:x}:x;openModal('RESOURCE LINK','<div class="form"><label>Title<input id="f53title" value="'+esc(vals.title||'')+'"></label><label>URL<input id="f53url" value="'+esc(vals.url||'')+'"></label><label>Category<select id="f53category">'+['Research','Fly Shop','Regulations'].map(c=>'<option '+(vals.category===c?'selected':'')+'>'+c+'</option>').join('')+'</select></label><label>Notes<textarea id="f53notes">'+esc(vals.notes||'')+'</textarea></label><button class="btn gold" id="f53save">SAVE TO PRIVATE ACCOUNT</button></div>');document.getElementById('f53save').onclick=()=>{const url=document.getElementById('f53url').value.trim();if(!/^https?:\/\/[^ ]+/i.test(url))return alert('Enter a valid http(s) URL');const item={...vals,title:document.getElementById('f53title').value.trim()||url,url,category:document.getElementById('f53category').value,notes:document.getElementById('f53notes').value};DATA.links=array(DATA.links);if(i<0)DATA.links.push(item);else DATA.links[i]=item;persistData();closeModal();render()};};
+window.fishos53LinkEdit=i=>{const x=i<0?{}:DATA.links[i];if(!x)return;const vals=typeof x==='string'?{title:x}:x;openModal('RESOURCE LINK','<div class="form"><label>Title<input id="f53title" value="'+esc(vals.title||'')+'"></label><label>URL<input id="f53url" value="'+esc(vals.url||'')+'"></label><label>Category<select id="f53category">'+['Research','Fly Shop','Regulations','Outfitters'].map(c=>'<option '+(vals.category===c?'selected':'')+'>'+c+'</option>').join('')+'</select></label><label>Notes<textarea id="f53notes">'+esc(vals.notes||'')+'</textarea></label><button class="btn gold" id="f53save">SAVE TO PRIVATE ACCOUNT</button></div>');document.getElementById('f53save').onclick=()=>{const url=document.getElementById('f53url').value.trim();if(!/^https?:\/\/[^ ]+/i.test(url))return alert('Enter a valid http(s) URL');const item={...vals,title:document.getElementById('f53title').value.trim()||url,url,category:document.getElementById('f53category').value,notes:document.getElementById('f53notes').value};DATA.links=array(DATA.links);if(i<0)DATA.links.push(item);else DATA.links[i]=item;persistData();closeModal();render()};};
 function pack(){const id=state.packTripId||'GENERAL';return id==='GENERAL'?(state.packing||(state.packing=defaultTripPack())):ensureTripPack(id)}
 function weight(x){if(x.weight!==''&&x.weight!=null&&Number.isFinite(Number(x.weight))&&Number(x.weight)>0)return Number(x.weight);if(Number(x.baselineWeight)>0)return Number(x.baselineWeight);const s=String(x.name||'').toLowerCase();for(const [re,w] of [[/wader/,48],[/boot/,48],[/rod/,5],[/reel/,8],[/shirt/,7],[/jacket/,18],[/sock/,3],[/fly box/,6],[/tippet|leader/,1],[/hat/,3]])if(re.test(s))return w;return 4}
 function packing(){
@@ -1850,5 +1850,55 @@ setTimeout(()=>{boot();if(!window.supabaseClient&&window.supabase){try{window.su
    c.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session)setTimeout(()=>restore(session).catch(console.warn),0)});
   }catch(e){console.warn('FishOS bootstrap',e)}
  }start();
+})();
+</script><style id="fishos-v55-styles">#fishos-release-chip{display:inline-block;padding:5px 10px;background:#e1efdf;color:#244e3e;border:2px solid #527e99;font:800 12px monospace;margin:8px 0 14px}.f55-pond{display:block;width:100%;max-width:740px;background:#a5d4cb;border:2px solid #517b8c;border-radius:8px;touch-action:manipulation;cursor:crosshair}.f55-game-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:10px 0}.f55-trip-flag{display:inline-block;margin-right:8px;border:1px solid #8da49e;border-radius:4px;padding:2px 6px;white-space:nowrap;font:700 11px system-ui}</style>
+<script id="fishos-v55">
+(function(){
+'use strict';
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let score=0,casts=0,fish={x:100,y:100,r:25},playing=false,animation=0,start=0;
+function release(){
+ const main=document.getElementById('main');if(!main||state.page!=='home')return;
+ let chip=document.getElementById('fishos-release-chip');
+ if(!chip){chip=document.createElement('div');chip.id='fishos-release-chip';const hero=main.querySelector('.hero');if(hero)hero.insertAdjacentElement('afterend',chip);else main.prepend(chip)}
+ chip.textContent='FISH OS V55  /  UPDATED OCT 8, 2026';
+}
+function pond(){
+ const main=document.getElementById('main');if(!main||state.page!=='fishing-game')return;
+ let host=main.querySelector('#f55game');if(host)return;
+ host=document.createElement('section');host.id='f55game';host.className='card';host.innerHTML='<h3>STILLWATER — PLAYABLE PROTOTYPE</h3><p>Cast at the moving fish to score. Prototype only: no account data, network calls, or saved catches.</p><div class="f55-game-bar"><button id="f55start" class="btn gold">START / RESTART</button><span id="f55score">Catches: 0 · Casts: 0</span><span id="f55timer">Time: 30 seconds</span></div><canvas class="f55-pond" id="f55canvas" width="700" height="350" aria-label="Click or tap the moving fish to catch it"></canvas><p id="f55message" class="muted" role="status">Press Start to fish.</p>';
+ const first=main.querySelector('.f53-game');if(first)first.insertAdjacentElement('afterend',host);else main.appendChild(host);
+ const canvas=host.querySelector('canvas'),ctx=canvas.getContext('2d');
+ let vx=1.7,vy=.85,active=false,until=0,raf=0,previous=0;
+ function draw(t){
+  if(!canvas.isConnected){cancelAnimationFrame(raf);return}
+  ctx.fillStyle='#98c8c3';ctx.fillRect(0,0,700,350);
+  for(let i=0;i<8;i++){ctx.beginPath();ctx.strokeStyle='#ffffff55';ctx.lineWidth=2;ctx.ellipse(60+i*85,65+(i%3)*105,45,9,0,0,Math.PI*2);ctx.stroke()}
+  ctx.fillStyle='#3d716c';ctx.fillRect(0,317,700,33);
+  ctx.fillStyle='#305e54';for(let i=0;i<25;i++){ctx.beginPath();ctx.moveTo(i*29,345);ctx.lineTo(i*29+9,310+(i%4)*5);ctx.lineTo(i*29+15,345);ctx.fill()}
+  if(active){const dt=Math.min(2,(t-previous)/16.67||1);fish.x+=vx*dt;fish.y+=vy*dt;if(fish.x<55||fish.x>645)vx*=-1;if(fish.y<55||fish.y>280)vy*=-1}
+  ctx.save();ctx.translate(fish.x,fish.y);if(vx<0)ctx.scale(-1,1);
+  ctx.fillStyle='#2c766e';ctx.beginPath();ctx.ellipse(0,0,36,18,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.moveTo(-27,0);ctx.lineTo(-58,-22);ctx.lineTo(-58,22);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#cde5bc';ctx.beginPath();ctx.arc(19,-5,3,0,Math.PI*2);ctx.fill();ctx.restore();
+  if(active){const remaining=Math.max(0,Math.ceil((until-t)/1000));host.querySelector('#f55timer').textContent='Time: '+remaining+' seconds';if(t>=until){active=false;host.querySelector('#f55message').textContent='Round finished: '+score+' catches in '+casts+' casts.';}}
+  previous=t;if(active)raf=requestAnimationFrame(draw);
+ }
+ host.querySelector('#f55start').onclick=()=>{if(raf)cancelAnimationFrame(raf);score=0;casts=0;fish={x:120,y:150,r:35};vx=2;vy=1.1;active=true;until=performance.now()+30000;previous=performance.now();host.querySelector('#f55score').textContent='Catches: 0 · Casts: 0';host.querySelector('#f55message').textContent='Tap the fish to cast!';raf=requestAnimationFrame(draw)};
+ canvas.onclick=e=>{if(!active)return;const rect=canvas.getBoundingClientRect(),x=(e.clientX-rect.left)*700/rect.width,y=(e.clientY-rect.top)*350/rect.height;casts++;if(Math.hypot(x-fish.x,y-fish.y)<45){score++;fish.x=90+Math.random()*520;fish.y=70+Math.random()*195;vx*=1.07;vy*=1.07;host.querySelector('#f55message').textContent='Fish on!'}else host.querySelector('#f55message').textContent='Missed cast — try again.';host.querySelector('#f55score').textContent='Catches: '+score+' · Casts: '+casts};
+ draw(performance.now());
+}
+function trips(){
+ const all=(Array.isArray(DATA.trips)?DATA.trips:[]).map((t,i)=>({t,i})).sort((a,b)=>{const d=x=>{const v=String(x.date||x.start_date||'').trim(),m=v.match(/\b(19|20)\d{2}(?:-\d{1,2}(?:-\d{1,2})?)?/);if(!m)return -Infinity;const n=Date.parse(m[0].length===4?m[0]+'-01-01':m[0]);return Number.isFinite(n)?n:-Infinity};return d(b.t)-d(a.t)||a.i-b.i});
+ return shell('Trips','Private trips ordered by most recent recorded date. Countries are only shown when known.','<div class="toolbar"><button class="btn gold" onclick="tripForm()">+ ADD TRIP</button><button class="btn" onclick="go(\'calendar\')">CALENDAR</button></div><div class="list">'+all.map(({t})=>{const s=[t.country,t.region,t.place].filter(Boolean).join(' ').toLowerCase();const country=t.country||(/\b(oregon|alaska|usa|united states)\b/.test(s)?'United States':'');const badge=country==='United States'||country==='USA'?'<span class="f55-trip-flag">🇺🇸 USA</span>':country?'<span class="f55-trip-flag">'+safe(country)+'</span>':'<span class="f55-trip-flag">COUNTRY TBD</span>';const route='trip-'+String(t.id||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');return '<div class="row" style="cursor:pointer" data-trip-route="'+safe(route)+'"><div>'+badge+' <b>'+safe(t.id||t.title||'Trip')+'</b><div class="meta">'+safe([t.date||t.start_date,t.place||t.location,t.status].filter(Boolean).join(' · '))+'</div></div><span>›</span></div>'}).join('')+'</div>');
+}
+function tools(){
+ if(state.page==='trips')document.querySelectorAll('#main [data-trip-route]').forEach(b=>b.onclick=()=>go(b.dataset.tripRoute));
+ if(state.page==='account'){const main=document.getElementById('main');if(!main)return;main.querySelectorAll('button').forEach(b=>{if(/PRIVATE UPLOADS|BACKUP/i.test(b.textContent))b.remove()})}
+ release();pond();
+}
+const old=window.render;
+window.render=function(...args){if(state.page==='trips'){side();mobile();if(typeof topAuth==='function')topAuth();const main=document.getElementById('main');if(main)main.innerHTML=trips();tools();return;}const value=old.apply(this,args);tools();return value};
+setTimeout(tools,60);
 })();
 </script></body></html>

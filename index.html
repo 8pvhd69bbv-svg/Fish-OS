@@ -1785,7 +1785,7 @@ let render0=window.render;window.render=function(...a){let res=render0.apply(thi
 <script id="fishos-v53-core">
 (function(){
 'use strict';
-const VER='V53', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
+const VER='V54', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const array=x=>Array.isArray(x)?x:[];
 function boot(){const old=state.supabase||{};if(old.url!==SUPA_URL||!old.key){state.supabase={url:SUPA_URL,key:PUB};localStorage.setItem('fishos_supabase',JSON.stringify(state.supabase));}}
@@ -1828,5 +1828,27 @@ addNav();version();iconAdd();return;
 const r=prevRender.apply(this,args);addNav();version();iconAdd();return r};
 const oldGo=window.go;window.go=function(p){if(['fishing-game','fishos-ai','account-settings'].includes(p)){state.stack=state.stack||[];state.stack.push(state.page);state.page=p;history.pushState({page:p},'',('#'+p));window.render();window.scrollTo(0,0);return;}return oldGo(p)};
 setTimeout(()=>{boot();if(!window.supabaseClient&&window.supabase){try{window.supabaseClient=window.supabase.createClient(SUPA_URL,PUB,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}catch(e){console.warn('FishOS auth setup',e)}}window.render()},30);
+})();
+</script><script id="fishos-v54-session-restore">
+/* FishOS V54 persistent-session bootstrap */
+(function(){
+ const url='https://eccdybgxdlihdowoowzs.supabase.co',key='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
+ async function restore(session){
+  if(!session?.user)return;
+  const changed=state.profile?.userId!==session.user.id;
+  state.profile.loggedIn=true;state.profile.userId=session.user.id;state.profile.email=session.user.email||'';state.profile.mode='Supabase';
+  localStorage.setItem('fishos_profile',JSON.stringify(state.profile));
+  if(changed||!state.privateHydrated){if(typeof window.hydratePrivateData==='function')await window.hydratePrivateData()}
+  if(typeof window.render==='function')window.render();
+ }
+ let attempts=0;function start(){
+  if(!window.supabase){if(++attempts<12)setTimeout(start,250);return}
+  try{
+   state.supabase={url,key};localStorage.setItem('fishos_supabase',JSON.stringify(state.supabase));
+   const c=window.supabaseClient||(window.supabaseClient=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
+   c.auth.getSession().then(({data,error})=>{if(error)console.warn('FishOS session restore',error);else if(data?.session)restore(data.session).catch(console.warn)});
+   c.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session)setTimeout(()=>restore(session).catch(console.warn),0)});
+  }catch(e){console.warn('FishOS bootstrap',e)}
+ }start();
 })();
 </script></body></html>

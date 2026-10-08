@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V54 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V55 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -24,7 +24,7 @@
 | FISH-019 | Dashboard hours fished and miles, V8 layout | OPEN / NOT VERIFIED | Previous patches did not reliably display. Test against live records; no fabricated totals. |
 | FISH-016 | V8-style dashboard full sections | READY FOR VERIFICATION | Next Trip, map, recent, Today, responsive layout. |
 | FISH-020 | Fish map pins for all verified coordinates | OPEN / NOT VERIFIED | Refresh/direct-navigation issue and distinct-coordinate counts. |
-| FISH-022 | Packing weights, quantity totals, rich item edits | OPEN / NOT VERIFIED | Per-item weight, style/type/year/condition and accurate oz/lb totals. |
+| FISH-022 | Packing weights, quantity totals, rich item edits | CLOSED (user confirmed 2026-10-08) | User confirms calculator now working; further improvements to be tracked separately. |
 | FISH-027 | Edit species checklist | READY FOR VERIFICATION | V51 controls need authenticated end-to-end tests. |
 | FISH-028 | Gear health and replacement tracking | PARTIAL | V51 covers rods; extend to other component gear. |
 | FISH-031 | Dashboard heading above CORE | IMPLEMENTED / VERIFY | V52 changes all three legacy navigation arrays to DASHBOARD heading before CORE. |
@@ -96,3 +96,10 @@
 - FISH-029: Added automatic Supabase getSession bootstrap and delayed signed-in hydration for returning users; updated dashboard version to V54. Signed-in browser test remains necessary; did not weaken RLS.
 - FISH-042: Dashboard release label V54 is in the active renderer code. No verification against user's session yet.
 - Releases: `index.html` and identical `Fish_OS_V54.html`. FISH-041 AI gateway still lacks server-side OpenAI API key and remains unavailable.
+
+## V55 — live coordinate completion (2026-10-08)
+- Private Supabase update applied: 27 blank location coordinates populated across nine named map reference locations (repeated database rows). 51/51 location rows now have latitude and longitude; 24 existing coordinate pairs preserved. New pairs clearly flagged `coordinate_accuracy: approximate` with source URLs and `coordinate_note`. No original coordinate was overwritten, no locations were deleted, and no master offline backup/restore test was completed.
+- User-supplied geographic context: Metolius near Sisters, Wickiup Reservoir in Oregon, Imnaha River near Joseph, Bighorn at Fort Smith, Nestucca near Hebo, and Caye Caulker in Belize. Existing coordinates for Metolius, Wickiup, Bighorn and Nestucca were retained because user requested replacements only when specific coordinates are provided; note that existing Nestucca coordinate has not been moved to Hebo.
+- FISH-008/FISH-020 still need map display/regression testing. Distinguish 51 rows from 15 unique named groups; approximate markers must not be presented as exact fishing locations.
+- FISH-022 CLOSED on explicit user confirmation; later packing refinements are separate work.
+- V55 website code includes dashboard version chip, playable standalone Stillwater mini-game, new Outfitters category, newest-first Trips, and additional local SVG icons. `index.html` and matching `Fish_OS_V55.html` are in GitHub. Browser QA still needed.

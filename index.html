@@ -1785,7 +1785,7 @@ let render0=window.render;window.render=function(...a){let res=render0.apply(thi
 <script id="fishos-v53-core">
 (function(){
 'use strict';
-const VER='V55', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
+const VER='V56', SUPA_URL='https://eccdybgxdlihdowoowzs.supabase.co', PUB='sb_publishable_e9ynGOQ9Fxjf-aYCJjK8UQ_Qw1rGFoU';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const array=x=>Array.isArray(x)?x:[];
 function boot(){const old=state.supabase||{};if(old.url!==SUPA_URL||!old.key){state.supabase={url:SUPA_URL,key:PUB};localStorage.setItem('fishos_supabase',JSON.stringify(state.supabase));}}
@@ -1900,5 +1900,45 @@ function tools(){
 const old=window.render;
 window.render=function(...args){if(state.page==='trips'){side();mobile();if(typeof topAuth==='function')topAuth();const main=document.getElementById('main');if(main)main.innerHTML=trips();tools();return;}const value=old.apply(this,args);tools();return value};
 setTimeout(tools,60);
+})();
+</script>
+<style id="fishos-v56-style">#fishos-v56-build{display:block!important;position:relative!important;z-index:3!important;padding:8px 12px!important;margin:12px 0!important;background:#dcebd5!important;color:#173e32!important;border:2px solid #527e99!important;font-weight:900!important;font-family:monospace!important;letter-spacing:.08em!important}.f56-status{font-size:12px}</style>
+<script id="fishos-v56-backups">
+(function(){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function build(){if(state.page!=='home')return;const main=document.getElementById('main');if(!main)return;let label=document.getElementById('fishos-v56-build');if(!label){label=document.createElement('div');label.id='fishos-v56-build';const hero=main.querySelector('.hero');if(hero)hero.after(label);else main.prepend(label)}label.textContent='FISH OS V56   •   2026-10-08   •   '+(state.profile?.loggedIn?'CLOUD ACCOUNT':'SIGN IN TO SAVE');}
+ function backupCard(){const main=document.getElementById('main');if(!main||!['upload','uploads'].includes(state.page)||main.querySelector('#f56backup'))return;const x=document.createElement('section');x.id='f56backup';x.className='card';x.style.marginTop='16px';x.innerHTML='<div class="titlebar">YOUR DATA / PORTABLE BACKUP</div><h3>Export your entire FishOS account</h3><p>Downloads a current private records snapshot plus your private uploaded files, one file at a time. Your record history is automatically captured in the cloud when saved. Store all downloads in a dedicated folder on your device. Existing upload, catalog and sync controls remain unchanged.</p><div class="toolbar"><button class="btn gold" id="f56records">DOWNLOAD RECORDS + MANIFEST</button><button class="btn" id="f56files">DOWNLOAD PRIVATE FILES</button><button class="btn" id="f56history">DOWNLOAD REVISION HISTORY</button></div><p id="f56status" class="f56-status" role="status">Sign in to export. Uploaded media bytes are separate from the JSON record export.</p>';main.appendChild(x);x.querySelector('#f56records').onclick=()=>window.fishos56Export('records');x.querySelector('#f56files').onclick=()=>window.fishos56Export('files');x.querySelector('#f56history').onclick=()=>window.fishos56Export('history')}
+ function save(name,blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),20000)}
+ const stamp=()=>new Date().toISOString().replace(/[:.]/g,'-');
+ window.fishos56Export=async mode=>{
+ const status=document.getElementById('f56status'),say=s=>{if(status)status.textContent=s};
+ try{
+  if(!state.profile?.loggedIn||!state.profile.userId||!window.supabaseClient)throw Error('Sign in to your private account first.');
+  const c=window.supabaseClient,uid=state.profile.userId;
+  if(mode==='history'){
+   say('Retrieving private revisions…');
+   const all=[],size=200;for(let start=0;start<10000;start+=size){const r=await c.from('fishos_data_revisions').select('revision_id,captured_at,revision_type,source_updated_at,snapshot').eq('user_id',uid).order('revision_id',{ascending:true}).range(start,start+size-1);if(r.error)throw r.error;all.push(...(r.data||[]));if((r.data||[]).length<size)break}
+   save('FishOS_revision_history_'+stamp()+'.json',new Blob([JSON.stringify({format:'fishos-revision-history-v1',exported_at:new Date().toISOString(),revisions:all},null,2)],{type:'application/json'}));say('Downloaded '+all.length+' revisions. Keep this file private.');return;
+  }
+  const records=await c.from('fishos_user_data').select('data,updated_at').eq('user_id',uid).maybeSingle();
+  if(records.error)throw records.error;
+  if(!records.data?.data)throw Error('No private account data was returned.');
+  const manifest=await c.from('fishos_files').select('id,bucket_id,path,original_name,mime_type,size_bytes,category,notes,created_at').eq('user_id',uid);
+  if(manifest.error)throw manifest.error;
+  const files=manifest.data||[];
+  const prefix='FishOS_'+stamp();
+  if(mode==='records'){
+   say('Preparing full private record snapshot…');
+   save(prefix+'_records_and_file_manifest.json',new Blob([JSON.stringify({format:'fishos-portable-backup-v1',exported_at:new Date().toISOString(),data_updated_at:records.data.updated_at,data:records.data.data,file_manifest:files,notice:'Uploaded file bytes must be downloaded separately with DOWNLOAD PRIVATE FILES.'},null,2)],{type:'application/json'}));
+   say('Downloaded full private records and '+files.length+' file references. Use DOWNLOAD PRIVATE FILES for the actual media bytes.');return;
+  }
+  if(mode==='files'){
+   say('Downloading '+files.length+' private file(s)… Browser may request permission for multiple downloads.');
+   let downloaded=0;for(const f of files){const r=await c.storage.from(f.bucket_id||'fishos-private').download(f.path);if(r.error)throw r.error;const safeName=String(f.original_name||f.path.split('/').pop()||'file').replace(/[\\/:*?"<>|]/g,'_');save(prefix+'_'+String(downloaded+1).padStart(3,'0')+'_'+safeName,r.data);downloaded++;say('Downloaded '+downloaded+' of '+files.length+' files.');}
+   say('Downloaded '+downloaded+' private file(s). Store alongside the records and manifest.');return;
+  }
+ }catch(e){say('Export error: '+(e.message||String(e)));}
+ };
+ const prior=window.render;window.render=function(...args){const result=prior.apply(this,args);build();backupCard();return result};setTimeout(()=>{build();backupCard()},150);
 })();
 </script></body></html>

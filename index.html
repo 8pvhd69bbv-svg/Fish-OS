@@ -69,6 +69,18 @@ html,body{background:#cfd0ca;color:var(--text);font-family:Tahoma,Verdana,Arial,
 #fishAIStatus{font-size:12px;padding:4px 10px;color:#445}#fishAIFieldActions{position:fixed;bottom:18px;left:18px;z-index:99989;display:none;gap:4px;flex-wrap:wrap;background:#e5e9e0;border:1px solid #63725d;padding:7px}
 #fishAIFieldActions.visible{display:flex}#fishAIFieldActions button{font-size:11px;padding:7px;cursor:pointer}
 @media(max-width:600px){#fishAIBar{bottom:75px;right:8px}#fishAIPanel{bottom:120px;right:5px;width:calc(100vw - 10px)}#fishAIFieldActions{bottom:125px;left:4px;right:4px}}
+</style><style id="fishos-v49-blue-fern-palette">
+/* Decorative colors only; avoid changing positioning, layout, navigation, or data. */
+:root{--fishos-blue-accent:#527e99;--fishos-fern:#4f805e;--fishos-fern-light:#dcebd5}
+.top,.topbar{border-bottom-color:#527e99!important}
+.nav.active,.nav:hover{box-shadow:inset 3px 0 0 #527e99}
+.kicker,.eyebrow{color:#386d88}
+.card{border-color:#9bb9a1}
+.btn:not(.gold):hover,.topbtn:hover{border-color:#527e99}
+input:focus,textarea:focus,select:focus{outline:2px solid #527e99;outline-offset:1px}
+.dashstats .stat:nth-child(even){border-bottom:3px solid #527e99}
+.dashstats .stat:nth-child(odd){border-bottom:3px solid #4f805e}
+.fishos-map-summary{border-left:3px solid #527e99}
 </style></head><body><div class="app"><header class="top"><button class="topbtn" id="menuBtn" aria-label="menu">☰</button><div class="brand">FISH OS<small>FLYS FOR FISH</small></div><div class="topgrow"></div><input id="search" class="search" placeholder="Search Fish OS…"><button class="topbtn" id="searchBtn">SEARCH</button><div id="liveClock" class="topclock" title="Live Fish OS clock"></div><button class="topbtn account" id="accountBtn">LOG IN</button><div id="searchResults" class="searchresults"></div></header><div class="shell" id="shell"><aside class="side" id="side"></aside><main class="main" id="main"></main></div><nav class="mobilebar" id="mobilebar"></nav></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script>
 function slug(v){return String(v??'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}

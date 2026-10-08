@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V56 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V59 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -26,9 +26,9 @@
 | FISH-020 | Fish map pins for all verified coordinates | OPEN / NOT VERIFIED | Refresh/direct-navigation issue and distinct-coordinate counts. |
 | FISH-022 | Packing weights, quantity totals, rich item edits | CLOSED (user confirmed 2026-10-08) | User confirms calculator now working; further improvements to be tracked separately. |
 | FISH-027 | Edit species checklist | READY FOR VERIFICATION | V51 controls need authenticated end-to-end tests. |
-| FISH-028 | Gear health and replacement tracking | PARTIAL | V51 covers rods; extend to other component gear. |
+| FISH-028 | Gear health and replacement tracking | USER ACCEPTED FOR NOW | V58 page covers eight categories, pending future expansion. |
 | FISH-031 | Dashboard heading above CORE | IMPLEMENTED / VERIFY | V52 changes all three legacy navigation arrays to DASHBOARD heading before CORE. |
-| FISH-032 | Combine Storage & Sync Status with Private File Catalog under Uploads | NEW | One coherent page; preserve every action, field, permission, status and file workflow. |
+| FISH-032 | Consolidate private-file panels | READY FOR VERIFICATION | V59 merges Private Files and File Catalog, preserving child controls; Storage & Sync remains separately accessible. |
 | FISH-033 | Improve/install consistent fish, rod, map icon pack | NEW / EVALUATE | Prefer versioned lightweight SVG set with approved license, no emoji; avoid risky unpinned CDNs or wholesale UI replacement. |
 | FISH-018 | Search snippets and outside-click dismissal | READY FOR VERIFICATION | User previously confirmed search fixed. |
 
@@ -52,7 +52,7 @@
 | FISH-036 | Gear warranty wizard | NEW | Type → brand → exact official warranty links; evidence/checklist, claim preparation and form guidance. AI assistance should not submit a warranty claim without review and consent. |
 | FISH-037 | Friend-code invites, messaging, permission-controlled sharing | NEW | Opt-in invitations, block/report, per-friend/group permissions enforced server-side with RLS; no public exposure. |
 | FISH-038 | Installable FishOS app (PWA first) | NEW | Manifest, icons, safe offline shell, update flow, caching rules, testing; offline private data requires explicit security design. |
-| FISH-023 | Stillwater fishing-game concept | CONCEPT | Lightweight isolated page only; do not displace core FishOS work. |
+| FISH-023 | Stillwater prototype | CLOSED — user accepted | Playable placeholder accepted; advanced game separate. |
 | FISH-039 | Stillwater rare-fish collection, breeding and growth | NEW / BACKLOG | Game-only data, isolated code and assets, no impact on real fish records. |
 | FISH-040 | Arcade fish-target game inspired by duck-hunt mechanics | NEW / BACKLOG | Separate prototype/module; lightweight optional launch under References. |
 | FISH-006 | Begin selective Winamp/nature-green visual refinement | STARTED / DESIGN REVIEW | V49 green/blue palette exists. Review selective chrome, LCD and icon styling without affecting function. Preserve existing visual language. |
@@ -111,3 +111,15 @@
 - FISH-004/FISH-015/FISH-017/FISH-026: PARTIAL; no verified independent Media-drive backup or restoration test; do not close. FISH-029/FISH-030: second-user login and isolation require actual human test; RLS predicates checked.
 - FISH-022 remains CLOSED based on user's observed success.
 - V56 source: `index.html` and same `Fish_OS_V56.html` archive. No private data overwritten.
+
+## V59 ticket assessment
+- FISH-042 CLOSED: user confirms visible release label. Top bar now reads V59.
+- FISH-023 CLOSED: user confirms Stillwater playable placeholder works for now.
+- FISH-046 NEW: Maps restored links to onX, Google Earth, USGS National Map (V59); verify browser links.
+- FISH-047 NEW: Dashboard changeable live USGS hydrographs for Nestucca/Deschutes/Wilson; 7-day provisional readings with timestamp/staleness/error handling, V59; test network availability.
+- FISH-048 NEW: Species checklist lock beside Add Species, default locked, guarded caught-target edits; V59; test on Fish List and Fish Tracker.
+- FISH-049 NEW: Reported and estimated Days/Hours on V8 dashboard, 6 assumed hours per day of completed trip date spans; V59; estimates are not historical observations.
+- FISH-050 NEW: Gear collection value fixes 9-column rod-price indexing and adds entered component costs; V59; test inventory after edits.
+- FISH-032: Private Files and catalog panels consolidated into one while retaining all controls; awaiting live verification.
+- FISH-028: user satisfied with initial dedicated Gear Health page.
+- FISH-004/015/017/026/045: fully automatic offsite/local backup + restore remain open and highest priority.

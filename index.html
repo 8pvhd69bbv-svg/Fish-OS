@@ -851,4 +851,104 @@ const existingTrip=window.tripForm;if(typeof existingTrip==='function')window.tr
 const oldAccount=window.account;if(typeof oldAccount==='function')window.account=function(...args){let html=oldAccount.apply(this,args);return html+'<div class="card"><h3>AI ASSISTANT / CLOUDFLARE</h3><p>Optional secure AI endpoint. Your account token is verified by Supabase on each request. Private records are sent only when you check “Include my private fishing data”.</p><p class="small">Worker: '+E(getURL()||'Not configured')+'</p><button class="btn" onclick="FishOSAI.settings()">CONFIGURE AI WORKER</button> <button class="btn" onclick="FishOSAI.toggle()">OPEN AI ASSISTANT</button></div>'};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inject);else inject();
 })();
-</script></body></html>
+</script><script id="fishos-v30-dashboard-fish-flies-map">
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const escapeV=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const listV=x=>Array.isArray(x)?x:[];
+const slugV=x=>String(x??'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const originalRenderV30=window.render;
+const originalSideV30=window.side;
+const originalMobileV30=window.mobile;
+const originalGoV30=window.go;
+window.go=function(p){return originalGoV30(p==='fish-list'?'fish-tracker':p)};
+window.side=function(){originalSideV30();const side=$('side');if(!side)return;side.querySelectorAll('button.nav').forEach(b=>{let label=b.querySelector('span:last-child')?.textContent?.trim();if(label==='Fish List')b.closest('.navgroup')?.remove()})};
+window.mobile=function(){originalMobileV30();const bar=$('mobilebar');if(bar)bar.querySelectorAll('button').forEach(b=>{if(b.textContent.trim()==='Fish List')b.remove()})};
+const pcount=()=>listV(DATA.trips).length;
+function panelLink(t,d,p,k){return `<div class="door" onclick="go('${p}')"><div class="kicker">${escapeV(k)}</div><h3>${escapeV(t)}</h3><p>${escapeV(d)}</p></div>`}
+function dashboardV30(){
+ const trips=listV(DATA.trips),j=listV(DATA.journal),f=listV(DATA.fish),loc=listV(DATA.locations),ss=listV(DATA.trip_sessions),rods=listV(DATA.rods);
+ const hours=ss.reduce((sum,x)=>sum+(Number(x.hours)||0),0)+trips.reduce((sum,x)=>sum+(Number(x.hours)||0),0);
+ const dated=trips.map(t=>({t,d:String(t.start_date||t.date||'').slice(0,10)})).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.d)&&x.d>=new Date().toISOString().slice(0,10)).sort((a,b)=>a.d.localeCompare(b.d));
+ const next=dated[0]?.t, waterCount=new Set([...loc.map(x=>x.name),...trips.map(x=>x.place||x.location)].filter(Boolean)).size;
+ const stats=[[trips.length,'Trips','trips'],[ss.length||'—','Days / sessions','tracking'],[hours?hours.toFixed(1):'—','Hours fished','tracking'],[waterCount,'Waters','locations'],[f.length,'Fish logged','tracking'],[listV(state.fishCaught).length,'Species caught','fish-tracker'],[rods.length,'Rods','rod-list']];
+ const last=j.slice(-3).reverse();
+ const notes=last.length?last.map(x=>`<div class="row" onclick="go('journal')"><div><div class="title">${escapeV(x.title||x.id||x.location||'Field journal')}</div><div class="meta">${escapeV([x.date,x.place||x.location,x.notes||x.observed].filter(Boolean).join(' • ').slice(0,180))}</div></div></div>`).join(''):'<p class="muted">No recent journal records are loaded.</p>';
+ return `<div class="hero"><div><div class="eyebrow">PRIVATE FISHING COMMAND CENTER</div><h1>FISH OS</h1><p>A wormhole into FLYS FOR FISH: trips, fish, waters, flies, gear, research and destinations.</p></div><button class="btn gold" onclick="quick()">+ QUICK ADD</button></div>
+ <div class="stats dashstats">${stats.map(x=>`<div class="stat link" onclick="go('${x[2]}')"><b>${escapeV(x[0])}</b><span>${escapeV(x[1])}</span></div>`).join('')}</div>
+ <div class="dashboard-next"><div><div class="kicker">NEXT TRIP / TIME AWARE</div><h2>${escapeV(next?.id||next?.title||'No upcoming trip')}</h2><p>${escapeV(next?[next.start_date||next.date,next.place||next.location].filter(Boolean).join(' • '):'Add a future trip with Quick Add')}</p></div><div><button class="btn gold" onclick="go('${next?'trip-'+slugV(next.id||next.title):'trips'}')">OPEN</button> <button class="btn" onclick="go('calendar')">CALENDAR</button></div></div>
+ <div class="dashsection" style="margin-top:14px"><div class="grid g3">
+ ${panelLink('Tracking','Days, hours, catches and activity charts.','tracking','TRACK')}
+ ${panelLink('World Destination Atlas','Country-by-country fishing research.','destinations','RESEARCH')}
+ ${panelLink('Fish Tracker','One fish species checklist, under Tracking.','fish-tracker','SPECIES')}
+ ${panelLink('Rod Vault','Your individual rods, reels and line inventory.','rod-list','GEAR')}
+ ${panelLink('Locations','Fishing waters and saved map pins.','locations','FIELD')}
+ ${panelLink('Fishing Pack','Trip-specific checklists and gear weights.','packing','PACK')}
+ </div></div>
+ <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Live fishing map</h3><div class="titlebar">FISH OS // GEOGRAPHIC MAP // DASHBOARD</div><div id="fishMap" class="map" style="min-height:320px"></div><div class="statusbar"><span>WGS84 • locations with saved coordinates</span><span>DRAG / SCROLL TO NAVIGATE</span></div></div><div class="card"><h3>Recent journal</h3><div class="list">${notes}</div><button class="btn" onclick="go('journal')">OPEN JOURNAL</button></div></div>
+ <div class="card" style="margin-top:14px"><h3>Today</h3><p class="muted">${escapeV(new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}))} • ${dated.length} upcoming dated trips</p><button class="btn" onclick="go('calendar')">OPEN LIVE CALENDAR</button></div>`;
+}
+const tabsV=['All','Streamer','Dry Fly','Nymph','Emerger','Saltwater','Warmwater','Egg / Worm','Other'];
+window.fishV30FlyFilter=function(x){window.flyFilter=x;render()};
+function classV(x){if(typeof x==='object'&&x){let t=String(x.type||x.category||'Other');return tabsV.includes(t)?t:'Other'}return 'Other'}
+function fliesV30(){let active=window.flyFilter||'All';const entries=listV(DATA.flies).map((x,i)=>({x,i,name:typeof x==='string'?x:x.name||x.title||`Pattern ${i+1}`,type:classV(x)}));const selected=entries.filter(x=>active==='All'||x.type===active);
+return `${typeof shell==='function'?shell('Fly Pattern Index','All patterns from your private collection. Filter, open, and add patterns.',''): '<h2>Fly Pattern Index</h2>'}<div class="toolbar"><button class="btn gold" onclick="flyForm()">+ ADD PATTERN</button><button class="btn" onclick="go('fly-tying')">TYING MATERIALS</button><span class="muted">${entries.length} patterns</span></div><div class="flytabs">${tabsV.map((t,i)=>`<button class="flytab ${active===t?'active':''}" onclick="fishV30FlyFilter(${JSON.stringify(t).replace(/"/g,'&quot;')})">${escapeV(t)}</button>`).join('')}</div><div class="flygrid">${selected.map(x=>`<div class="flycard" onclick="go('fly-${slugV(x.name)}')"><b>${escapeV(x.name)}</b><div><span class="tag">${escapeV(x.type)}</span></div><div class="muted small">${escapeV(typeof x.x==='object'?(x.x.species||x.x.materials||'Saved fly pattern'):'Imported pattern — category not assigned')}</div></div>`).join('')||'<div class="empty">No patterns in this filter. Select All or add a pattern.</div>'}</div>`;
+}
+function fishV30(){return (typeof fishList==='function'?fishList():'<div class="notice">Fish tracker unavailable.</div>').replace('Fish List','Fish Tracker')}
+function mapEntriesV(){const points=[];const seen=new Set();for(const x of [...listV(DATA.locations),...listV(DATA.trips)]){
+ if(!x||typeof x!=='object')continue;const lat=Number(x.lat??x.latitude),lon=Number(x.lon??x.lng??x.longitude),name=String(x.name||x.place||x.location||x.id||'Fishing location');
+ if(!Number.isFinite(lat)||!Number.isFinite(lon)||!lat||!lon||Math.abs(lat)>90||Math.abs(lon)>180)continue;
+ const id=lat.toFixed(5)+'|'+lon.toFixed(5)+'|'+name.toLowerCase();if(seen.has(id))continue;seen.add(id);points.push({name,lat,lon,note:String(x.coordinate_note||''),page:'location-'+slugV(name)});
+ }return points}
+window.initFishMap=function(){const el=$('fishMap');if(!el||el.dataset.ready==='1')return;if(!window.L){el.innerHTML='<p class="notice">Map tiles are still loading. Refresh if this persists.</p>';return}
+ const points=mapEntriesV();if(!points.length){el.innerHTML='<div class="notice">No location coordinates in your private account yet. Import the V30 private location backup under Account.</div>';return}
+ el.dataset.ready='1';const map=L.map(el,{scrollWheelZoom:true,zoomControl:true,worldCopyJump:true}).setView([44,-121],6);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+ for(const p of points)L.marker([p.lat,p.lon]).addTo(map).bindPopup(`<b>${escapeV(p.name)}</b><p>${escapeV(p.note)}</p><small>${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</small>`);
+ if(points.length>1)map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lon])).pad(.15),{maxZoom:10});else map.setView([points[0].lat,points[0].lon],11);
+ window.fishMap=map;setTimeout(()=>map.invalidateSize(),180);
+};
+const oldSaveFlyV=window.saveFlyForm;
+if(typeof oldSaveFlyV==='function')window.saveFlyForm=function(){oldSaveFlyV();if(state.page==='fly-patterns')render()};
+window.render=function(){const page=state.page==='fish-list'?'fish-tracker':state.page;try{
+  if(page==='home'||page==='fly-patterns'||page==='fish-tracker'){
+   side();mobile();if(typeof topAuth==='function')topAuth();$('main').innerHTML=page==='home'?dashboardV30():page==='fly-patterns'?fliesV30():fishV30();
+   if(page==='home')setTimeout(window.initFishMap,100);return;
+  }
+  originalRenderV30();if((page==='maps'||page==='locations')&&$('fishMap')){const old=$('fishMap');old.dataset.ready='';setTimeout(window.initFishMap,100)}
+ }catch(err){console.error('V30 render',page,err);$('main').innerHTML=`<div class="card"><h3>Page error</h3><p>${escapeV(err.message||err)}</p></div>`}
+};
+window.render();
+})();
+</script><script id="fishos-v30-coordinate-restore">
+(function(){
+ const prevAccount=window.account;
+ if(typeof prevAccount==='function') window.account=function(...args){const prior=prevAccount.apply(this,args);return prior+`<div class="card" style="margin-top:14px"><h3>RESTORE PRIVATE LOCATION COORDINATES</h3><p class="muted">Import your coordinate file here. This updates existing named locations in place, avoids duplicate locations, and saves to your private Supabase account. Do not upload the coordinates file to GitHub.</p><div class="toolbar"><input type="file" id="fishosCoordFile" accept=".json,application/json"><button class="btn gold" onclick="restorePrivateCoordinatesV30()">RESTORE COORDINATES</button></div><p id="fishosCoordStatus" class="small muted"></p></div>`;};
+ window.restorePrivateCoordinatesV30=async function(){const field=document.getElementById('fishosCoordFile'),report=document.getElementById('fishosCoordStatus');
+  try{
+   if(!state.profile?.loggedIn||!state.privateHydrated)throw Error('Sign in and finish loading private data first.');
+   if(!field?.files?.[0])throw Error('Select the private coordinates JSON file.');
+   let file=JSON.parse(await field.files[0].text());file=file.format==='fishos-private'&&file.data?file.data:file;
+   const rows=Array.isArray(file.locations)?file.locations:[];
+   if(!rows.length)throw Error('No location records found in this JSON file.');
+   const additions=[];let updated=0,skipped=0;
+   DATA.locations=Array.isArray(DATA.locations)?DATA.locations:[];
+   for(const source of rows){const lat=Number(source.lat),lon=Number(source.lon);
+    if(!Number.isFinite(lat)||!Number.isFinite(lon)||!lat||!lon||Math.abs(lat)>90||Math.abs(lon)>180){skipped++;continue}
+    const normalized=s=>String(s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,' ');
+    const existing=DATA.locations.find(x=>normalized(x.name||x.id)===normalized(source.name||source.id));
+    if(existing){existing.lat=lat;existing.lon=lon;existing.coordinate_note=source.coordinate_note||existing.coordinate_note||'';updated++}
+    else{additions.push({...source,lat,lon});updated++}
+   }
+   DATA.locations.push(...additions);
+   if(!updated)throw Error('No valid coordinates were found.');
+   if(typeof persistData==='function')persistData();
+   if(typeof window.syncCloud!=='function')throw Error('Cloud save function is unavailable.');
+   const saved=await window.syncCloud();
+   if(!saved)throw Error('Coordinates updated in this browser, but cloud save failed. Check your account status before refreshing.');
+   report.textContent=`Saved ${updated} coordinate records to private cloud (${skipped} unlocated entries skipped). Open Maps to see your pins.`;
+  }catch(err){report.textContent='Restore failed: '+(err.message||err);console.error(err)}
+ };
+})();
+</script>
+</body></html>

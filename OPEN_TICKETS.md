@@ -1,6 +1,6 @@
 # Fish OS Open Ticket Register
 
-Baseline: V46 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
+Baseline: V48 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
 
 | ID | Ticket | Area | Status | Acceptance / caution |
 |---|---|---|---|---|
@@ -46,3 +46,10 @@ Baseline: V46 (live GitHub HTML); original register baseline V44. All issues bel
 - RULE-001: Change only features explicitly requested; flag incidental changes ⚠️.
 - RULE-002: Review tickets before each development pass; only the user closes tickets.
 - RULE-003: Deliver both `index.html` and an identical versioned HTML file.
+## V47–V48 release log — open until verified
+- V47 / FISH-019: reattempted dashboard Hours fished and Miles logged display. User reports prior releases did not display. Needs authenticated browser confirmation.
+- V47 / FISH-022: reattempted packing weights for custom items and prominent total in ounces and pounds. Estimates not saved automatically. Needs checking against actual packing records.
+- V48 / FISH-021: fixed Resources classification in the ACTIVE V39 page renderer (previous implementation patched a different renderer). Shows Fly Shop / Regulations / Research. Display-only categorization; verify categories before saving to Supabase.
+- Search-bar outside-click dismissal remains in V46 onward (FISH-018); user can confirm closure.
+- Authoritative private master and Media-drive synchronization remain open under FISH-004/FISH-015/FISH-017. Do not upload private data to public GitHub Pages.
+- Files: each release has index.html and versioned copy. Tests: GitHub file writes succeeded; no authenticated live browser regression test. No tickets closed.

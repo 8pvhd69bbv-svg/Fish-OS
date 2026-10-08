@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V59 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V60 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -123,3 +123,11 @@
 - FISH-032: Private Files and catalog panels consolidated into one while retaining all controls; awaiting live verification.
 - FISH-028: user satisfied with initial dedicated Gear Health page.
 - FISH-004/015/017/026/045: fully automatic offsite/local backup + restore remain open and highest priority.
+
+## V60 release — pending user validation
+- Research reverted to classic hub. Uploads Research category links privately saved research files back to Research.
+- Dashboard design V9 (site V60) has persistent USGS chart panel; verify live station data.
+- Map initialization retries on navigation without page refresh.
+- Gear Health has an editable Brand field stored independently in private account gear metadata when saved; one-click index for existing inventory brands.
+- Calendar has top-right Upcoming fishing opportunities panel, empty until dated opportunities exist.
+- Open: signed-in browser acceptance tests, data backup and independent restore tests.

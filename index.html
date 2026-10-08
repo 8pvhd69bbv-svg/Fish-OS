@@ -1203,14 +1203,58 @@ for(const c of [...h.querySelectorAll('.card')]){const t=title(c);if(t==='CUSTOM
 return h.innerHTML};
 function originalPrivateFiles(){if(typeof oldIconHub!=='function')return '';const h=parse(oldIconHub());const card=findCard(h,'PRIVATE FISH OS FILES');return card?.outerHTML||''}
 function iconPage(){const h=parse(oldIconHub());for(const label of ['PRIVATE FISH OS FILES','RECENT PRIVATE FILES']){const c=findCard(h,label);if(c)c.remove()}const heading=h.querySelector('.hero h1');if(heading)heading.textContent='Custom Icons';return h.innerHTML}
-function uploadPage(){const {coordinate,importCard}=getOriginalSections();const privateFiles=originalPrivateFiles();return shell('Upload','One place for private JSON imports, location-coordinate restoration and private files.',
-`<div class="notice"><b>PRIVATE ACCOUNT STORAGE:</b> Your JSON and research files should never be uploaded to public GitHub. Sign in and confirm PRIVATE CLOUD: Saved before importing.</div>
-<div class="grid g2" id="fishos36-import-panels"><div>${importCard||'<div class="card"><h3>Import</h3><p class="muted">Import tool unavailable. Open Account to check private-cloud setup.</p></div>'}</div><div>${coordinate||'<div class="card"><h3>Restore Private Location Coordinates</h3><p class="muted">Coordinate restore unavailable in this build.</p></div>'}</div></div>
-<div class="card" style="margin-top:14px"><div class="titlebar">PRIVATE FISH OS FILES</div><p class="muted small">Upload files of any type allowed by Supabase Storage; keep an editable catalog and verify that each file exists in your private bucket.</p>
-<div class="grid g2"><div class="form"><label>SELECT FILES<input id="v34Files" type="file" multiple></label><label>CATEGORY<select id="v34Category"><option>General</option><option>Destinations</option><option>Species</option><option>Fly Patterns</option><option>Knots</option><option>Maps</option><option>Gear</option><option>Trip Research</option><option>Articles</option><option>Video / Audio</option><option>Other</option></select></label><label>NOTES<textarea id="v34Notes" rows="3" placeholder="File description / location / source"></textarea></label><button class="btn gold" onclick="v34UploadFiles()">UPLOAD TO PRIVATE STORAGE</button><div id="v34UploadStatus" role="status" class="muted small"></div></div>
-<div><label>SEARCH CATALOG<input id="v34Search" placeholder="Filename, category, notes" oninput="v34FilterCatalog(this.value)"></label><button class="btn" onclick="v34ListFiles()">REFRESH PRIVATE FILES</button><div id="v34FileStatus" role="status" class="muted small"></div></div></div>
-<div id="v34FileRows" style="margin-top:14px"><p class="muted">Sign in to load your private file catalog.</p></div></div>
-<div class="card" style="margin-top:14px"><div class="titlebar">UPLOAD GUIDE</div><p>Website code and public icons belong in GitHub. Private fishing files, photos, documents and research belong in the <b>fishos-private</b> Supabase Storage bucket with catalog metadata in <b>fishos_files</b>.</p></div>`)}
+function uploadPage(){return shell('Upload','One private intake for files, account backups and fishing records.',`
+<div class="notice"><b>PRIVATE ACCOUNT:</b> Signed-in fishing records are saved in your Supabase database (<b>fishos_user_data</b>). Uploaded documents and photos are stored in your private Supabase Storage bucket (<b>fishos-private</b>), with file details in <b>fishos_files</b>. Retrieve them here under <b>Your Private Files</b> using OPEN or download a data backup with EXPORT. Verify your account is signed in before uploading.</div>
+<div class="card" id="fishos37-intake"><div class="titlebar">UPLOAD · ONE PRIVATE INBOX</div>
+<p class="muted small">Select any document, photo, video, or JSON file. Fish OS identifies its type: known coordinate and backup JSON files are offered for a reviewed import; everything else is cataloged as a private file. Nothing is merged into your fishing records without confirmation.</p>
+<label>SELECT FILES<input id="fishos37Files" type="file" multiple onchange="fishos37Describe()"></label>
+<div class="grid g2"><label>DOCUMENT CATEGORY<select id="v34Category"><option>General</option><option>Destinations</option><option>Species</option><option>Fly Patterns</option><option>Knots</option><option>Maps</option><option>Gear</option><option>Trip Research</option><option>Articles</option><option>Video / Audio</option><option>Other</option></select></label>
+<label>NOTES<textarea id="v34Notes" rows="2" placeholder="Optional description, location, trip or source"></textarea></label></div>
+<div id="fishos37Detected" class="muted small" role="status">No files selected.</div>
+<div class="toolbar"><button class="btn gold" onclick="fishos37Process()">REVIEW / UPLOAD</button><button class="btn" onclick="exportFishOSPrivate()">EXPORT PRIVATE DATA BACKUP</button></div>
+<div id="fishos37Result" class="small muted" role="status"></div>
+<div hidden aria-hidden="true"><input id="v34Files" type="file" multiple><input id="v35ImportFile" type="file"><input id="fishosCoordFile" type="file"><span id="v35ImportStatus"></span><span id="fishosCoordStatus"></span><span id="v34UploadStatus"></span></div>
+</div>
+<div class="card"><div class="titlebar">YOUR PRIVATE FILES · CATALOG & VERIFICATION</div><div class="toolbar"><label>SEARCH<input id="v34Search" placeholder="Filename, category, notes" oninput="v34FilterCatalog(this.value)"></label><button class="btn" onclick="v34ListFiles()">REFRESH FILES</button></div><div id="v34FileStatus" class="small muted" role="status"></div><div id="v34FileRows"><p class="muted">Sign in to load the private catalog.</p></div></div>
+<div class="card"><div class="titlebar">UPLOAD GUIDE · 5 STEPS</div><ol>
+<li><b>Sign in:</b> Open System → Account. Confirm PRIVATE CLOUD shows Saved or your account is connected.</li>
+<li><b>Choose your files:</b> Select one or more files above. Fish OS identifies recognized backup or coordinate JSON.</li>
+<li><b>Review:</b> Use REVIEW / UPLOAD. For fishing-data JSON, review the import preview and confirm. Ordinary files go to private Storage.</li>
+<li><b>Verify:</b> Check the catalog below and click VERIFY next to a file to confirm the storage object exists.</li>
+<li><b>Retrieve or manage:</b> Use OPEN, EDIT or DELETE below. Use EXPORT PRIVATE DATA BACKUP for a copy of structured fishing records. Uploaded documents remain separate from that JSON export.</li></ol>
+<p class="muted small"><b>Storage locations:</b> Records: Supabase <code>public.fishos_user_data</code>. Files: Supabase Storage <code>fishos-private</code>. File catalog: <code>public.fishos_files</code>. Access is linked to your signed-in account.</p></div>`) }
+function fishos37Say(msg){const e=document.getElementById('fishos37Result');if(e)e.textContent=msg}
+function fishos37StatusSummary(){const msgs=['v35ImportStatus','fishosCoordStatus','v34UploadStatus'].map(id=>document.getElementById(id)?.textContent?.trim()).filter(Boolean);if(msgs.length)fishos37Say(msgs.join(' · '))}
+function fishos37IsCoordinates(x){return !!(x&&typeof x==='object'&&(x.format==='fishos-location-coordinates-v30'||x.format==='fishos-private-coordinates-v30'||x.type==='fishos-private-coordinates-v30'||x.coordinate_restore||x.coordinates)&&!(x._fishos_private_backup));}
+function fishos37IsBackup(x){return !!(x&&typeof x==='object'&&(x.format==='fishos-research-import-v1'||x._fishos_private_backup?.version==='v33-consolidated'||(x.format==='fishos-private'&&x.data)||['journal','trips','rods','locations','flies','knot_notes','links'].some(k=>Object.prototype.hasOwnProperty.call(x,k))));}
+function fishos37ToInput(input,file){if(!input)throw Error('Upload handler is unavailable.');const transfer=new DataTransfer();transfer.items.add(file);input.files=transfer.files}
+window.fishos37Describe=async function(){const files=[...document.getElementById('fishos37Files')?.files||[]],out=document.getElementById('fishos37Detected');if(!out)return;out.textContent=files.length?`${files.length} file(s) selected. JSON will be inspected before import; other files will go to the private catalog.`:'No files selected.'};
+window.fishos37Process=async function(){try{
+const selected=[...document.getElementById('fishos37Files')?.files||[]];if(!selected.length)throw Error('Select one or more files.');
+if(!state.profile?.loggedIn)throw Error('Sign in through Account first.');
+const imports=[],ordinary=[];
+for(const file of selected){if(!/\.json$/i.test(file.name)&&file.type!=='application/json'){ordinary.push(file);continue}if(file.size>15e6){ordinary.push(file);continue}
+let json;try{json=JSON.parse(await file.text())}catch{ordinary.push(file);continue}
+if(fishos37IsCoordinates(json))imports.push({file,type:'coords'});
+else if(fishos37IsBackup(json))imports.push({file,type:'backup'});
+else ordinary.push(file);
+}
+if(imports.length>1)throw Error('Select only one recognized private data/coordinate JSON at a time. Other documents can be uploaded together.');
+if(imports.length&&ordinary.length)throw Error('For safety, upload ordinary files separately from private JSON imports.');
+if(imports.length){const item=imports[0];if(item.type==='coords'){
+fishos37ToInput(document.getElementById('fishosCoordFile'),item.file);
+if(typeof window.restorePrivateCoordinatesV30!=='function')throw Error('Coordinate restore function unavailable.');
+fishos37Say('Coordinate import selected. Review the confirmation prompt.');await window.restorePrivateCoordinatesV30();fishos37StatusSummary();
+}else{
+fishos37ToInput(document.getElementById('v35ImportFile'),item.file);
+if(typeof window.v35Import!=='function')throw Error('Private import function unavailable.');
+fishos37Say('Private data import selected. Review the confirmation prompt.');await window.v35Import();fishos37StatusSummary();
+}}
+else{const transfer=new DataTransfer();ordinary.forEach(f=>transfer.items.add(f));document.getElementById('v34Files').files=transfer.files;
+if(typeof window.v34UploadFiles!=='function')throw Error('Private file upload function unavailable.');
+fishos37Say('Uploading '+ordinary.length+' file(s) to private Storage…');await window.v34UploadFiles();fishos37StatusSummary();}
+}catch(e){fishos37Say('Not completed: '+String(e?.message||e))}}
+
 window.side=function(){if(typeof oldSide==='function')oldSide();const el=document.getElementById('side');if(!el)return;
 const groups=[...el.querySelectorAll('.navgroup')];for(const g of groups){const label=g.querySelector('.navlabel')?.textContent?.trim().toUpperCase();const btn=g.querySelector('button');const text=btn?.textContent?.trim().toLowerCase()||'';if(label==='CUSTOMIZE'||label==='CUSTOMIZATION'||label==='SYSTEM'||text==='account'||text.includes('custom icons')||text==='upload')g.remove()}
 const options=[['account','gear','Account'],['upload','box','Upload'],['custom-icons','gear','Custom Icons']];options.forEach(([route,icon,name],i)=>{const g=document.createElement('div');g.className='navgroup';if(i===0){const label=document.createElement('div');label.className='navlabel';label.textContent='SYSTEM';g.appendChild(label)}const b=document.createElement('button');b.className='nav'+(state.page===route?' active':'');b.onclick=()=>go(route);b.innerHTML=I(icon)+'<span>'+name+'</span>';g.appendChild(b);el.appendChild(g)})};

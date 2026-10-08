@@ -1,40 +1,59 @@
 # Fish OS — FLYS FOR FISH
 
-Fish OS is a fishing operating system for trips, locations, fish journals, tracking, rod/reel/line inventories, fly patterns, tying materials, packing, maps, research, and personal records.
+**The fishing operating-system hub for everything surrounding an angler's life.**
 
-## Live website
-https://8pvhd69bbv-svg.github.io/Fish-OS/
+**Live website:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
+**Current application release:** V50
 
-## Current release
-**V49** — subtle slate-blue and fern-green accents. Earlier V45–V48 changes to search, dashboard, map pins, packing, and Resources still require authenticated browser verification. A successful GitHub Pages build alone does not verify UI functionality.
+## The vision
 
-- `index.html` is the **active website** served by GitHub Pages.
-- `Fish_OS_V49.html` is the identical historical release copy; older `Fish_OS_V*.html` files are backups, not the home page.
-- `.nojekyll` should be retained.
-- `OPEN_TICKETS.md` is the authoritative open-ticket list. **Only the user closes tickets.**
-- `Fish_OS_Codex_Handoff.md` (if available locally) describes earlier architecture; use this README and open tickets for newer release status.
+Fish OS is meant to be a personal, interconnected fishing headquarters—not simply a catch log, trip planner, or gear spreadsheet. It brings the practical, historical, creative, and exploratory sides of fishing together in one searchable operating system. A trip becomes more than a date: it can connect to its destination, waterbody, fishing sessions, journal notes, catches, flies, rods, reels, packing list, photos, research, and future return plans.
 
-## Architecture and privacy
-- GitHub Pages hosts application code and public assets **only**.
-- Supabase handles authenticated private records, including `public.fishos_user_data`, private file metadata and `fishos-private` storage.
-- Enforce row-level security (RLS); never expose service-role keys in browser code.
-- **Never commit or publish** private master backups, location exports, trip/journal data, account profiles, personal photos, authentication secrets or private links.
-- Local Windows Media-drive folders are **not automatically synchronized** by these GitHub updates.
-- A complete authoritative private master requires authenticated Supabase export and reconciliation with local private files; do not assume code repository files are the full dataset.
+The long-term aim is a durable record of the angler's fishing life and a workspace for deciding what to do next. Information should be entered once, preserved privately, searchable from anywhere, and reusable across the system.
 
-## Change and release rules
-1. Preserve existing features, UI, mobile compatibility and the retro LimeWire / early-2000s file-browser design.
-2. Change only user-requested features; flag unavoidable incidental changes before release.
-3. Read `OPEN_TICKETS.md` before work, document changes and verification outcomes, and keep unverified tasks open.
-4. Save each tested release as both `index.html` and an identical `Fish_OS_VNN.html` copy.
-5. Distinguish actual observations from estimates; never invent fish records, coordinates, conditions, distances, or weights.
-6. Verify in an authenticated live browser; browser JavaScript render overrides have caused features not to appear even when deployment succeeded.
+### Main areas
 
-## Current development concerns
-- Home dashboard metrics and V8-style arrangement still need user confirmation.
-- Packing custom baseline weights and prominent ounce/pound totals still need user confirmation.
-- Location map markers and distinct saved coordinate count need validation.
-- Resources labels (Fly Shop / Regulations / Research) are inferred for display and may need classification review.
-- Private master consolidation, persistence testing and local-drive backup remain open.
+- **Command center / Dashboard:** live overview, next trip, recent fishing activity, fishing statistics, and map. The requested V8-style arrangement and hours/miles visibility still require verification.
+- **Trips and calendar:** upcoming adventures, completed outings, trip sessions, fishing windows, plans, locations, and follow-up notes.
+- **Waters and maps:** rivers, lakes, destinations, location records, regional research, fish-shaped pins and coordinates. Never invent coordinates.
+- **Journal and tracking:** firsthand field reports, fishing hours, mileage where recorded, catch evidence, species checklists and historical fishing activity. Distinguish verified catches from estimates, sightings or research.
+- **Gear and fishing pack:** rods, reels, lines, fly boxes, field kits, materials, tippet, owned equipment, purchases, and trip-specific packing with editable quantities and estimated/measured weights.
+- **Flies and tying:** pattern catalog, material inventory, fly selection, and personal fly-tying knowledge.
+- **Destination atlas and research:** organized fisheries worldwide, regional notes, operators, research references and opportunities to revisit.
+- **Resources / references:** a searchable, account-scoped link catalog with Fly Shop, Regulations and Research filtering. Classification is currently heuristic/on-screen; stored categories need a separate verification and editing workflow.
+- **Uploads and files:** an interface for private storage and attachments, with a link-entry shortcut to the Resources catalog. The website repository itself is not a private photo archive.
+- **FishOS Arcade:** a separate future recreational branch. V50 introduces the non-playable **Stillwater** concept page under Resources. It does not ship a game engine or touch personal records.
 
-See [OPEN_TICKETS.md](OPEN_TICKETS.md) for ticket IDs and acceptance criteria.
+## Design philosophy
+
+Fish OS adopts the information density and tactile interface of early-2000s desktop utilities and file browsers, with LimeWire/Winamp inspiration. Keep compact navigation, clear organization, useful visual cues, mobile usability, and restrained nature greens with selective slate-blue accents. The information is the priority; decorative or game functionality must not interrupt essential workflows.
+
+## Data architecture
+
+`index.html` contains the browser application deployed by GitHub Pages. GitHub stores **public code and public website assets only**.
+
+Supabase authenticates users and provides account-scoped private records via `public.fishos_user_data`, `public.fishos_files` metadata and private `fishos-private` storage. Supabase RLS must enforce access control. Never expose service-role keys in public code.
+
+User data is not safely backed up just because HTML versions are archived. A complete backup must include the latest private JSON data, referenced private file bytes, a catalog/manifest, checksums, and a tested restore path.
+
+### Backup direction (planned, not yet implemented)
+
+1. Export a full authenticated private snapshot and file manifest with a date/season identifier.
+2. Back up associated private files, not only their URLs or metadata.
+3. Copy encrypted snapshots to an independently controlled backup destination and to the user's Windows Media drive through an explicit local sync client.
+4. Schedule periodic snapshots plus season-end archives; verify integrity and periodically test a restore.
+5. Keep several historical versions and reject silent conflicts. Browser downloads alone cannot reliably write an unattended file to a specific Windows drive.
+
+**Status:** automatic two-location backup and recovery are not implemented. Do not upload the private master to the public repository or deploy it with GitHub Pages.
+
+## Releases and tickets
+
+- `index.html` is the current live entry point. `Fish_OS_VNN.html` files are immutable versioned copies.
+- `OPEN_TICKETS.md` holds the project backlog and release acceptance conditions. Only the user closes tickets.
+- Scope changes narrowly. Preserve unrelated features; flag unavoidable changes before release.
+- Verify changes in an authenticated browser on desktop and mobile. A successful Pages deployment does not establish correct application behavior.
+- Preserve private data and working UI. Treat derived or estimated field data explicitly as such.
+
+**V50 changes:** Stillwater concept landing page; resource filter buttons; Upload Guide shortcut to add a website link; README expansion. The game is concept-only. Existing problems with stats, packing, map counts and some classification accuracy remain unverified.
+
+See [OPEN_TICKETS.md](OPEN_TICKETS.md) for detailed status.

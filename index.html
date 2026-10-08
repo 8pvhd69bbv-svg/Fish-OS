@@ -1618,4 +1618,85 @@ window.render=function(...args){const result=prevRender.apply(this,args);dashboa
 dashboardStats();patchPacking();
 })();
 </script>
+
+<style id="fishos-v47-stats-style">
+#main .dashstats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+#main .dashstats [data-v47]{border:2px solid #719b4e;background:#e3efd7;color:#24402c}
+#main .packhud{flex-wrap:wrap}#main .packhud [data-pack-total]{font-weight:800;font-size:15px}
+@media(max-width:700px){#main .dashstats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+<script id="fishos-v47-visible-stats-pack">
+(function(){
+'use strict';
+const rows=x=>Array.isArray(x)?x:[];
+const good=x=>x!==null&&x!==undefined&&x!==''&&Number.isFinite(Number(x))&&Number(x)>=0;
+const sum=(arr,keys)=>arr.reduce((n,x)=>n+((keys.map(k=>x?.[k]).find(good))===undefined?0:Number(keys.map(k=>x?.[k]).find(good))),0);
+const known=(arr,keys)=>arr.some(x=>keys.some(k=>good(x?.[k])));
+const weights={
+'hat':3,'fishing shirt':7,'socks':3,'fly rod':5,'reel':8,'leaders / tippet':1,
+'nippers / forceps':3,'license / permits':0.2,'phone / charger':12,
+'waders':48,'wading boots':52,'rain jacket':20,'fly box':6,'headlamp':3
+};
+function base(item,category){
+ const key=String(item.name||'').trim().toLowerCase();
+ if(good(item.baselineWeight)&&Number(item.baselineWeight)>0)return Number(item.baselineWeight);
+ if(Object.hasOwn(weights,key))return weights[key];
+ if(typeof BASE==='object'&&BASE&&good(BASE[item.name])&&Number(BASE[item.name])>0)return Number(BASE[item.name]);
+ if(/rod/.test(key))return 5;if(/reel/.test(key))return 8;if(/wader/.test(key))return 48;
+ if(/fly|tippet|leader/.test(key))return 1;if(/boot/.test(key))return 52;
+ if(/shirt|jacket|clothing/.test(key))return 8;
+ return 4;
+}
+function apply(){
+ const main=document.getElementById('main');if(!main)return;
+ if(state.page==='home'){
+  const stats=main.querySelector('.dashstats');if(stats){
+   const sess=rows(DATA.trip_sessions),trips=rows(DATA.trips);
+   const h=['hours','hours_fished','hoursFished'],m=['miles_fished','milesFished','distance_fished_miles','distanceMiles','miles'];
+   const build=(label,keys,id)=>{
+    const source=known(sess,keys)?sess:trips;const value=known(source,keys)?sum(source,keys).toFixed(1):'—';
+    let el=[...stats.children].find(n=>n.querySelector('span')?.textContent.trim()===label);
+    if(!el){el=document.createElement('div');stats.appendChild(el)}
+    el.className='stat link';el.dataset.v47=id;el.innerHTML='<b>'+value+'</b><span>'+label+'</span>';
+    el.onclick=()=>go('tracking');
+   };
+   build('Hours fished',h,'hours');build('Miles logged',m,'miles');
+  }
+ }
+ if(state.page==='packing'){
+  const packId=state.packTripId||'GENERAL';
+  const pack=packId==='GENERAL'?state.packing:state.packingByTrip?.[packId];
+  if(!pack||typeof pack!=='object')return;
+  const hud=main.querySelector('.packhud');if(!hud)return;
+  let total=0,est=0;
+  for(const [category,items] of Object.entries(pack)){
+   if(!Array.isArray(items))continue;
+   items.forEach((item,i)=>{
+    if(!item)return;
+    const saved=good(item.weight)&&Number(item.weight)>0?Number(item.weight):null;
+    const w=saved??base(item,category),qty=good(item.qty)?Number(item.qty):1;
+    total+=w*qty;if(saved===null)est++;
+    const sections=[...main.querySelectorAll('.packcat')];
+    const section=sections.find(n=>n.querySelector('h3')?.textContent.trim()===category);
+    const row=section?.querySelectorAll('.packitem')?.[i];if(!row)return;
+    const input=row.querySelector('input[title="Weight in ounces"]');
+    if(input&&saved===null){input.value=w;input.title='Estimated baseline ounces; change to save your chosen weight';}
+    const detail=row.querySelector('small');if(detail&&saved===null)detail.textContent=(item.details?item.details+' • ':'')+'Estimated baseline: '+w+' oz';
+   });
+  }
+  let totalEl=hud.querySelector('[data-pack-total]');if(!totalEl){totalEl=document.createElement('span');totalEl.dataset.packTotal='1';hud.prepend(totalEl)}
+  totalEl.textContent='TOTAL: '+total.toFixed(1)+' oz / '+(total/16).toFixed(2)+' lb';
+  const original=hud.querySelector('b');if(original)original.textContent='PACK WEIGHT: '+total.toFixed(1)+' oz ('+(total/16).toFixed(2)+' lb)';
+  let note=main.querySelector('#v47PackNote');if(!note){note=document.createElement('div');note.id='v47PackNote';hud.after(note)}
+  note.textContent=est+' items use rough estimates until you enter actual weights. Total includes all quantities.';
+ }
+}
+let pending=false;
+function schedule(){if(pending)return;pending=true;setTimeout(()=>{pending=false;try{apply()}catch(e){console.warn('V47 display',e)}},0)}
+const prior=window.render;
+window.render=function(...args){const out=prior.apply(this,args);schedule();return out};
+document.addEventListener('click',e=>{if(e.target.closest('[onclick*="go("], [onclick*="render("]'))schedule()},false);
+schedule();setTimeout(schedule,250);
+})();
+</script>
 </body></html>

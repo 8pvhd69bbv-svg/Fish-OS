@@ -3,7 +3,13 @@
 **The fishing operating-system hub for everything surrounding an angler's life.**
 
 **Live website:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
-**Current application release:** V50
+**Current application release:** V61
+
+The current prioritized work register is [OPEN_TICKETS.md](OPEN_TICKETS.md). V61 preserves the V60 feature set, isolates browser caches by Supabase project and signed-in user, and fixes Dashboard bookmarks/navigation so the current dashboard and USGS panels render.
+
+Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs` for synthetic account/routing regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V61.html` are identical release copies; earlier archives remain unchanged.
+
+Signed-out edits are temporary and are cleared on sign-in or reload. Old unscoped browser caches are retained locally but are not automatically claimed by an account or uploaded. Authenticated cloud data is authoritative on hydration. These client safeguards supplement Supabase RLS; they do not replace a live two-account permission test or a complete private backup.
 
 ## The vision
 

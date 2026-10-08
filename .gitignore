@@ -1,0 +1,21 @@
+.env
+.env.*
+!.env.example
+Private Data/
+private-data/
+private-uploads/
+Backups/
+Give to AI/
+*.pem
+*.key
+*.p12
+*.sql
+*.dump
+*private*backup*.json
+node_modules/
+.local/
+*.log
+
+# Local chat-derived notes
+HANDOFF.md
+STATUS.md

@@ -1,5 +1,5 @@
 # Fish OS — Prioritized Open Tickets
-**Baseline:** V60 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
+**Baseline:** V61 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
 ## P0 — Personal data storage and backup
 | ID | Ticket | Status | Acceptance / next check |
@@ -14,7 +14,7 @@
 |---|---|---|---|
 | FISH-029 | Streamlined FishOS-branded login | NEW | Hide backend configuration from ordinary users; password/magic link behind branded FishOS form, friendly errors, session persistence. Keep existing auth/RLS security. |
 | FISH-030 | Invite and test second user safely | NEW | One test user, clear onboarding, verify strict account isolation and logout/login across devices. No data leaks. |
-| FISH-013 | Supabase-backed persistence and account isolation | OPEN | Live sign-in, reload, record edit, attachments and permissions testing required. |
+| FISH-013 | Supabase-backed persistence and account isolation | IN PROGRESS | V61 scopes browser caches by project/user, clears private memory on account transitions, guards delayed hydration/save completions, and removes duplicate session restoration. Synthetic regression tests pass. Live two-account sign-in, reload, edit, attachment and RLS verification still required; not closed. |
 | FISH-012 | iOS session, current release and cloud state | OPEN | Test mobile reload, login status and sync. |
 
 ## P1 — Stability, navigation and essential features
@@ -22,7 +22,7 @@
 |---|---|---|---|
 | FISH-014 | Safely consolidate legacy renderers | OPEN | Numerous renderer overrides require architecture review + regression tests; no feature stripping. |
 | FISH-019 | Dashboard hours fished and miles, V8 layout | OPEN / NOT VERIFIED | Previous patches did not reliably display. Test against live records; no fabricated totals. |
-| FISH-016 | V8-style dashboard full sections | READY FOR VERIFICATION | Next Trip, map, recent, Today, responsive layout. |
+| FISH-016 | V8-style dashboard full sections | READY FOR VERIFICATION | V61 fixes Dashboard/#dashboard routing to the current home renderer. Next Trip, map container, recent, Today and flow panels verified signed out; Stillwater and FishOS AI navigation preserved. Live records and mobile verification remain. |
 | FISH-020 | Fish map pins for all verified coordinates | OPEN / NOT VERIFIED | Refresh/direct-navigation issue and distinct-coordinate counts. |
 | FISH-022 | Packing weights, quantity totals, rich item edits | CLOSED (user confirmed 2026-10-08) | User confirms calculator now working; further improvements to be tracked separately. |
 | FISH-027 | Edit species checklist | READY FOR VERIFICATION | V51 controls need authenticated end-to-end tests. |
@@ -131,3 +131,10 @@
 - Gear Health has an editable Brand field stored independently in private account gear metadata when saved; one-click index for existing inventory brands.
 - Calendar has top-right Upcoming fishing opportunities panel, empty until dated opportunities exist.
 - Open: signed-in browser acceptance tests, data backup and independent restore tests.
+
+## V61 release — account isolation and dashboard routing
+- FISH-013: browser caches now belong to a project/user; guest drafts stay in memory. Logout/account changes clear private state and reload; delayed loads/saves cannot update another account's UI. Cloud hydration no longer merges or uploads unclaimed browser data. Live two-account/RLS/attachment acceptance is still open.
+- FISH-016 / FISH-047: Dashboard clicks and legacy `#dashboard` bookmarks now resolve to the current V9 renderer. Verified signed out: full dashboard sections, Stillwater/FishOS AI links, three USGS panels with current provisional readings and timestamps. Station selection and authenticated/mobile acceptance remain to verify.
+- Validation: 45 inline/external scripts parse; nine synthetic routing/account-isolation tests pass. Tests cover delayed hydration, failed hydration, empty cloud state, logout and late saves. No production records were modified during these tests.
+- `index.html` and `Fish_OS_V61.html` are identical. Earlier release archives and V60 feature modules remain available. Public-only loopback preview and validation scripts added.
+- FISH-004/015/017/026/045 remain the highest-priority next work: complete private backup and independently tested restore. Supabase leaked-password protection remains unavailable on the current Free plan; no billing change made.

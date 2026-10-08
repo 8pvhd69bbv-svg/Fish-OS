@@ -1,6 +1,6 @@
 # Fish OS Open Ticket Register
 
-Baseline: V50 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
+Baseline: V51 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
 
 | ID | Ticket | Area | Status | Acceptance / caution |
 |---|---|---|---|---|
@@ -67,3 +67,11 @@ Baseline: V50 (live GitHub HTML); original register baseline V44. All issues bel
 - FISH-026 | Automated full private seasonal backups with local Media-drive copy and restore | Private data | Planning | Include user JSON, Supabase Storage file bytes, manifest, history, checksum/restore testing; local background agent/sync needed. Not implemented, never publish on GitHub Pages.
 - README expanded to describe FishOS hub vision and each major subsystem. Files: index.html + Fish_OS_V50.html. No previous tickets closed.
 - V50 GitHub writes succeeded; authenticated UI regression testing and local-drive write access were not established.
+
+## V51 — Locations, Maps, Species, Packing, Gear Health (all pending verification)
+- FISH-007: Clickable locations summary, renamed Raw saved rows to Locations, non-destructive individual location editor. Existing duplicate-review dialog still needs richer edit links and real merge safety.
+- FISH-020: Map initializer retried after rendering; requires direct navigation/refresh testing and confirmed coordinates.
+- FISH-022: Recomputed packing estimates and displayed top ounce/pound totals; added item editor for name, description/details, style, type, year, condition, weight. Verify every packing route, form save, cloud persistence and zero-weight semantics.
+- FISH-027 | Species checklist edit controls | Fish | Ready for Verification | V51 adds edit button to add/rename custom species. Verify compatibility with canonical species and Supabase serialization; do not silently change caught statuses.
+- FISH-028 | Gear health / replacement tracker | Tracking | Ready for Verification | V51 adds rod assessment fields for condition, review year, notes. Extend to reels, fly lines, other gear after verification. No automated replacement forecasts.
+- Release files: index.html and Fish_OS_V51.html. Static code committed; live authenticated functional tests not run. No tickets closed.

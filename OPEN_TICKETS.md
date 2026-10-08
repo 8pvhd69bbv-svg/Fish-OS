@@ -1,6 +1,6 @@
 # Fish OS Open Ticket Register
 
-Baseline: V49 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
+Baseline: V50 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
 
 | ID | Ticket | Area | Status | Acceptance / caution |
 |---|---|---|---|---|
@@ -59,3 +59,11 @@ Baseline: V49 (live GitHub HTML); original register baseline V44. All issues bel
 - Files: `index.html` and matching `Fish_OS_V49.html` created.
 - README updated with architecture, GitHub Pages rules, Supabase privacy, release and ticket management.
 - Automated deployment/browser QA was not completed; previous dashboard/packing/resources issues remain open until user verification. No tickets closed.
+
+## V50 release — open for verification
+- FISH-023 | Stillwater future fishing game | Resources / concept | Ready for Verification | Non-playable lightweight concept page under Resources. No game engine or Supabase access; do not allow future game work to displace core OS work.
+- FISH-024 | Resource catalog sorting/filtering and durable manual categorization | Resources | In Progress | V50 adds category filter buttons (All, Fly Shop, Regulations, Research). Existing automatic guesses remain imperfect; user must be able to assign and persist real categories in a later release.
+- FISH-025 | Add a website link from Upload Guide and display in Resources | Uploads / Resources | Ready for Verification | V50 adds a link-entry shortcut invoking the existing Resources add-link modal; test persistence after sign-in and refresh.
+- FISH-026 | Automated full private seasonal backups with local Media-drive copy and restore | Private data | Planning | Include user JSON, Supabase Storage file bytes, manifest, history, checksum/restore testing; local background agent/sync needed. Not implemented, never publish on GitHub Pages.
+- README expanded to describe FishOS hub vision and each major subsystem. Files: index.html + Fish_OS_V50.html. No previous tickets closed.
+- V50 GitHub writes succeeded; authenticated UI regression testing and local-drive write access were not established.

@@ -1026,4 +1026,69 @@ window.render=function(){const p=state.page; if(p==='fly-patterns'||p==='rod-lis
 packSeeds32();window.render();
 })();
 </script>
+<script id="fishos-v33-focused-map-import">
+(function(){
+ const esc33=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const normalized=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]/g,'');
+ const keyFor=(kind,v)=>{
+  if(typeof v==='string')return normalized(v);
+  if(!v||typeof v!=='object')return normalized(JSON.stringify(v));
+  if(kind==='journal')return normalized([v.id||v.title||v.date,v.date||'',v.location||v.place||''].join('|'));
+  if(kind==='rods')return normalized([v[0],v[1],v[2],v[3]].join('|'));
+  if(kind==='trips')return normalized(v.id||v.title||v.name);
+  if(kind==='locations')return normalized(v.name||v.id||v.place);
+  if(kind==='links'){try{let u=new URL(v.url||v);return (u.hostname.replace(/^www\./,'')+u.pathname.replace(/\/$/,'')).toLowerCase()}catch{return normalized(v.url||v)}}
+  if(kind==='knot_notes')return normalized(v.name||v.title);
+  if(kind==='flies')return normalized(v.name||v.title);
+  if(kind==='destinations')return normalized(v.country||v.name);
+  return normalized(v.id||v.name||v.title||JSON.stringify(v));
+ };
+ const keep={trips:1,locations:1,rods:1,journal:1,fish:1,flies:1,links:1,knot_notes:1,destinations:1,destination_notes:1,buy:1,buy_items:1,buy_rods:1,calendar_entries:1,trip_sessions:1,component_gear:1,river:1,rivers:1,packing:1,knots:1,priority_species:1,species:1};
+ function mapLinks(){
+  const p=state.page;
+  if(!['maps','locations'].includes(p)&&!p.startsWith('location-')&&!p.startsWith('trip-'))return;
+  const main=document.getElementById('main');if(!main||main.querySelector('#fishos33-links'))return;
+  const chosen=p.startsWith('location-')?(DATA.locations||[]).find(x=>normalized(x.name||x.id)===normalized(p.slice(9))):null;
+  const lat=Number(chosen?.lat??chosen?.latitude),lon=Number(chosen?.lon??chosen?.lng??chosen?.longitude);
+  const coords=Number.isFinite(lat)&&Number.isFinite(lon)&&lat&&lon?lat+','+lon:null;
+  const query=coords||chosen?.name||'fishing locations';
+  const div=document.createElement('section');div.id='fishos33-links';div.className='card';div.style.marginTop='12px';
+  const items=[['GOOGLE MAPS','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(query)],['GOOGLE EARTH','https://earth.google.com/web/'],['ONX MAPS','https://web.onxmaps.com/'],['USGS WATER DATA','https://waterdata.usgs.gov/'],['NOAA WEATHER','https://www.weather.gov/'],['OPENSTREETMAP','https://www.openstreetmap.org/search?query='+encodeURIComponent(query)]];
+  div.innerHTML='<h3>MAPS & FIELD DATA</h3><p class="muted small">External resources open in new tabs. ONX is a link, not an embedded ONX layer. USGS readings require a selected gauge.</p><div class="toolbar">'+items.map(([t,u])=>'<a class="btn" href="'+esc33(u)+'" target="_blank" rel="noopener noreferrer">'+t+'</a>').join('')+'</div>';
+  main.appendChild(div);
+ }
+ function addImport(){if(state.page!=='account')return;const main=document.getElementById('main');if(!main||main.querySelector('#fishos33-import'))return;
+  const div=document.createElement('section');div.id='fishos33-import';div.className='card';div.style.marginTop='12px';div.innerHTML='<h3>SAFE CONSOLIDATED PRIVATE IMPORT</h3><p class="muted small">Upload the V33 personal JSON here ONLY, after signing in. Compares records by identity and skips matches; does not overwrite edited cloud records. Preview before confirming. Back up current cloud data first using Export Private JSON above.</p><input type="file" accept=".json,application/json" id="fishos33-file"><button class="btn gold" onclick="fishos33Import()">PREVIEW / IMPORT MISSING ONLY</button><p class="muted small" id="fishos33-result"></p>';main.appendChild(div);
+ }
+ window.fishos33Import=async function(){const label=document.getElementById('fishos33-result');const say=s=>{if(label)label.textContent=s};try{
+  const file=document.getElementById('fishos33-file')?.files?.[0];if(!file)throw Error('Select the V33 private JSON.');if(file.size>15e6)throw Error('Backup too large.');
+  if(!state.profile?.loggedIn||!state.privateHydrated||!window.supabaseClient||!state.profile?.userId)throw Error('Sign in and finish cloud loading first.');
+  const raw=JSON.parse(await file.text());if(raw?._fishos_private_backup?.version!=='v33-consolidated')throw Error('Select the V33 consolidated private JSON file.');
+  const client=window.supabaseClient;const res=await client.from('fishos_user_data').select('data').eq('user_id',state.profile.userId).maybeSingle();if(res.error)throw res.error;
+  const current=res.data?.data||{},merged={...current},counts=[];
+  for(const [k,items] of Object.entries(raw)){
+   if(k.startsWith('_')||k==='storage_note'||k==='system'||k==='project'||k==='version')continue;
+   if(Array.isArray(items)){
+    if(!keep[k])continue;
+    const prev=Array.isArray(current[k])?current[k]:[];
+    const identities=new Set(prev.map(v=>keyFor(k,v)));
+    const additions=items.filter(v=>{const id=keyFor(k,v);if(!id||identities.has(id))return false;identities.add(id);return true});
+    if(additions.length)merged[k]=prev.concat(additions);
+    counts.push(k+': '+additions.length+' new / '+(items.length-additions.length)+' skipped');
+   }else if(items&&typeof items==='object'){
+    if(!Object.prototype.hasOwnProperty.call(merged,k))merged[k]=items;
+   }else if((merged[k]===undefined||merged[k]===null||merged[k]==='')&&items!==undefined)merged[k]=items;
+  }
+  const changes=counts.filter(x=>!x.includes(': 0 new'));
+  say('Preview: '+(changes.join('; ')||'No missing array records')+'. Nothing saved yet.');
+  if(!changes.length){say('No missing array records detected. Your existing cloud data was not changed.');return}
+  if(!confirm('Import missing records ONLY? Existing records are skipped. '+changes.join('; ')))return;
+  const save=await client.from('fishos_user_data').upsert({user_id:state.profile.userId,data:merged,updated_at:new Date().toISOString()});if(save.error)throw save.error;
+  say('Saved to private Supabase. Reload the page to hydrate all imported records.');state.cloudStatus='Saved';
+ }catch(err){say('Import not completed: '+(err.message||err))}
+ };
+ const prior=window.render;window.render=function(){const result=prior.apply(this,arguments);setTimeout(()=>{try{mapLinks();addImport()}catch(e){console.warn('V33 enhancement',e)}},0);return result};
+ setTimeout(()=>{mapLinks();addImport()},100);
+})();
+</script>
 </body></html>

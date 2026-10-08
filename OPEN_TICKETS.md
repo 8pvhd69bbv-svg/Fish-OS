@@ -1,77 +1,82 @@
-# Fish OS Open Ticket Register
+# Fish OS — Prioritized Open Tickets
+**Baseline:** V52 (2026-10-08). Source of truth: this GitHub register. Closed items are retained in the Closed section. Never close unverified items. User authorizes closing independently *confirmed complete data tickets*; otherwise request confirmation.
 
-Baseline: V51 (live GitHub HTML); original register baseline V44. All issues below remain OPEN until the user expressly says they are resolved or closed.
+## P0 — Personal data storage and backup
+| ID | Ticket | Status | Acceptance / next check |
+|---|---|---|---|
+| FISH-004 | Private master backup containing locations and all data | IN PROGRESS | Live account has 1 JSON data row and 2 private file objects. Need complete export, file bytes, manifest and restore test. NOT CONFIRMED COMPLETE. |
+| FISH-015 | Safely reconcile master snapshots and future updates | OPEN | Conflict resolution, no duplicate imports, verified updates; not tested. |
+| FISH-017 | One authoritative master from live Supabase and private files | IN PROGRESS | 51 locations, 44 trips, 9 journal entries verified in current live JSON. File catalog 2/2 present. No complete byte-level restore test. NOT CONFIRMED COMPLETE. |
+| FISH-026 | Automated full backups online/offline and seasonal archives | PLANNED | Versioned encrypted snapshot, file catalog and bytes, scheduling, Media-drive local agent, checksum + restore, no public GitHub uploads. |
 
-| ID | Ticket | Area | Status | Acceptance / caution |
-|---|---|---|---|---|
-| FISH-004 | One private master backup containing private locations | Data | In Progress | Six historical coordinate pairs verified; live Supabase export and reconciliation still required. |
-| FISH-005 | Portable hosting/provider-independent architecture | Architecture | Open | Planning only; no migration authorized. |
-| FISH-006 | Selective Winamp chrome / nature-green theme, fish/rod/map icons and LCD | Design | Open | Style direction approved; implementation scope not yet specified; do not change without request. |
-| FISH-007 | Deduplicate saved location records; reconcile 554 raw vs mapped | Locations | Open | V42 review tooling exists; no destructive cleanup approved. |
-| FISH-008 | Safely enrich maps with missing verified region-level coordinates | Locations | Ready for Verification | Fish-shaped pins restored for all coordinate-bearing live locations; unmapped records still require location validation. |
-| FISH-009 | Link vetted private research to country pages | Destinations | Open | Prior import had parsing errors; requires review. |
-| FISH-010 | Populate fishing-window hopes/dreams calendar from notes | Calendar | Open | V42 placeholder is not full extraction. |
-| FISH-011 | Reconcile biggest-fish and species counts from journal evidence | Tracking | Open | Do not treat estimates or sightings as measurements. |
-| FISH-012 | Ensure iOS displays current release and private sync status | Mobile | Open | Cannot verify without browser/device test. |
-| FISH-013 | Verify Supabase-backed persistence of all editors and files | Quality | Open | Individual flows need live functional testing. |
-| FISH-014 | Consolidate legacy duplicate renderers safely | Quality | Open | Architecture review only; avoid changing working interface without approval. |
-| FISH-015 | Master private file future updates and safe nonduplicating consolidation | Data | Open | Snapshots currently manual; no live-account access or automatic export. |
-| FISH-016 | Restore V8 dashboard arrangement with live/private stats, Next Trip, map, recent, Today | Dashboard | Ready for Verification | V43 restores requested sections; user must verify desktop/mobile. No hardcoded stats. |
-| FISH-017 | Verify one authoritative master from live Supabase and private file catalog | Data | In Progress | V43 read-only count comparison is NOT a complete merge/conflict test; live export, bytes, and restore test still required. |
+## P0 — Simple login and one-user product test
+| ID | Ticket | Status | Acceptance / next check |
+|---|---|---|---|
+| FISH-029 | Streamlined FishOS-branded login | NEW | Hide backend configuration from ordinary users; password/magic link behind branded FishOS form, friendly errors, session persistence. Keep existing auth/RLS security. |
+| FISH-030 | Invite and test second user safely | NEW | One test user, clear onboarding, verify strict account isolation and logout/login across devices. No data leaks. |
+| FISH-013 | Supabase-backed persistence and account isolation | OPEN | Live sign-in, reload, record edit, attachments and permissions testing required. |
+| FISH-012 | iOS session, current release and cloud state | OPEN | Test mobile reload, login status and sync. |
 
-| FISH-018 | Global search result dismissal and concise snippets | Search | Ready for Verification | V45 limits each result summary to 250 characters and V46 closes suggestions on outside click/Escape. User reports search otherwise solved; verify mobile and desktop. |
-| FISH-019 | V8-style home dashboard Hours fished and Miles logged | Dashboard | Ready for Verification | V46 adjusts stats layout and injects recorded metrics. Hours and miles must come from real data; validate display, historical totals, and mobile. |
-| FISH-020 | Display all valid saved map coordinates as fish-shaped pins | Maps | Ready for Verification | V46 renders all coordinate-bearing records, grouping identical coordinates. Check actual map against 24 mapped/51 saved; verify fish pins and geocoding gaps. No invented coordinates. |
-| FISH-021 | Categorize Resources as Fly Shop, Regulations, Research | Resources | Ready for Verification | V46 categorizes on display using heuristics; Supabase categories remain unchanged. Audit classification accuracy before persistence. |
-| FISH-022 | Supply packing baseline weights for custom items and accurate top totals | Packing | Ready for Verification | V46 estimates missing weights and totals on screen, without silently saving estimates. Verify checked/unchecked convention, quantities, zero weights, weight input persistence and trip-specific packs. |
+## P1 — Stability, navigation and essential features
+| ID | Ticket | Status | Acceptance / next check |
+|---|---|---|---|
+| FISH-014 | Safely consolidate legacy renderers | OPEN | Numerous renderer overrides require architecture review + regression tests; no feature stripping. |
+| FISH-019 | Dashboard hours fished and miles, V8 layout | OPEN / NOT VERIFIED | Previous patches did not reliably display. Test against live records; no fabricated totals. |
+| FISH-016 | V8-style dashboard full sections | READY FOR VERIFICATION | Next Trip, map, recent, Today, responsive layout. |
+| FISH-020 | Fish map pins for all verified coordinates | OPEN / NOT VERIFIED | Refresh/direct-navigation issue and distinct-coordinate counts. |
+| FISH-022 | Packing weights, quantity totals, rich item edits | OPEN / NOT VERIFIED | Per-item weight, style/type/year/condition and accurate oz/lb totals. |
+| FISH-027 | Edit species checklist | READY FOR VERIFICATION | V51 controls need authenticated end-to-end tests. |
+| FISH-028 | Gear health and replacement tracking | PARTIAL | V51 covers rods; extend to other component gear. |
+| FISH-031 | Dashboard heading above CORE | IMPLEMENTED / VERIFY | V52 changes all three legacy navigation arrays to DASHBOARD heading before CORE. |
+| FISH-032 | Combine Storage & Sync Status with Private File Catalog under Uploads | NEW | One coherent page; preserve every action, field, permission, status and file workflow. |
+| FISH-033 | Improve/install consistent fish, rod, map icon pack | NEW / EVALUATE | Prefer versioned lightweight SVG set with approved license, no emoji; avoid risky unpinned CDNs or wholesale UI replacement. |
+| FISH-018 | Search snippets and outside-click dismissal | READY FOR VERIFICATION | User previously confirmed search fixed. |
 
-## V45–V46 release notes and test status
-- V45: search results capped at 30, with at most 250 characters of context; dashboard Hours fished and Miles logged adjustments attempted.
-- V46: search closes on outside click/Escape; four-column desktop/2-column mobile stats; fish map markers for saved coordinates; on-screen Resources categories; estimated custom packing weights and total.
-- V45 files: `index.html` and `Fish_OS_V45.html` at release time. V46 files: `index.html` and `Fish_OS_V46.html` at release time.
-- Validation: GitHub commits and versioned copies completed; authenticated Supabase, real-device browsing and regression tests **not performed**.
-- Safety: no intentional Supabase writes or private master uploads; do not infer live data correctness from static code.
-- Known follow-ups: user did not see expected dashboard metrics after V45; verify V46 in browser. Location counts may differ from distinct plotted positions. Resources categorization currently nonpersistent. Packing baseline changes currently display-only.
-- No existing ticket was closed.
+## P2 — Research, destinations and calendar
+| ID | Ticket | Status | Acceptance / next check |
+|---|---|---|---|
+| FISH-009 | Connect verified private research to country pages | BLOCKED / NOT COMPLETE | Current live: 49 links, 0 country-assigned, destination_notes empty. Country page supports tagged matching, but bulk assignment cannot be trusted without vetted mapping. Preserve source records. |
+| FISH-010 | Hopes-and-dreams fishing window | PARTIAL / WINDOW EXISTS | V42 already has Add Fishing Window dialog and calendar display. Need date-range/seasonal window fields, validation, source-note extraction after review. Do not invent dates. |
+| FISH-008 | Verified map coordinate enrichment | READY FOR VERIFICATION | Missing pins require trusted coordinates; no guessing. |
+| FISH-011 | Fish sizes and species totals from journal evidence | OPEN | Verify actual landed catches/measurements; do not infer from sightings. |
+| FISH-021 | Resource classification | PARTIAL | V48 heuristic categorization not reliably correct. |
+| FISH-024 | Persistent manually editable resource categories | IN PROGRESS | V50 filter buttons exist; need verified explicit category persistence. |
+| FISH-025 | Upload-page resource-link shortcut | READY FOR VERIFICATION | V50 button; authenticated save-refresh check. |
+| FISH-005 | Hosting portability | OPEN / PLANNING | No migration approved. |
 
-## Release policy
-- Never modify unrequested features. Flag unavoidable incidental changes with ⚠️ before release.
-- Attach `index.html` and a matching versioned HTML file to every website update.
-- Keep private master JSON out of the public repository.
-- New tickets stay open until explicit user authorization to close them.
-- Each future release should enumerate changed ticket IDs, unresolved tickets, and validation results.
-- Do not assume this archive represents the current live Supabase account.
+## P3 — Media, warranties, social features and app
+| ID | Ticket | Status | Acceptance / next check |
+|---|---|---|---|
+| FISH-034 | Integrated photo/video library, viewer and upload | NEW | Private Supabase Storage, albums/metadata, file validation, quotas, signed URLs, privacy. |
+| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | NEW | Assign/reassign selected media to locations, fly tying, gear and portfolio without duplicating originals. |
+| FISH-036 | Gear warranty wizard | NEW | Type → brand → exact official warranty links; evidence/checklist, claim preparation and form guidance. AI assistance should not submit a warranty claim without review and consent. |
+| FISH-037 | Friend-code invites, messaging, permission-controlled sharing | NEW | Opt-in invitations, block/report, per-friend/group permissions enforced server-side with RLS; no public exposure. |
+| FISH-038 | Installable FishOS app (PWA first) | NEW | Manifest, icons, safe offline shell, update flow, caching rules, testing; offline private data requires explicit security design. |
+| FISH-023 | Stillwater fishing-game concept | CONCEPT | Lightweight isolated page only; do not displace core FishOS work. |
+| FISH-039 | Stillwater rare-fish collection, breeding and growth | NEW / BACKLOG | Game-only data, isolated code and assets, no impact on real fish records. |
+| FISH-040 | Arcade fish-target game inspired by duck-hunt mechanics | NEW / BACKLOG | Separate prototype/module; lightweight optional launch under References. |
+| FISH-006 | Begin selective Winamp/nature-green visual refinement | STARTED / DESIGN REVIEW | V49 green/blue palette exists. Review selective chrome, LCD and icon styling without affecting function. Preserve existing visual language. |
 
-## Permanent Development Rules (not tickets)
-- RULE-001: Change only features explicitly requested; flag incidental changes ⚠️.
-- RULE-002: Review tickets before each development pass; only the user closes tickets.
-- RULE-003: Deliver both `index.html` and an identical versioned HTML file.
-## V47–V48 release log — open until verified
-- V47 / FISH-019: reattempted dashboard Hours fished and Miles logged display. User reports prior releases did not display. Needs authenticated browser confirmation.
-- V47 / FISH-022: reattempted packing weights for custom items and prominent total in ounces and pounds. Estimates not saved automatically. Needs checking against actual packing records.
-- V48 / FISH-021: fixed Resources classification in the ACTIVE V39 page renderer (previous implementation patched a different renderer). Shows Fly Shop / Regulations / Research. Display-only categorization; verify categories before saving to Supabase.
-- Search-bar outside-click dismissal remains in V46 onward (FISH-018); user can confirm closure.
-- Authoritative private master and Media-drive synchronization remain open under FISH-004/FISH-015/FISH-017. Do not upload private data to public GitHub Pages.
-- Files: each release has index.html and versioned copy. Tests: GitHub file writes succeeded; no authenticated live browser regression test. No tickets closed.
+## Closed (per user instruction)
+| ID | Ticket | Closure |
+|---|---|---|
+| FISH-007 | CLOSED AT USER DIRECTION, 2026-10-08. Duplicate-safe location review exists. Live data still has 51 records and 15 repeated name+region groups; no destructive merge or deletion was performed. Closure does **not** certify deduplication completed. |
 
-## V49 release — styling only
-- Added subtle slate blue (#527e99) and fern green (#4f805e) accents for navigation, borders, hover/focus and dashboard statistics. No intended behavior or data changes.
-- Files: `index.html` and matching `Fish_OS_V49.html` created.
-- README updated with architecture, GitHub Pages rules, Supabase privacy, release and ticket management.
-- Automated deployment/browser QA was not completed; previous dashboard/packing/resources issues remain open until user verification. No tickets closed.
+## Live data audit (read-only, 2026-10-08)
+- Supabase project Fish OS connected and healthy. `public.fishos_user_data`: 1 row, RLS enabled, 4 policies; `public.fishos_files`: 2 rows, RLS enabled, 4 policies; private storage: 2 objects and 2 matching metadata records.
+- Current JSON: trips 44, locations 51, journal 9, rods 18, flies 16, fishCaught 41, links 49, calendar_entries 0, trip_sessions 0, individual fish logs 0. Some keys store historical legacy structures. These counts are **not** a verified complete historical master.
+- Links with explicitly stored country: 0/49. Links with explicitly stored category: 0/49. Data tickets 004, 009, 015, 017, 026 **not confirmed complete**.
+- One backup-named private storage object exists, but completeness, file bytes and restorability remain unverified.
+- No DB or private storage modifications made in this audit; no automated export/local Media-drive write performed.
 
-## V50 release — open for verification
-- FISH-023 | Stillwater future fishing game | Resources / concept | Ready for Verification | Non-playable lightweight concept page under Resources. No game engine or Supabase access; do not allow future game work to displace core OS work.
-- FISH-024 | Resource catalog sorting/filtering and durable manual categorization | Resources | In Progress | V50 adds category filter buttons (All, Fly Shop, Regulations, Research). Existing automatic guesses remain imperfect; user must be able to assign and persist real categories in a later release.
-- FISH-025 | Add a website link from Upload Guide and display in Resources | Uploads / Resources | Ready for Verification | V50 adds a link-entry shortcut invoking the existing Resources add-link modal; test persistence after sign-in and refresh.
-- FISH-026 | Automated full private seasonal backups with local Media-drive copy and restore | Private data | Planning | Include user JSON, Supabase Storage file bytes, manifest, history, checksum/restore testing; local background agent/sync needed. Not implemented, never publish on GitHub Pages.
-- README expanded to describe FishOS hub vision and each major subsystem. Files: index.html + Fish_OS_V50.html. No previous tickets closed.
-- V50 GitHub writes succeeded; authenticated UI regression testing and local-drive write access were not established.
+## Release V52 / quality
+- One isolated UI change: Dashboard moved from CORE into its own DASHBOARD group in all three navigation implementations. No other feature code changed.
+- Files: `index.html` plus identical `Fish_OS_V52.html`. GitHub commit succeeded. Authenticated browser UI and iOS regression testing not yet completed.
+- All future releases must preserve working functionality, enumerate changed ticket IDs, and describe tests/known limitations.
 
-## V51 — Locations, Maps, Species, Packing, Gear Health (all pending verification)
-- FISH-007: Clickable locations summary, renamed Raw saved rows to Locations, non-destructive individual location editor. Existing duplicate-review dialog still needs richer edit links and real merge safety.
-- FISH-020: Map initializer retried after rendering; requires direct navigation/refresh testing and confirmed coordinates.
-- FISH-022: Recomputed packing estimates and displayed top ounce/pound totals; added item editor for name, description/details, style, type, year, condition, weight. Verify every packing route, form save, cloud persistence and zero-weight semantics.
-- FISH-027 | Species checklist edit controls | Fish | Ready for Verification | V51 adds edit button to add/rename custom species. Verify compatibility with canonical species and Supabase serialization; do not silently change caught statuses.
-- FISH-028 | Gear health / replacement tracker | Tracking | Ready for Verification | V51 adds rod assessment fields for condition, review year, notes. Extend to reels, fly lines, other gear after verification. No automated replacement forecasts.
-- Release files: index.html and Fish_OS_V51.html. Static code committed; live authenticated functional tests not run. No tickets closed.
+## Permanent development rules
+- RULE-001: Change only user-authorized features; flag incidental changes in advance.
+- RULE-002: Tickets stay open until user approval, except independently verified complete data tickets with granted closure authority.
+- RULE-003: Every HTML release includes both `index.html` and identical `Fish_OS_VNN.html`.
+- RULE-004: Never publish private master backups, personal records, photos, credentials, or secrets to GitHub Pages.
+- RULE-005: No made-up fishing catches, measurements, coordinates, weather, flows, regulations or dates. Keep estimates labeled.

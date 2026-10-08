@@ -1536,4 +1536,86 @@ const originalRender42=window.render;window.render=function(){if(state.page==='l
  addStats();
 })();
 </script>
+
+<style id="fishos-v46-style">
+.dashstats{grid-template-columns:repeat(4,minmax(0,1fr))}.dashstats .stat b{font-size:clamp(17px,2vw,28px)}.fishos-map-summary{padding:7px 10px;font-size:12px}.fishos-pack-note{font-size:11px;padding:6px 10px;color:#665428}
+@media(max-width:720px){.dashstats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<script id="fishos-v46-scoped-fixes">
+(function(){
+'use strict';
+const esc46=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const entries=v=>Array.isArray(v)?v:[];
+const numeric=v=>v===''||v==null?null:Number.isFinite(Number(v))&&Number(v)>=0?Number(v):null;
+document.addEventListener('pointerdown',e=>{const box=document.getElementById('searchResults');if(box&&!box.contains(e.target)&&!e.target.closest('#search,#searchBtn'))box.classList.remove('show')},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('searchResults')?.classList.remove('show')});
+function cleanCategory(x){
+ const title=String(x.title||x.name||''),url=String(x.url||''),tags=String(x.tags||'')+' '+String(x.notes||'');const combined=(title+' '+url+' '+tags).toLowerCase();
+ if(/(^|[^\w])(fly.?shop|flyfishing.?shop|fly.?store|tackle.?shop|fly.?fishing.?store|fly.?outfitters?)([^\w]|$)/i.test(combined)||/\b(tridentflyfishing|flyshop|flyfishfood|bigyfly|avidmax|jstockard)\b/.test(combined))return 'Fly Shop';
+ if(/\b(regulation|rules|license|licence|fish.?and.?wildlife|fishing.?reg|fish.?and.?game|odfw|wdfw|myodfw|wildlife\.ca\.gov|fwp\.mt\.gov)\b/.test(combined))return 'Regulations';
+ return 'Research';
+}
+const oldResources=window.resources;
+window.resources=function(){const rows=entries(DATA.links);const old=rows.map(x=>x&&typeof x==='object'?x.category:null);
+try{rows.forEach((x,i)=>{if(x&&typeof x==='object')x.category=cleanCategory(x)});return typeof oldResources==='function'?oldResources():''}
+finally{rows.forEach((x,i)=>{if(x&&typeof x==='object'){if(old[i]===undefined)delete x.category;else x.category=old[i]}})}};
+function dashboardStats(){
+ if(state.page!=='home')return;const holder=document.querySelector('#main .dashstats');if(!holder)return;
+ const sessions=entries(DATA.trip_sessions),trips=entries(DATA.trips);
+ function total(rows,fields){return rows.reduce((n,x)=>{for(const k of fields){let v=numeric(x?.[k]);if(v!==null)return n+v}return n},0)}
+ function picked(rows,fields){return rows.filter(x=>fields.some(k=>numeric(x?.[k])!==null))}
+ const hfields=['hours','hours_fished','hoursFished'],mfields=['miles_fished','milesFished','distance_fished_miles','distanceMiles','miles'];
+ const hs=picked(sessions,hfields),ht=picked(trips,hfields),ms=picked(sessions,mfields),mt=picked(trips,mfields);
+ const stats=[['Hours fished',hs.length?total(hs,hfields):ht.length?total(ht,hfields):null],['Miles logged',ms.length?total(ms,mfields):mt.length?total(mt,mfields):null]];
+ for(const [label,value] of stats){
+ let el=[...holder.children].find(x=>x.querySelector('span')?.textContent.trim()===label);
+ if(!el){el=document.createElement('div');el.className='stat link';el.innerHTML='<b></b><span></span>';holder.appendChild(el)}
+ el.querySelector('span').textContent=label;el.querySelector('b').textContent=value===null?'—':value.toFixed(1);el.onclick=()=>go('tracking');
+ }
+}
+const fallbackWeight=(x,g)=>{
+ const name=String(x.name||'').toLowerCase();
+ const pairs=[[/wader/,48],[/wading boot/,52],[/rain.?jacket|shell jacket/,20],[/rod(?! holder)/,5],[/reel/,8],[/fly box/,6],[/fly line/,3],[/tippet|leader/,1],[/headlamp/,3],[/net/,12],[/pliers|hemostat|forceps/,3],[/nipper/,1],[/sunscreen/,4],[/water bottle/,12],[/fly(?! box| line)/,0.1],[/sock/,3],[/hat|cap/,3],[/glove/,4],[/shirt/,7],[/pants/,16],[/food|snack/,8]];
+ for(const [rx,oz] of pairs)if(rx.test(name))return oz;
+ const cat=String(g).toLowerCase();return /clothing|apparel/.test(cat)?8:/gear|tools|equipment/.test(cat)?6:/fly|terminal/.test(cat)?1:4;
+};
+function patchPacking(){
+ if(state.page!=='packing')return;const sel=state.packTripId||'GENERAL';
+ const pack=sel==='GENERAL'?state.packing:state.packingByTrip?.[sel]||state.packingByTrip?.[String(sel)];
+ if(!pack||typeof pack!=='object')return;
+ let estimated=0,items=0,weight=0,checked=0;
+ for(const [group,rows] of Object.entries(pack)){if(!Array.isArray(rows))continue;for(const x of rows){if(!x||typeof x!=='object')continue;items++;if(x.done)checked++;
+ let w=numeric(x.weight);if(w===null||w===0&&numeric(x.baselineWeight)===null){w=numeric(x.baselineWeight);if(w===null||w===0){w=typeof BASE==='object'&&BASE?numeric(BASE[x.name]):null;if(w===null||w===0){w=fallbackWeight(x,group);estimated++}}}
+ const qty=numeric(x.qty)??1;weight+=qty*w;
+ }}const hud=document.querySelector('#main .packhud');if(!hud)return;
+ const b=hud.querySelector('b');if(b)b.textContent='PACK WEIGHT: '+weight.toFixed(1)+' oz ('+(weight/16).toFixed(2)+' lb)';
+ const first=hud.querySelector('span');if(first)first.textContent=checked+'/'+items+' checked';
+ let note=document.getElementById('fishosPackEstimates');if(!note){note=document.createElement('div');note.id='fishosPackEstimates';note.className='fishos-pack-note';hud.after(note)}
+ note.textContent=estimated?estimated+' custom/unweighted items use rough estimated baselines for the total; enter measured ounces to replace them.':'Total uses recorded or established baseline weights. All quantities included.';
+ // Visually fill blank custom weight inputs without overwriting saved records.
+ document.querySelectorAll('#main .packcat').forEach(section=>{const heading=section.querySelector('h3')?.textContent.trim(),rows=pack[heading];if(!Array.isArray(rows))return;section.querySelectorAll('.packitem').forEach((el,i)=>{const item=rows[i];if(!item)return;const inp=el.querySelector('input[title="Weight in ounces"]');if(!inp)return;const w=numeric(item.weight);if(w===null||w===0&&numeric(item.baselineWeight)===null){const estimate=numeric(item.baselineWeight)||numeric(typeof BASE==='object'?BASE?.[item.name]:null)||fallbackWeight(item,heading);inp.value=estimate;inp.title='Estimated baseline in ounces — change to your measured weight';}})});
+}
+function coords46(x){const lat=Number(x?.lat??x?.latitude),lon=Number(x?.lon??x?.lng??x?.longitude);return Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180&&(lat!==0||lon!==0)?[lat,lon]:null}
+window.initFishMap=function(){
+ const el=document.getElementById('fishMap');if(!el||el.dataset.ready==='v46'||!window.L)return;
+ if(window.fishMap){try{window.fishMap.remove()}catch(e){}window.fishMap=null}
+ el.innerHTML='';el.dataset.ready='v46';
+ const map=L.map(el,{scrollWheelZoom:true,worldCopyJump:true}).setView([43,-118],4);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+ const all=entries(DATA.locations);const groups=new Map();let mapped=0;
+ for(const x of all){const c=coords46(x);if(!c)continue;mapped++;const key=c.join('|');if(!groups.has(key))groups.set(key,{coord:c,items:[]});groups.get(key).items.push(x)}
+ const icon=typeof fishIcon==='function'?fishIcon():L.divIcon({className:'fish-pin',html:'<span style="font-size:22px">◇</span>',iconSize:[28,28]});
+ for(const g of groups.values()){
+ const names=g.items.map(x=>esc46(x.name||x.place||x.title||'Saved location'));
+ L.marker(g.coord,{icon}).addTo(map).bindPopup('<b>'+g.items.length+' saved location'+(g.items.length===1?'':'s')+'</b><div style="max-height:240px;overflow:auto">'+names.join('<br>')+'</div>');
+ }
+ if(groups.size)map.fitBounds([...groups.values()].map(g=>g.coord),{padding:[25,25],maxZoom:10});
+ const summary=document.createElement('div');summary.className='fishos-map-summary';summary.textContent=mapped+' geocoded location records at '+groups.size+' distinct coordinate points; '+(all.length-mapped)+' without valid coordinates.';el.after(summary);
+ setTimeout(()=>map.invalidateSize(),120);window.fishMap=map;
+};
+const prevRender=window.render;
+window.render=function(...args){const result=prevRender.apply(this,args);dashboardStats();patchPacking();if(state.page==='maps'||state.page==='home'){setTimeout(()=>{const el=document.getElementById('fishMap');if(el&&el.dataset.ready!=='v46')window.initFishMap()},140)}return result};
+dashboardStats();patchPacking();
+})();
+</script>
 </body></html>

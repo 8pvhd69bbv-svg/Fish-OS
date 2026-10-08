@@ -1,11 +1,13 @@
-/* FishOS V59 USGS flows: 7-day discharge charts, configurable stations. */
+/* FishOS V59 USGS flows: 30-day discharge charts, configurable stations. */
 (function(){
 'use strict';
 const stations=[
 {id:'14303600',name:'Nestucca — Beaver'},
 {id:'14092500',name:'Deschutes — Madras'},
 {id:'14301500',name:'Wilson — Tillamook'},
-{id:'14103000',name:'Deschutes — Moody'}
+{id:'14103000',name:'Deschutes — Moody'},
+{id:'14305500',name:'Siletz — Siletz'},
+{id:'14137000',name:'Sandy — Marmot'}
 ];
 const defaults=['14303600','14092500','14301500'];
 const idList=new Set(stations.map(x=>x.id));
@@ -21,7 +23,7 @@ function controls(){
  if(state.page!=='home')return;
  const main=document.getElementById('main');if(!main||main.querySelector('#fishos59flows'))return;
  const box=document.createElement('section');box.className='card';box.id='fishos59flows';box.style.marginTop='14px';
- box.innerHTML='<h3>LOCAL RIVER FLOWS / USGS</h3><p class="muted">Measured discharge (cfs), last 7 days. Provisional observations; some stations may report late or have no data. Choose a different river in each panel.</p><div class="grid g3" id="f59gaugegrid"></div>';
+ box.innerHTML='<h3>LOCAL RIVER FLOWS / USGS</h3><p class="muted">Measured discharge (cfs), last 30 days. Provisional observations; some stations may report late or have no data. Choose a different river in each panel.</p><div class="grid g3" id="f59gaugegrid"></div>';
  const today=Array.from(main.querySelectorAll('.card')).find(x=>x.querySelector('h3')?.textContent?.trim()==='Today');
  if(today)today.before(box);else main.appendChild(box);
  const cfg=settings(),grid=box.querySelector('#f59gaugegrid');
@@ -45,7 +47,7 @@ function plot(canvas,series){
 async function load(i,id,token){
  const value=document.getElementById('f59-value-'+i),note=document.getElementById('f59-msg-'+i),canvas=document.getElementById('f59-graph-'+i),link=document.getElementById('f59-link-'+i);
  if(!value||!canvas)return;link.href='https://waterdata.usgs.gov/monitoring-location/USGS-'+id+'/';value.textContent='Loading USGS…';note.textContent='';
- const url='https://waterservices.usgs.gov/nwis/iv/?format=json&sites='+id+'&parameterCd=00060&period=P7D';
+ const url='https://waterservices.usgs.gov/nwis/iv/?format=json&sites='+id+'&parameterCd=00060&period=P30D';
  try{
  const ctl=new AbortController(),timeout=setTimeout(()=>ctl.abort(),12000);
  let res;try{res=await fetch(url,{signal:ctl.signal})}finally{clearTimeout(timeout)}
@@ -54,7 +56,7 @@ async function load(i,id,token){
  const series=(json.value?.timeSeries||[]).filter(x=>x.variable?.variableCode?.some(y=>y.value==='00060')).flatMap(x=>x.values?.flatMap(o=>o.value||[])||[])
  .map(x=>({time:Date.parse(x.dateTime),v:Number(x.value)})).filter(x=>Number.isFinite(x.time)&&Number.isFinite(x.v)&&x.v>=0).sort((a,b)=>a.time-b.time);
  if(token!==serial||!canvas.isConnected||document.getElementById('f59-select-'+i)?.value!==id)return;
- if(!series.length){value.textContent='No recent discharge readings';note.textContent='USGS returned no usable cfs observations for this station in the last 7 days.';plot(canvas,[]);return}
+ if(!series.length){value.textContent='No recent discharge readings';note.textContent='USGS returned no usable cfs observations for this station in the last 30 days.';plot(canvas,[]);return}
  const latest=series.at(-1),age=(Date.now()-latest.time)/3600000,stale=age>48;
  value.textContent=latest.v.toLocaleString()+' cfs '+(stale?'— STALE':'— latest observation');
  note.textContent=new Date(latest.time).toLocaleString()+' · '+(stale?'Reading is more than 48 hours old; not current.':'USGS provisional data.');

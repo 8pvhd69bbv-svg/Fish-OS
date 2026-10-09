@@ -3,13 +3,13 @@
 **The fishing operating-system hub for everything surrounding an angler's life.**
 
 **Live website:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
-**Current application release:** V61
+**Current application release:** V62
 
-The current prioritized work register is [OPEN_TICKETS.md](OPEN_TICKETS.md). V61 preserves the V60 feature set, isolates browser caches by Supabase project and signed-in user, and fixes Dashboard bookmarks/navigation so the current dashboard and USGS panels render.
+The current prioritized work register is [OPEN_TICKETS.md](OPEN_TICKETS.md). V62 adds independent Fly Photos, Tying Knowledge and casting pages, restores Research categories, and adds editable trip country/state/geography while retaining the accepted dashboard and account isolation.
 
-Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs` for synthetic account/routing regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V61.html` are identical release copies; earlier archives remain unchanged.
+Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs scripts/test-collections.mjs` for synthetic regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V62.html` are identical release copies; earlier archives remain unchanged.
 
-Signed-out edits are temporary and are cleared on sign-in or reload. Old unscoped browser caches are retained locally but are not automatically claimed by an account or uploaded. Authenticated cloud data is authoritative on hydration. These client safeguards supplement Supabase RLS; they do not replace a live two-account permission test or a complete private backup.
+For fly photos, choose **Fly Photos** in the existing Upload category selector. Photos stay in private Storage and appear in Fly Tying → Fly Photos; originals remain in the file catalog. Tying Knowledge and each casting section store separate private notes. Inferred trip coordinates are approximate regional references, never exact fishing spots; existing values are preserved and the trip editor allows correction.
 
 ## The vision
 
@@ -28,38 +28,14 @@ The long-term aim is a durable record of the angler's fishing life and a workspa
 - **Destination atlas and research:** organized fisheries worldwide, regional notes, operators, research references and opportunities to revisit.
 - **Resources / references:** a searchable, account-scoped link catalog with Fly Shop, Regulations and Research filtering. Classification is currently heuristic/on-screen; stored categories need a separate verification and editing workflow.
 - **Uploads and files:** an interface for private storage and attachments, with a link-entry shortcut to the Resources catalog. The website repository itself is not a private photo archive.
-- **FishOS Arcade:** a separate future recreational branch. V50 introduces the non-playable **Stillwater** concept page under Resources. It does not ship a game engine or touch personal records.
+- **FishOS Arcade:** a separate future recreational branch. Stillwater has its own game page under References.
 
 ## Design philosophy
 
 Fish OS adopts the information density and tactile interface of early-2000s desktop utilities and file browsers, with LimeWire/Winamp inspiration. Keep compact navigation, clear organization, useful visual cues, mobile usability, and restrained nature greens with selective slate-blue accents. The information is the priority; decorative or game functionality must not interrupt essential workflows.
 
-## Data architecture
+## Development
 
-`index.html` contains the browser application deployed by GitHub Pages. GitHub stores **public code and public website assets only**.
+Keep earlier HTML release archives. Use the public feature checklist in OPEN_TICKETS.md for priorities; detailed maintenance notes remain local.
 
-Supabase authenticates users and provides account-scoped private records via `public.fishos_user_data`, `public.fishos_files` metadata and private `fishos-private` storage. Supabase RLS must enforce access control. Never expose service-role keys in public code.
-
-User data is not safely backed up just because HTML versions are archived. A complete backup must include the latest private JSON data, referenced private file bytes, a catalog/manifest, checksums, and a tested restore path.
-
-### Backup direction (planned, not yet implemented)
-
-1. Export a full authenticated private snapshot and file manifest with a date/season identifier.
-2. Back up associated private files, not only their URLs or metadata.
-3. Copy encrypted snapshots to an independently controlled backup destination and to the user's Windows Media drive through an explicit local sync client.
-4. Schedule periodic snapshots plus season-end archives; verify integrity and periodically test a restore.
-5. Keep several historical versions and reject silent conflicts. Browser downloads alone cannot reliably write an unattended file to a specific Windows drive.
-
-**Status:** automatic two-location backup and recovery are not implemented. Do not upload the private master to the public repository or deploy it with GitHub Pages.
-
-## Releases and tickets
-
-- `index.html` is the current live entry point. `Fish_OS_VNN.html` files are immutable versioned copies.
-- `OPEN_TICKETS.md` holds the project backlog and release acceptance conditions. Only the user closes tickets.
-- Scope changes narrowly. Preserve unrelated features; flag unavoidable changes before release.
-- Verify changes in an authenticated browser on desktop and mobile. A successful Pages deployment does not establish correct application behavior.
-- Preserve private data and working UI. Treat derived or estimated field data explicitly as such.
-
-**V50 changes:** Stillwater concept landing page; resource filter buttons; Upload Guide shortcut to add a website link; README expansion. The game is concept-only. Existing problems with stats, packing, map counts and some classification accuracy remain unverified.
-
-See [OPEN_TICKETS.md](OPEN_TICKETS.md) for detailed status.
+Run node scripts/check.mjs and the synthetic tests before publishing. Preserve existing routes and controls when adding pages.

@@ -110,5 +110,6 @@ test('all application persistence uses the scoped facade; SDK storage stays nati
   assert.match(withoutFacade,/persistSession:true/);
   assert.equal(html.includes('id="fishos-v54-session-restore"'),false);
   for(const m of html.matchAll(/<script src="(assets\/[^\"]+)"/g))assert.equal(readFileSync(new URL('../'+m[1],import.meta.url),'utf8').includes('localStorage.'),false,m[1]);
-  assert.equal(readFileSync(new URL('../Fish_OS_V61.html',import.meta.url),'utf8'),html);
+  const version=html.match(/el.textContent='FISH OS (V\d+)'/)[1];
+  assert.equal(readFileSync(new URL('../Fish_OS_'+version+'.html',import.meta.url),'utf8'),html);
 });

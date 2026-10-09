@@ -12,9 +12,6 @@ Give to AI/
 *.sql
 *.dump
 *private*backup*.json
-*PRIVATE*.json
-Fish_OS_*COMPLETE.zip
-Restore-Test*/
 node_modules/
 .local/
 *.log

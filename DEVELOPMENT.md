@@ -1,6 +1,6 @@
 # Fish OS current development handoff
 
-Current release: **V63**. Entry point: `index.html`; matching release archive: `Fish_OS_V63.html`.
+Current release: **V64**. Entry point: `index.html`; matching release archive: `Fish_OS_V64.html`.
 
 ## Continue development
 
@@ -10,7 +10,9 @@ Use `node scripts/preview.mjs` for a preview and `node scripts/check.mjs` for sy
 
 ## Latest changes
 
-V63 fixes the built-in Back button, adds editable journal entries sorted newest first, and adds an inventory editor for packs, reels, lines, boxes, bags, nets and waders. Packs are included in Gear Health. The sidebar begins with Dashboard, CORE, TRACKING, then the existing sections.
+V64 adds separate fishing/travel estimates with explicit assumptions, user confirmation of journal-linked catches, named packing lists with completed-trip protection, high contrast page references, USA labels, map tools below the map, inventory charts and an updated gear diagram. Research Notes holds imported user source notes, which must not be treated as current verified regulations or prices. The full Tickets page saves user review checkmarks privately; repository status is still maintained by Codex.
+
+V64 fixes the built-in Back button, adds editable journal entries sorted newest first, and adds an inventory editor for packs, reels, lines, boxes, bags, nets and waders. Packs are included in Gear Health. The sidebar begins with Dashboard, CORE, TRACKING, then the existing sections.
 
 Owner Tools contains optional page references and links to this handoff, tickets, account settings and Upload. It provides tools for the signed-in user's own account; it does not create an administrative role.
 

@@ -41,7 +41,7 @@ Detailed development notes are kept locally. This checklist tracks public applic
 | FISH-040 | Arcade fish-target game inspired by duck-hunt mechanics | NEW / BACKLOG |
 | FISH-006 | Begin selective Winamp/nature-green visual refinement | STARTED / DESIGN REVIEW |
 | FISH-007 | Duplicate record review | Closed at user direction |
-| FISH-046 | Map provider links | UI verified |
+| FISH-046 | Map provider links | CLOSED — user confirmed 2026-10-09 |
 | FISH-047 | River flow panels | User review |
 | FISH-048 | Species checklist lock | Verification pending |
 | FISH-049 | Dashboard estimates | User review |
@@ -51,9 +51,15 @@ Detailed development notes are kept locally. This checklist tracks public applic
 | FISH-053 | Tying Knowledge page | Implemented |
 | FISH-054 | Dedicated casting pages | Implemented |
 | FISH-055 | Research category filters | CLOSED — user confirmed 2026-10-09 |
-
 | FISH-056 | Back navigation | Ready for user review |
 | FISH-057 | Date-sorted editable journal entries | Ready for user review |
 | FISH-058 | Add/edit gear and pack health integration | Ready for user review |
-| FISH-059 | Page references and owner tools | Ready for user review |
+| FISH-059 | Optional page references | CLOSED — user confirmed 2026-10-09 |
 | FISH-060 | Current handoff and housekeeping | Maintained |
+| FISH-061 | Owner Tools expansion and project checklist | Implemented; user review |
+| FISH-062 | Separate fishing and travel distance estimates | Implemented; assumptions labeled |
+| FISH-063 | Confirm journal mentions as linked catches | Implemented; user review |
+| FISH-064 | Named packing lists and completed-trip locks | Implemented; user review |
+| FISH-065 | Gear component clarity and inventory overview charts | Implemented; user review |
+| FISH-066 | Private research note organization | Implemented; review source notes |
+| FISH-067 | Fly recipes linked to material availability | Planned from user vision |

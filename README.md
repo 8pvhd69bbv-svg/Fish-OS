@@ -3,11 +3,11 @@
 **The fishing operating-system hub for everything surrounding an angler's life.**
 
 **Live website:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
-**Current application release:** V64
+**Current application release:** V1.065
 
 The current prioritized work register is [OPEN_TICKETS.md](OPEN_TICKETS.md). V64 separates fishing and travel estimates, enables confirmed journal-linked catch records, adds named packing lists and completed-trip locks, and expands inventory charts and Owner Tools. See [DEVELOPMENT.md](DEVELOPMENT.md) for the current handoff.
 
-Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs scripts/test-collections.mjs scripts/test-workspace.mjs` for synthetic regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V64.html` are identical release copies; earlier archives remain unchanged.
+Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs scripts/test-collections.mjs scripts/test-workspace.mjs` for synthetic regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V1.065.html` are identical release copies; earlier archives remain unchanged.
 
 For fly photos, choose **Fly Photos** in the existing Upload category selector. Photos stay in private Storage and appear in Fly Tying → Fly Photos; originals remain in the file catalog. Tying Knowledge and each casting section store separate private notes. Inferred trip coordinates are approximate regional references, never exact fishing spots; existing values are preserved and the trip editor allows correction.
 
@@ -39,3 +39,7 @@ Fish OS adopts the information density and tactile interface of early-2000s desk
 Keep earlier HTML release archives. Use the public feature checklist in OPEN_TICKETS.md for priorities; detailed maintenance notes remain local.
 
 Run node scripts/check.mjs and the synthetic tests before publishing. Preserve existing routes and controls when adding pages.
+
+V1.065: grouped tickets (Closed last), visible estimated hours/days, automatic editable reported journal catches, inventory category selectors, separate reel line class and physical ounces, past-trip status, owner-only tools and per-control references. Release names now use V1.NNN; historical archives keep their original names.
+
+This release also adds an automatic owner-scoped server master and private downloadable master, full-page journal editing, linked trip notes, girth-based weight estimates using Wisconsin DNR formulas, and rod/reel/line classification tools. Uploaded media remain in private Storage and are included by manifest; this does not create an offsite media archive. Backend reconciliation, renderer consolidation, login simplification and live second-user testing remain tracked.

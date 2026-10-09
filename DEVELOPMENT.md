@@ -1,6 +1,6 @@
 # Fish OS current development handoff
 
-Current release: **V64**. Entry point: `index.html`; matching release archive: `Fish_OS_V64.html`.
+Current release: **V1.065**. Entry point: `index.html`; matching release archive: `Fish_OS_V1.065.html`.
 
 ## Continue development
 
@@ -29,3 +29,7 @@ Do not duplicate an entire private backup for code-only releases. Verify the exi
 ## Outstanding verification
 
 Live two-account and mobile verification remain open. New journal and inventory controls need the user's review. Historical record reconciliation remains separate from recovery testing.
+
+V1.065: grouped tickets (Closed last), visible estimated hours/days, automatic editable reported journal catches, inventory category selectors, separate reel line class and physical ounces, past-trip status, owner-only tools and per-control references. Release names now use V1.NNN; historical archives keep their original names.
+
+This release also adds an automatic owner-scoped server master and private downloadable master, full-page journal editing, linked trip notes, girth-based weight estimates using Wisconsin DNR formulas, and rod/reel/line classification tools. Uploaded media remain in private Storage and are included by manifest; this does not create an offsite media archive. Backend reconciliation, renderer consolidation, login simplification and live second-user testing remain tracked.

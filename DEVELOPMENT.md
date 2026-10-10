@@ -1,6 +1,6 @@
 # Fish OS current development handoff
 
-Current release: **V1.065**. Entry point: `index.html`; matching release archive: `Fish_OS_V1.065.html`.
+Current release: **V1.066**. Entry point: `index.html`; matching release archive: `Fish_OS_V1.066.html`.
 
 ## Continue development
 
@@ -30,6 +30,19 @@ Do not duplicate an entire private backup for code-only releases. Verify the exi
 
 Live two-account and mobile verification remain open. New journal and inventory controls need the user's review. Historical record reconciliation remains separate from recovery testing.
 
-V1.065: grouped tickets (Closed last), visible estimated hours/days, automatic editable reported journal catches, inventory category selectors, separate reel line class and physical ounces, past-trip status, owner-only tools and per-control references. Release names now use V1.NNN; historical archives keep their original names.
+V1.066: grouped tickets (Closed last), visible estimated hours/days, automatic editable reported journal catches, inventory category selectors, separate reel line class and physical ounces, past-trip status, owner-only tools and per-control references. Release names now use V1.NNN; historical archives keep their original names.
 
 This release also adds an automatic owner-scoped server master and private downloadable master, full-page journal editing, linked trip notes, girth-based weight estimates using Wisconsin DNR formulas, and rod/reel/line classification tools. Uploaded media remain in private Storage and are included by manifest; this does not create an offsite media archive. Backend reconciliation, renderer consolidation, login simplification and live second-user testing remain tracked.
+
+
+V1.066 adds a darker, responsive workspace while retaining header identity and routes; unified inventory editing with category moves, confirmed deletion and classification controls; reliable category/search/sort results; a collection-value breakdown; trip-specific maps and matching private research/files; and clearer Upload choices. Historical reconciliation is audited privately, with current records authoritative. Standalone Custom Icons navigation is retired; existing routes redirect to Upload.
+
+## Account and workflow answers
+
+Signed-in changes persist after a successful cloud save and are loaded again after login. Upload stores original files privately; file contents do not automatically become structured records. The current server MASTER updates with records and file-catalog changes; its downloadable Storage copy refreshes after successful saves/account loading. Previously downloaded local files are snapshots, and original uploaded media are separate from record JSON.
+
+Users create a Fish OS account with email/password (email confirmation may be required). They do not need a Supabase dashboard account.
+
+For professional fly-fishing customer service, existing resources, pattern knowledge, line/rod classifications and warranty/purchase notes provide a starting knowledge base. Useful future additions include searchable product specifications, compatibility guides, warranty checklists and reusable answer templates.
+
+Remaining priorities: real two-account and iPhone session/upload verification, smaller legacy renderer modules, and verified structured interpretation of source research. Historical reconciliation preserves ambiguous variants rather than inventing dates or replacing current records.

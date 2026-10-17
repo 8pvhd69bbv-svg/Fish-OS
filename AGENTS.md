@@ -9,7 +9,7 @@
 - Read OPEN_TICKETS.md for current priorities. If local STATUS.md exists, read it before changing import, auth, hydration, or sync. Check cache ownership and logout behavior.
 - Use the Supabase skill for backend work. No production schema, policy, or data changes without task authorization.
 - Review diffs and staged paths before commits. Secret-pattern scans do not guarantee privacy.
-- Push/deploy when requested, verify Pages source first, then live behavior. Publish index.html and an identical versioned HTML archive; preserve earlier archives.
+- Default for every Fish OS update: complete the checks, commit and push the update, and verify deployment unless the user explicitly says not to publish. This standing user instruction authorizes routine publication without asking again. Verify Pages source before pushing and live behavior afterward. Publish index.html and an identical versioned HTML archive; preserve earlier archives.
 - Keep documentation current and distinguish facts from assumptions.
 - Preserve existing functions and estimates unless the user approves their removal. Keep recorded fishing distance separate from travel distance and labeled assumptions.
 - Identify requested changes by page reference and exact control name. Close tickets only on user acceptance; a privately checked review box is input for the next ledger update.
@@ -19,8 +19,10 @@
 
 ## Efficient delegated work
 
-- When the user authorizes delegation, reuse named agents with focused briefs. Include the goal, relevant file paths, constraints and acceptance checks; avoid inheriting the full chat when a short brief suffices.
+- In every new Fish OS project chat, use focused planner, implementer and reviewer subagents as the user requested. Reuse named agents with focused briefs. Include the goal, relevant file paths, constraints and acceptance checks; avoid inheriting the full chat when a short brief suffices.
 - Planner reads only enough to identify dependencies, risks and bounded tasks. Grunt implements a bounded task with explicit file ownership. Avoid overlapping edits and repeated repository-wide audits.
 - Agent reports should list changes, checks, unresolved issues and relevant paths concisely. The orchestrator integrates once, runs the appropriate final checks, maintains the handoff and publishes.
 - Keep private account reads/writes, credentials, data reconciliation and final publication under the orchestrator's control. Do not distribute private records unless a delegated task requires them.
-- Delegation is not guaranteed to reduce tokens. Use one agent or direct work for small changes; use parallel agents only for independent work that benefits from it. Never silently substitute an unavailable requested model.
+- Keep the planner and reviewer checks bounded for small changes; parallelize only independent work with explicit file ownership. Never silently substitute an unavailable requested model.
+
+- Ticket housekeeping: responsive/iOS/session/release checks are recurring release practice, not FISH-012 issue work. Keep user-accepted tickets current for three published releases, then preserve their status and descriptions in TICKET_HISTORY.md; never phase out pending work.

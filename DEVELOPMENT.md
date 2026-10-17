@@ -1,6 +1,6 @@
 # Fish OS current development handoff
 
-Current application: **V1.068**. Entry: `index.html`; identical archive: `Fish_OS_V1.068.html`. Historical releases and their assets remain present.
+Current release: **V1.069**. Publication is authorized; deployment and live verification are pending. Entry: `index.html`; identical release archive: `Fish_OS_V1.069.html`. Historical releases and their assets remain present.
 
 Read AGENTS.md, OPEN_TICKETS.md and DESIGN_IMPLEMENTATION.md. The current design renderer and stylesheet implement page compositions, not merely palette changes. New routes: #water-profile, #season-recap, #pre-trip. Existing editors, account guards, upload/import/restore operations and source records are retained.
 
@@ -10,7 +10,7 @@ Preview with `node scripts/preview.mjs`. Its `/__design-review` endpoint injects
 
 Run `node scripts/check.mjs`, `node --test --test-isolation=none scripts/test-*.mjs`, and `node scripts/audit.mjs`. Review populated layouts at confirmed viewport widths of 390px and 1440px. The current suite includes account isolation, historical restore preservation, category metadata, source-linked catches, read-only insights and delayed backup export guards.
 
-Publication requires the complete proposed Git tree to retain all prior tracked release/recovery files. Pages source was verified as main/root with HTTPS. Update the local ignored HANDOFF.md/STATUS.md with deployment evidence after publication. Ticket closure requires owner acceptance.
+Updates are committed and pushed by default unless the user explicitly instructs otherwise. Publication requires the complete proposed Git tree to retain all prior tracked release/recovery files. Pages source was verified as main/root with HTTPS. Update the local ignored HANDOFF.md/STATUS.md with deployment evidence after publication. Ticket closure requires owner acceptance.
 
 ## Data and feature limits
 
@@ -25,3 +25,7 @@ Inventory includes brand suggestions, reel colors, retail/model-year/comparable 
 The source audit found no duplicate current asset references, missing current dependencies or assets unused by every current/historical release. Removed two conflicting cosmetic blocks, a stale duplicate release badge and the unpublished V1.067 UI candidate. Historical source archives are retained. Four redesigned pages bypass the inherited render chain; further consolidation of its 25 inline wrappers remains under FISH-014.
 
 Actual iPhone, signed-in multi-account/multi-device and full private upload/export acceptance remain open. Synthetic browser checks do not establish those results. The local handoff and human intake instructions remain outside publication.
+
+## V1.069 review fixes
+
+Search omits resource/link collections before result limits. River flow panels are visible below the home map; popup names display once and Leaflet stacking is isolated. Journal actions align right, month names and species tags derive from saved entries, and locations sort alphabetically. Journal rows are not hidden or grouped: owner-authorized duplicate removal was applied to private cloud records with a verified recovery copy; no private records are published. Current tickets retire accepted items to TICKET_HISTORY.md after three updates; routine session checks replace FISH-012. AGENTS.md persists delegation for new project chats. New focused override assets: fishos-review-v1-069.js/.css and fishos-tickets-v1-069.js.

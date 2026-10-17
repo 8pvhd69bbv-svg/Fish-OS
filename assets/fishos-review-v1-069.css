@@ -1,0 +1,9 @@
+/* Keep Leaflet panes inside the map's own stacking context below sticky navigation. */
+#fishMap{isolation:isolate;z-index:0}
+#fishos59flows{min-width:0}
+#fishos59flows select{max-width:100%;width:100%}
+#fishos59flows #f59gaugegrid>div{min-width:0}
+.ui68-entry>.ui68-entry-actions{margin-top:0;margin-left:auto;justify-content:flex-end;flex-shrink:0}
+.ui68-entry .ui68-entry-species{margin-top:16px}
+@media(max-width:799px){.ui68-entry>.ui68-entry-actions{order:1;width:100%}.ui68-entry>.ui68-entry-body{order:2}.ui68-entry>.ui68-date{order:0}}
+.ui68-entry{flex-direction:row}

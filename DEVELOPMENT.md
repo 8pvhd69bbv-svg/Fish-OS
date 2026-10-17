@@ -1,6 +1,6 @@
 # Fish OS current development handoff
 
-Current release: **V1.069**. Publication is authorized; deployment and live verification are pending. Entry: `index.html`; identical release archive: `Fish_OS_V1.069.html`. Historical releases and their assets remain present.
+Current release: **V1.070**. Stillwater playable game candidate; deployment verification pending. Entry: `index.html`; identical release archive: `Fish_OS_V1.070.html`. Historical releases and their assets remain present.
 
 Read AGENTS.md, OPEN_TICKETS.md and DESIGN_IMPLEMENTATION.md. The current design renderer and stylesheet implement page compositions, not merely palette changes. New routes: #water-profile, #season-recap, #pre-trip. Existing editors, account guards, upload/import/restore operations and source records are retained.
 
@@ -29,3 +29,15 @@ Actual iPhone, signed-in multi-account/multi-device and full private upload/expo
 ## V1.069 review fixes
 
 Search omits resource/link collections before result limits. River flow panels are visible below the home map; popup names display once and Leaflet stacking is isolated. Journal actions align right, month names and species tags derive from saved entries, and locations sort alphabetically. Journal rows are not hidden or grouped: owner-authorized duplicate removal was applied to private cloud records with a verified recovery copy; no private records are published. Current tickets retire accepted items to TICKET_HISTORY.md after three updates; routine session checks replace FISH-012. AGENTS.md persists delegation for new project chats. New focused override assets: fishos-review-v1-069.js/.css and fishos-tickets-v1-069.js.
+
+## V1.070 Stillwater
+
+Stillwater is an original playable adventure contained in a fixed game viewport on the existing #fishing-game route. Standalone assets/stillwater-game.html, CSS and JS own all game screens. The prior concept and click-target prototype are replaced on this route. Existing private app records remain untouched.
+
+Day: ten minutes of active daylight, wading/aiming, riffle/pool/deep-run fish, fly/depth matching, drag/mending, timed hook set and directional tension fights. A full creel, exhausted energy or sunset returns to the lodge. Optional hatch, wind and rescue events occur during the day. Three river sections unlock through catches. The provided animated brown trout sheet is copied into public assets/stillwater-brown-trout.png and used in-water and in catch/collection views.
+
+Night: five customers, cooking timers, patience, tips and one-to-three lodge stars. A post-service shop upgrades rods, fly patterns, dishes, creel and kitchen before sleeping. Soup permits recovery after a poor fishing day. Species cards start as silhouettes and track size/best-fly records. Season milestones cover the Copper King legendary brown, full menu and three catches in every section.
+
+Persistence uses only the browser-local fishos-stillwater-adventure-v2 namespace; it is not cloud-synced or account-specific. Expedition inventory, progression and in-progress dinner service survive reloads. No production/account data is accessed. This is a three-species prototype, not a full commercial game; breeding/growth and the separate target-game backlog remain open.
+
+Validation: 70 tests pass, including targeted bites, wrong-fly rejection, fights, quest idempotence, service earnings/stars, pause, reload, ten-minute daylight/events and upgrade gates. Syntax/dependency audit passes. Signed-out 390px/1440px browser checks cover embedded layout, locked collection and a cooked/served dinner order. Real-device touch and extended balance testing remain pending.

@@ -83,4 +83,5 @@ window.render=function(...args){
  const res=prior.apply(this,args);decorate();if(state.page==='tracking')setTimeout(decorate,100);return res;
 };
 setTimeout(decorate,90);
+window.fishosHealth68={items,code,brand,displayName};
 })();

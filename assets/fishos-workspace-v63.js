@@ -64,5 +64,6 @@ window.render=function(...args){if(document.readyState==='loading')return;let re
  if(references()){const badge=document.createElement('div');badge.className='tag';badge.textContent='PAGE V63 / '+state.page;main.prepend(badge)}
  return result;
 };
+window.fishosEditors68={editJournal};
 document.addEventListener('DOMContentLoaded',()=>render(),{once:true});setTimeout(()=>render(),0);
 })();

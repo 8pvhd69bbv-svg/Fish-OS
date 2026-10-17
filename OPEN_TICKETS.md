@@ -368,3 +368,21 @@ Full-page journal editing and linked trip log information. User accepted the cur
 ### FISH-077 — Rod, reel and line class selectors
 
 Rod, reel and line class selectors. User accepted the current implementation; retain its existing behavior.
+
+
+## October 16 design directive — awaiting owner acceptance
+
+The prior local candidate reused FISH-068–073. Those IDs remain assigned to their original accepted work above; the new requests use FISH-078–085.
+
+| Ticket | Feature | Size | Status |
+|---|---|---|---|
+| FISH-078 | Reference page layouts and consistent UI across every existing page | Large | Implemented V1.068; awaiting owner review |
+| FISH-079 | Duplicate resources | Medium | View grouping implemented; all saved versions retained |
+| FISH-080 | Shared country atlas and geographic references | Medium | 193 existing entries mapped; private overlays retained |
+| FISH-081 | Inventory line brands, reel colors and retail cost | Medium | Implemented; synthetic save verified |
+| FISH-082 | Estimated resale with current online listings | Medium | Planning estimate and manual comparables implemented; automatic listings/brand model OPEN |
+| FISH-083 | One current handoff and local file cleanup | Small | Maintained; exact loose duplicates removed; recovery copies retained |
+| FISH-084 | Water Profile, Season Recap and Pre-trip Check | Medium | Approved and implemented V1.068; read-only models verified |
+| FISH-085 | Cancel backup exports across account changes | Medium | Implemented; delayed-query regression tests pass |
+
+FISH-014 audit: removed conflicting cosmetic layers and superseded UI candidate; established one current design renderer and stylesheet. Current/historical static dependencies have no missing or unreferenced assets. Twenty-five inherited inline renderer wrappers remain; four designed pages now bypass that chain. Further consolidation must preserve existing account/import/backup/trip behavior through incremental tests.

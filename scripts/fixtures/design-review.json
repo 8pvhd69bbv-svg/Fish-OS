@@ -1,0 +1,36 @@
+{
+  "trips": [
+    {"id":"Synthetic river weekend","place":"Sample River","date":"2027-06-12","status":"Upcoming","people":["Test angler"],"country":"United States"},
+    {"id":"Synthetic completed trip","place":"Sample River","date":"2026-06-10","status":"Completed","notes":"Synthetic trip log"}
+  ],
+  "journal": [
+    {"id":"synthetic-j1","title":"Synthetic streamer observation","date":"2026-06-10","location":"Sample River","species":["Brown trout"],"type":"Observation","observed":"Fish followed the streamer near the shaded bank.","tactics":["Streamers"],"result":"A slower retrieve produced a response."},
+    {"id":"synthetic-j2","title":"Synthetic trip log","date":"2026-05-11","location":"Sample Lake","species":["Rainbow trout"],"trip_id":"synthetic-past","notes":"Calm water and an evening hatch."},
+    {"id":"synthetic-j3","title":"Synthetic undated field note","location":"Sample River","species":["Brown trout"],"notes":"Add a date after checking the field notebook."}
+  ],
+  "locations": [
+    {"name":"Sample River","region":"Oregon","lat":44.5,"lon":-121.5},
+    {"name":"Sample River","region":"Oregon","notes":"Duplicate display review example"},
+    {"name":"Sample Lake","region":"Montana","lat":46.6,"lon":-111.9}
+  ],
+  "fish":[
+    {"id":"synthetic-f1","species":"Brown trout","date":"2026-06-10","location":"Sample River","length_inches":22,"girth_inches":12},
+    {"id":"synthetic-f2","species":"Rainbow trout","date":"2026-05-11","location":"Sample Lake","length_inches":18,"girth_inches":10}
+  ],
+  "flies":[
+    {"name":"Synthetic olive streamer","category":"Streamer","species":["Brown trout"],"notes":"Olive body, subtle flash.","waters":["Sample River"]},
+    {"name":"Synthetic dry fly","category":"Dry Fly","species":["Rainbow trout"],"notes":"Floating dry fly."},
+    {"name":"Synthetic bead nymph","category":"Nymph","species":["Brown trout","Rainbow trout"],"materials":"Hook, bead, thread."},
+    {"name":"Synthetic saltwater fly","category":"Saltwater","species":["Permit"],"notes":"Saltwater pattern."},
+    {"name":"Synthetic hook","category":"Other","notes":"Uncategorized pattern."}
+  ],
+  "rods": [],
+  "component_gear": {
+    "rods": [],
+    "reels":[{"id":"gear63-synthetic-reel","name":"Synthetic reel","brand":"Test brand","condition":"Good","color":"Blue","retail_cost":400,"cost":250}],
+    "lines":[{"id":"gear63-synthetic-line","name":"Synthetic floating line","brand":"RIO","condition":"Not assessed"}],
+    "packs":[{"id":"gear63-synthetic-pack","name":"Synthetic field pack","brand":"Test brand","condition":"Poor"}]
+  },
+  "field_settings":{"gear_health":{"packs|gear63-synthetic-pack":{"condition":"Poor"},"reels|gear63-synthetic-reel":{"condition":"Good"}},"distance_settings":{"fishing_miles_per_day":2,"hours_per_day":6}},
+  "section_notes":[],"links":[],"trip_sessions":[]
+}

@@ -3,11 +3,13 @@
 **The fishing operating-system hub for everything surrounding an angler's life.**
 
 **Live website:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
-**Current application release:** V1.066
+**Current application release:** V1.068
+
+V1.068 implements the reference page layouts, adds Water Profile, Season Recap and Pre-trip Check, and retains all existing editors and private-account controls. See [DESIGN_IMPLEMENTATION.md](DESIGN_IMPLEMENTATION.md) for the design acceptance checklist.
 
 The current prioritized work register is [OPEN_TICKETS.md](OPEN_TICKETS.md). V64 separates fishing and travel estimates, enables confirmed journal-linked catch records, adds named packing lists and completed-trip locks, and expands inventory charts and Owner Tools. See [DEVELOPMENT.md](DEVELOPMENT.md) for the current handoff.
 
-Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test scripts/test-account-isolation.mjs scripts/test-collections.mjs scripts/test-workspace.mjs` for synthetic regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V1.066.html` are identical release copies; earlier archives remain unchanged.
+Run `node scripts/preview.mjs` for a loopback-only preview, `node scripts/check.mjs` for script validation, and `node --test --test-isolation=none scripts/test-*.mjs` for synthetic regressions. The preview serves public application assets only. `index.html` and `Fish_OS_V1.068.html` are identical release copies; earlier archives remain unchanged.
 
 For fly photos, choose **Fly Photos** in the existing Upload category selector. Photos stay in private Storage and appear in Fly Tying → Fly Photos; originals remain in the file catalog. Tying Knowledge and each casting section store separate private notes. Inferred trip coordinates are approximate regional references, never exact fishing spots; existing values are preserved and the trip editor allows correction.
 

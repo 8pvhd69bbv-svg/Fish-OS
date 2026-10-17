@@ -9,12 +9,18 @@ for(const name of await readdir(new URL('../icons/',import.meta.url)))if(/^[a-z0
 const port=Number(process.env.PORT||4173);
 http.createServer(async (req, res) => {
   const path = new URL(req.url, 'http://localhost').pathname;
-  const isHTML=['/', '/index.html', '/Fish-OS/', '/Fish-OS/index.html'].includes(path);
+  const review=path==='/__design-review';
+  const isHTML=review||['/', '/index.html', '/Fish-OS/', '/Fish-OS/index.html'].includes(path);
   const asset=path.replace(/^\/Fish-OS\//,'').replace(/^\//,'');
   if (!isHTML&&!publicAssets.has(asset)) { res.writeHead(404); res.end('Not found'); return; }
   if (!['GET','HEAD'].includes(req.method)) { res.writeHead(405); res.end(); return; }
   try {
-    const body = await readFile(isHTML?html:new URL('../'+asset,import.meta.url));
+    let body = await readFile(isHTML?html:new URL('../'+asset,import.meta.url));
+    if(review){
+      const fixture=JSON.parse(await readFile(new URL('./fixtures/design-review.json',import.meta.url),'utf8'));
+      const injection=`<script>document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{if(state.profile?.loggedIn)return;Object.assign(DATA,${JSON.stringify(fixture).replace(/</g,'\\u003c')});state.fishCaught=['Brown trout','Rainbow trout'];state.packingByTrip={'Synthetic river weekend':{FIELD:[{name:'Synthetic pack item',done:true,qty:1,weight:4},{name:'Synthetic fly box',done:false,qty:1,weight:6}]}};render()},500),{once:true});</script>`;
+      body=Buffer.from(body.toString('utf8').replace('</body>',injection+'</body>'));
+    }
     const type=isHTML?'text/html':asset.endsWith('.svg')?'image/svg+xml':asset.endsWith('.js')?'text/javascript':'text/css';
     res.writeHead(200, {'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store'});
     res.end(req.method === 'HEAD' ? undefined : body);

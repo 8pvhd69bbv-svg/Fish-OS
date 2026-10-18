@@ -4,7 +4,7 @@ const html = new URL('../index.html', import.meta.url);
 const source=await readFile(html,'utf8');
 const publicAssets=new Set([...source.matchAll(/(?:src|href)=["']((?:assets|icons)\/[^"']+)["']/g)].map(m=>m[1]));
 // The standalone Stillwater frame has its own local stylesheet and game script.
-for(const name of ['wyatt-wizard.png','fly-rod.png','fly-rod-detail.png','stillwater-game.html','stillwater-game.css','stillwater-game.js','stillwater-brown-trout.png'])publicAssets.add('assets/'+name);
+for(const name of ['wyatt-cutout-v1-072.png','fishing-icon-pack.png','wyatt-wizard.png','fly-rod.png','fly-rod-detail.png','stillwater-game.html','stillwater-game.css','stillwater-game.js','stillwater-brown-trout.png'])publicAssets.add('assets/'+name);
 // Icons may be referenced by the application at runtime.
 const {readdir}=await import('node:fs/promises');
 for(const name of await readdir(new URL('../icons/',import.meta.url)))if(/^[a-z0-9_-]+\.svg$/i.test(name))publicAssets.add('icons/'+name);

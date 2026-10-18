@@ -1,0 +1,6 @@
+/* Current atlas ratings retain their labels and remain colored after filtering. */
+body #main .country.rating-bust > summary > .tag{color:#ff7d7d!important}
+body #main .country.rating-unrated > summary > .tag{color:#f2d04a!important}
+body #main a.cleanup72-distance{display:block;text-decoration:none;cursor:pointer}
+body #main a.cleanup72-distance:hover{border-color:#79c900!important}
+body #main a.cleanup72-distance:focus-visible{outline:2px solid #d6ff7a;outline-offset:3px;border-color:#79c900!important}

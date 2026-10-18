@@ -1,0 +1,12 @@
+#side .nav-art72{width:34px;height:28px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.nav-brown72{display:inline-block;width:34px;height:20px;background:url('stillwater-brown-trout.png') no-repeat 0 -18px;background-size:272px 405.17px}
+.nav-fly72{display:inline-block;width:30px;height:30px;border-radius:50%;background:#fff url('fishing-icon-pack.png') no-repeat -11px -60px;background-size:264px 144px}
+#main .rodscene .rod-anatomy72{display:block;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:12px}
+#fishAIBar{background:transparent!important;border:0!important;box-shadow:none!important}
+body #fishAIBar button{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;min-height:0!important;border-radius:0!important;display:block!important}
+#fishAIBar button img{display:block;width:82px;height:124px;object-fit:contain;filter:drop-shadow(0 2px 3px #0008)}
+#fishAIBar button:hover img{filter:drop-shadow(0 0 5px #b3db89)}
+#fishAIBar button:focus-visible{outline:2px solid #b3db89!important;outline-offset:4px;border-radius:8px!important}
+@media(max-width:600px){#fishAIBar button img{width:62px;height:94px}}
+
+body #main .rodscene .toolbar{background:#141b0d;padding:12px;margin:0;border-radius:0 0 12px 12px}body #main .rodscene .toolbar .btn{background:#1f2c12!important;color:#e9efe0!important;border-color:#60764a!important}

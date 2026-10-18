@@ -1,7 +1,7 @@
-# Fish OS V1.071
+# Fish OS V1.072
 
-Supplied brown trout, fly rods and Wyatt artwork; readable USGS controls; Research document drops and reviewed URL intake; Journal/Locations section photo selection; Back navigation across newer pages; invite instructions in Account and Owner Tools. Existing field settings now preserve section photos when edited.
+Browser feedback cleanup: System Account/Upload at sidebar bottom; dashboard fishing/travel mileage links to Tracking; detailed rod anatomy replaces Gear artwork while retaining component controls; Bust red and Unrated yellow; Resources-only game shortcut removed; supplied fly navigation icon, brown-trout Tracker and Insights icons; transparent image-only Wyatt with exact hover label.
 
-FISH-032 and FISH-058 closed by owner instruction. FISH-060 is maintenance. HTML retention is current + ten previous + oldest; removed releases remain in Git history. Assets used by retained releases are preserved.
+83 existing regression tests pass. Signed-out browser verifies navigation, rating colors, controls and transparent button. No private data or backend changes. HTML retention remains oldest + ten previous + current.
 
-Private mixed notes were reorganized with original source text retained. Existing rows were preserved. Ambiguous place identification and live second-user/upload/photo persistence checks remain open. Current verification recorded in local STATUS.md.
+Wyatt cutout generated with built-in image tool. Prompt: remove black background to transparent alpha; preserve character, full figure, rod and line; no button, border or new text. Asset: assets/wyatt-cutout-v1-072.png.

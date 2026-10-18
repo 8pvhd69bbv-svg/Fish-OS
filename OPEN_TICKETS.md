@@ -15,16 +15,13 @@ Largest to smallest within each group. Accepted work remains current for three p
 | FISH-067 | Fly recipes linked to material availability | Large | Planned from user vision |
 | FISH-021 | Resource classification | Medium | PARTIAL |
 | FISH-024 | Persistent manually editable resource categories | Medium | IN PROGRESS |
-| FISH-032 | Consolidate private-file panels | Medium | READY FOR VERIFICATION |
-| FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | NEW / EVALUATE |
-| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | NEW |
+| FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | Supplied brown trout, rods and Wyatt artwork integrated; owner review pending |
+| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Journal and Locations section covers implemented; portfolio remains open |
 | FISH-036 | Gear warranty wizard | Medium | NEW |
-| FISH-056 | Back navigation | Medium | Ready for user review |
-| FISH-058 | Add/edit gear and pack health integration | Medium | Ready for user review |
+| FISH-056 | Back navigation | Medium | Fixed newer-route Back history; regression checks pass; owner review pending |
 | FISH-063 | Journal-linked editable catches | Medium | Implemented — automatic reported catches; editable in Tracking |
-| FISH-066 | Private research note organization | Medium | Implemented; review source notes |
-| FISH-025 | Upload-page resource-link shortcut | Small | UI VERIFIED / LIVE SAVE OPEN |
-| FISH-060 | Current handoff and housekeeping | Small | Maintained |
+| FISH-066 | Private research note organization | Medium | Mixed source notes reorganized privately; original text retained; ambiguous Oregon pins pending |
+| FISH-025 | Upload-page resource-link shortcut | Small | Drop/picker and URL review implemented; synthetic checks pass; live upload verification pending |
 
 ## Issues
 
@@ -43,11 +40,16 @@ Largest to smallest within each group. Accepted work remains current for three p
 | FISH-013 | Account persistence | Medium | Cloud saves and revision parity verified; live two-account testing tracked in FISH-030 |
 | FISH-026 | Recurring recovery checks | Medium | Implemented — automatic record parity and master download verification |
 | FISH-029 | Streamlined FishOS-branded login | Medium | NEW |
-| FISH-030 | Invite and test second user safely | Medium | NEW |
+| FISH-030 | Invite and test second user safely | Medium | Admin and invitee instructions added to Account / Owner Tools; live second-user test pending |
 
 ## Recently accepted
 
-None retained from the older acceptance batch; see [ticket history](TICKET_HISTORY.md).
+| Ticket | Feature | Size | Status |
+|---|---|---|---|
+| FISH-058 | Add/edit gear and pack health integration | Medium | CLOSED — owner accepted V1.071; archive after V1.074 |
+| FISH-032 | Consolidate HTML release backups | Medium | CLOSED — verified oldest + 10 previous copies; V1.071 accepted, archive after V1.074 |
+
+Accepted V1.071; retain through V1.074. FISH-060 is routine maintenance, not a ticket.
 
 ## Ticket descriptions
 
@@ -103,9 +105,9 @@ Streamlined FishOS-branded login. Preserve current behavior while completing thi
 
 Invite and test second user safely. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
-### FISH-032 — Consolidate private-file panels
+### FISH-032 — Consolidate HTML release backups
 
-Consolidate private-file panels. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
+Owner clarified scope: retain current release, 10 previous HTML copies and oldest HTML release. Other recovery snapshots remain private. Verified during V1.071.
 
 ### FISH-033 — Improve/install consistent fish, rod, map icon pack
 
@@ -146,10 +148,6 @@ Back navigation. Preserve current behavior while completing this feature. Verify
 ### FISH-058 — Add/edit gear and pack health integration
 
 Add/edit gear and pack health integration. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
-
-### FISH-060 — Current handoff and housekeeping
-
-Current handoff and housekeeping. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
 ### FISH-063 — Journal-linked editable catches
 

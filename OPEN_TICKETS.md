@@ -10,13 +10,12 @@ Largest to smallest within each group. Accepted work remains current for three p
 | FISH-034 | Integrated photo/video library, viewer and upload | Large | NEW |
 | FISH-037 | Friend-code invites, messaging, permission-controlled sharing | Large | NEW |
 | FISH-038 | Installable FishOS app (PWA first) | Large | NEW |
-| FISH-039 | Stillwater rare-fish collection, breeding and growth | Large | NEW / BACKLOG |
-| FISH-040 | Arcade fish-target game inspired by duck-hunt mechanics | Large | NEW / BACKLOG |
+| FISH-039 | Stillwater fishing adventure, collection and growth | Large | ACTIVE — current fishing game; V1.0725 artwork, keyboard controls and viewport improvements; breeding/growth remains planned |
 | FISH-067 | Fly recipes linked to material availability | Large | Planned from user vision |
 | FISH-021 | Resource classification | Medium | PARTIAL |
 | FISH-024 | Persistent manually editable resource categories | Medium | IN PROGRESS |
 | FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | Supplied brown trout, rods and Wyatt artwork integrated; owner review pending |
-| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Journal and Locations section covers implemented; portfolio remains open |
+| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Section controls collapse; per-location and per-fly private photo selection implemented; live photo test pending |
 | FISH-036 | Gear warranty wizard | Medium | NEW |
 | FISH-056 | Back navigation | Medium | Fixed newer-route Back history; regression checks pass; owner review pending |
 | FISH-063 | Journal-linked editable catches | Medium | Implemented — automatic reported catches; editable in Tracking |
@@ -33,14 +32,14 @@ Largest to smallest within each group. Accepted work remains current for three p
 
 | Ticket | Feature | Size | Status |
 |---|---|---|---|
-| FISH-014 | Safely consolidate legacy renderers | Large | OPEN |
-| FISH-015 | Automatic current master and future updates | Large | Implemented — server trigger and browser copy; historical reconciliation tracked in FISH-017 |
-| FISH-017 | Historical record reconciliation | Large | Executed — available historical sources reconciled; ambiguous versions retained privately |
-| FISH-005 | Hosting portability | Medium | OPEN / PLANNING |
-| FISH-013 | Account persistence | Medium | Cloud saves and revision parity verified; live two-account testing tracked in FISH-030 |
-| FISH-026 | Recurring recovery checks | Medium | Implemented — automatic record parity and master download verification |
-| FISH-029 | Streamlined FishOS-branded login | Medium | NEW |
-| FISH-030 | Invite and test second user safely | Medium | Admin and invitee instructions added to Account / Owner Tools; live second-user test pending |
+| FISH-014 | Safely consolidate legacy renderers | Large | PARTIAL — current renderer isolated; new page hooks share one dispatcher; legacy inline chain remains |
+| FISH-015 | Automatic current master and future updates | Large | Implemented; master/revision triggers and live snapshot parity rechecked October 18; awaiting acceptance |
+| FISH-017 | Historical record reconciliation | Large | Available historical sources reconciled; ambiguous source records retained; awaiting acceptance |
+| FISH-005 | Hosting portability | Medium | Public-only hosting bundle and migration runbook implemented; alternate-host sign-in verification pending |
+| FISH-013 | Account persistence | Medium | RLS and snapshot parity verified; isolation regressions pass; live two-account test remains FISH-030 |
+| FISH-026 | Recurring recovery checks | Medium | Automatic parity/download checks implemented; live master parity rechecked; offline recovery tests pass |
+| FISH-029 | Streamlined FishOS-branded login | Medium | Branded login, inline feedback, duplicate-submit guard, password visibility and keyboard submit implemented; live tester review pending |
+| FISH-030 | Invite and test second user safely | Medium | REQUIRES TESTER — only one account has saved data; second-user sign-in/upload/isolation verification remains |
 
 ## Recently accepted
 
@@ -133,13 +132,9 @@ Friend-code invites, messaging, permission-controlled sharing. Preserve current 
 
 Installable FishOS app (PWA first). Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
-### FISH-039 — Stillwater rare-fish collection, breeding and growth
+### FISH-039 — Stillwater fishing adventure, collection and growth
 
-Stillwater rare-fish collection, breeding and growth. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
-
-### FISH-040 — Arcade fish-target game inspired by duck-hunt mechanics
-
-Arcade fish-target game inspired by duck-hunt mechanics. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
+The current Stillwater game is FISH-039. V1.0725 applies the supplied artwork direction, Wyatt, readable typography and keyboard controls. Existing fishing, quests, lodge service, collection and save behavior remain. Rare-fish breeding and growth are still planned. FISH-040 was removed at the owner’s request; it is not a separate game project.
 
 ### FISH-056 — Back navigation
 
@@ -168,12 +163,12 @@ The prior local candidate reused FISH-068–073. Those IDs remain assigned to th
 | Ticket | Feature | Size | Status |
 |---|---|---|---|
 | FISH-078 | Reference page layouts and consistent UI across every existing page | Large | Implemented V1.068; awaiting owner review |
-| FISH-079 | Duplicate resources | Medium | View grouping implemented; all saved versions retained |
+| FISH-079 | Duplicate resources | Medium | One card per resource; Combine Copies preserves unique notes; Remove Resource removes its copies; awaiting acceptance |
 | FISH-080 | Shared country atlas and geographic references | Medium | 193 existing entries mapped; private overlays retained |
 | FISH-081 | Inventory line brands, reel colors and retail cost | Medium | Implemented; synthetic save verified |
 | FISH-082 | Estimated resale with current online listings | Medium | Planning estimate and manual comparables implemented; automatic listings/brand model OPEN |
 | FISH-083 | One current handoff and local file cleanup | Small | Maintained; exact loose duplicates removed; recovery copies retained |
-| FISH-084 | Water Profile, Season Recap and Pre-trip Check | Medium | Approved and implemented V1.068; read-only models verified |
+| FISH-084 | Water Profile, Year Recap and Pre-trip Check | Medium | Implemented; Year Recap naming corrected in V1.0725; awaiting acceptance |
 | FISH-085 | Cancel backup exports across account changes | Medium | Implemented; delayed-query regression tests pass |
 
 FISH-014 audit: removed conflicting cosmetic layers and superseded UI candidate; established one current design renderer and stylesheet. Current/historical static dependencies have no missing or unreferenced assets. Twenty-five inherited inline renderer wrappers remain; four designed pages now bypass that chain. Further consolidation must preserve existing account/import/backup/trip behavior through incremental tests.
@@ -181,3 +176,11 @@ FISH-014 audit: removed conflicting cosmetic layers and superseded UI candidate;
 ## Release practice
 
 Responsive layout, release identity and cloud/session checks run every release. Actual iOS and live-account verification limits must be reported. This routine work is no longer an issue ticket (formerly FISH-012). Only user acceptance closes a ticket. Keep newly accepted tickets for three published releases, recording acceptance release and archive-after release, then preserve them in TICKET_HISTORY.md. Pending and implemented-but-unaccepted work stays current.
+
+## V1.0725 partial update and backend review
+
+The 30 browser annotations are tracked in DEVELOPMENT.md. Partial releases use the requested suffix; do not promote to a full Update without owner direction. No additional tickets were closed by this pass. FISH-040 is removed; current game work belongs to FISH-039.
+
+Backend evidence (October 18): all four public application tables have RLS; ownership policies constrain authenticated access; the file bucket is private; master and revision triggers exist and current snapshots match. The advisor flags leaked-password protection as disabled. No backend schema, permissions, credentials or private records were changed. A second account is required for FISH-030 live verification.
+
+Continue remaining work in this order: FISH-030 live test once a tester is available; FISH-014 incremental renderer consolidation; FISH-005 alternate-host verification; FISH-009 source verification; FISH-034 media library; FISH-067 recipe/material matching; FISH-036 warranty flow; FISH-038 PWA; FISH-037 sharing; FISH-039 collection/growth. These remain planned work, not completed features.

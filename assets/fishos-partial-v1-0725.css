@@ -1,0 +1,19 @@
+/* Compact page navigation, slate blue accents and a consistent tracker. */
+body #main[data-page="fly-tying"] > .grid.g4{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;width:100%;gap:12px}
+body #main[data-page="gear"] > .grid.g4{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;width:100%;gap:10px}
+body #main[data-page="journal"] .ui68-stats .stat:nth-child(2) b{color:#79b9ed!important}
+body #main .fishprogress{background:#18200f!important;border:1px solid #3a4a28!important;border-radius:10px;padding:12px;color:#e9efe0!important}
+body #main .fishprogress > div:last-child{margin-top:8px;font-size:14px;color:#e9efe0!important}
+body #main .fishbar{height:24px}.fishmini{flex:0 0 34px}.fishmini:not(.caught){opacity:.22}
+body #main .caught725{color:#74ff49!important;font-weight:700}
+.rod725-crop{overflow:hidden;border-radius:12px;background:#d3ddd7}
+body #main .rodscene .rod725-crop .rod-anatomy72{margin-top:-12%;border-radius:0}
+body #main .health725-alert{font:inherit;text-align:left;cursor:pointer}.health725-alert:hover{outline:1px solid #ff9b8a}
+body #main[data-page="trips"] .ui68-item strong{font-size:16px}body #main[data-page="trips"] .ui68-item small{line-height:1.6}
+@media(max-width:1000px){body #main[data-page="gear"] > .grid.g4{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:600px){body #main[data-page="gear"] > .grid.g4,body #main[data-page="fly-tying"] > .grid.g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+body #main #atlas32Grid a.country{display:flex!important;align-items:center;justify-content:space-between;gap:12px;background:#141b0d!important;border:1px solid #26301c;border-radius:10px;box-shadow:none}
+body #main #atlas32Grid a.country:hover{border-color:#79c900}body #main #atlas32Grid a.rating-bust .tag{color:#ff7d7d!important}body #main #atlas32Grid a.rating-unrated .tag{color:#f2d04a!important}
+#detail725-form{display:grid;gap:14px}#detail725-form label{display:grid;gap:5px}#detail725-form textarea{width:100%;min-height:110px}
+body #main[data-page="fly-tying"] > .grid.g4 > .grid,body #main[data-page="gear"] > .grid.g4 > .grid{display:contents!important}
+body #main[data-page="calendar"] [aria-current="date"]{border:3px solid #d6ff7a!important;box-shadow:0 0 0 1px #527e99!important;background:#1c2c19!important}

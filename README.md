@@ -3,7 +3,7 @@
 **The fishing operating-system hub for everything surrounding an angler's life.**
 
 **Live application:** https://8pvhd69bbv-svg.github.io/Fish-OS/  
-**Current documented release:** V1.0725 (partial update)
+**Current documented release:** V1.073 (maintenance update)
 
 Fish OS is a personal fly-fishing headquarters connecting trips, waters, fishing journals, catches, gear, fly tying, research, uploads and future fishing plans. Records are intended to be entered once, preserved privately, searchable and reused across the system.
 
@@ -28,7 +28,7 @@ A dense, practical early-2000s desktop utility/file-browser interface with LimeW
 - [TICKET_HISTORY.md](TICKET_HISTORY.md) — previous ticket history.
 - [HOSTING.md](HOSTING.md) — deployment and hosting portability.
 
-The current entry point is `index.html`; the documented matching archive is `Fish_OS_V1.0725.html`. Historical HTML release copies follow the oldest + ten previous + current retention rule.
+The current entry point is `index.html`; the documented matching archive is `Fish_OS_V1.073.html`. Historical HTML release copies follow the oldest + ten previous + current retention rule.
 
 ### Local verification
 ```sh

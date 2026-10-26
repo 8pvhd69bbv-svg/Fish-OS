@@ -1,14 +1,14 @@
 # FISH OS — Project State
 
-Last documentation update: 2026-10-24 (Pacific time). This is the first-read handoff for new development chats. Status is grounded in repository documents; it is not a fresh live Supabase or browser verification.
+Last documentation update: 2026-10-25 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
 
 ## Current state
-- **Release:** V1.0725 (partial release, not a fully accepted Update).
+- **Release:** V1.073 (maintenance update; ticket acceptance remains separate).
 - **GitHub:** https://github.com/8pvhd69bbv-svg/Fish-OS — default branch `main`.
 - **Live app:** https://8pvhd69bbv-svg.github.io/Fish-OS/
-- **Entry files:** `index.html` and `Fish_OS_V1.0725.html`, documented as identical.
-- **Last reported tests:** 104 synthetic regressions passing, syntax/static-asset checks, and signed-out synthetic browser checks (see `DEVELOPMENT.md`). Not rerun by this documentation change.
-- **Owner acceptance:** No additional tickets accepted in V1.0725.
+- **Entry files:** `index.html` and `Fish_OS_V1.073.html`, documented as identical.
+- **Last reported tests:** 149 synthetic regressions passing, syntax/static-asset checks and signed-out Upload browser check (see `DEVELOPMENT.md`).
+- **Owner acceptance:** No additional tickets accepted in V1.073.
 
 ## Source of truth
 - **GitHub:** public application code, designs, and development documentation.
@@ -21,18 +21,18 @@ Last documentation update: 2026-10-24 (Pacific time). This is the first-read han
 
 ## Architecture and design
 HTML/CSS/JavaScript front end on GitHub Pages with Leaflet mapping and Supabase Auth, database and private Storage. Current shared UI assets documented in the repository:
-- `assets/fishos-design-v1-068.js`
+- `assets/fishos-design-v1-0725.js`
 - `assets/fishos-design-models-v1-068.js`
 - `assets/fishos-ui-v1-068.css`
 
-The Oct 18 backend review reported four application tables with RLS/ownership policies, private media Storage, master/revision triggers and matching current snapshots. **Reinspect the actual schema, policies and data before backend changes.** No live verification is implied here.
+The Oct 25 backend review verified four application tables with RLS/ownership policies, private media Storage, master/revision triggers and matching current snapshots. **Reinspect the actual schema, policies and data before backend changes.** Added and verified the file-owner index; no private records or ownership policies changed.
 
 ## Current ticket snapshot (not a substitute for OPEN_TICKETS.md)
 **Accepted:** FISH-058 (gear/pack health) and FISH-032 (release backups), accepted V1.071; retain through V1.074 per established ticket policy.
 
 **Requires attention:**
 - FISH-030: second-account sign-in, upload and isolation test; requires tester.
-- FISH-014: incremental legacy renderer consolidation (25 inherited wrappers remained in the last design audit).
+- FISH-014: incremental legacy renderer consolidation (26 inherited wrappers remain in the current static audit).
 - FISH-005: alternate-host authentication verification.
 - FISH-009: verified private research integration (blocked pending source verification).
 - FISH-034: integrated media library.
@@ -51,7 +51,7 @@ The Oct 18 backend review reported four application tables with RLS/ownership po
 ## Known verification gaps and risks
 - Live two-account tests and live photo/upload persistence checks are outstanding.
 - Alternate-host login is not verified.
-- Supabase advisor warned on Oct 18 that leaked-password protection was disabled; recheck rather than treating this as a permanent current fact.
+- Supabase advisor confirmed on Oct 25 that leaked-password protection remains disabled.
 - Legacy renderer wrappers remain; wholesale removal risks breaking editors, account, backups/import and trips.
 - Resource categorization needs persistent manual control and verification; some geographical sources and pins are uncertain.
 - A source reference, estimate or planned trip is not a confirmed catch, visit, or precise fishing coordinate.
@@ -81,4 +81,5 @@ The Oct 18 backend review reported four application tables with RLS/ownership po
 - All Stillwater work belongs under FISH-039.
 
 ## Changelog
+- **2026-10-25:** V1.073 library deletion safety, file-owner database index, ticket refresh and verified private intake receipt. Existing HTML archives preserved; 14 retained, above the minimum target.
 - **2026-10-24:** Established central project state documentation and README separation. Documentation-only change; no new application features or tests claimed.

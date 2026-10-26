@@ -1,7 +1,7 @@
 // Public-only static deployment bundle. Private workspace folders are never traversed.
 import {mkdir,readFile,readdir,writeFile,copyFile} from 'node:fs/promises';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';
-const root=fileURLToPath(new URL('..',import.meta.url)),out=path.resolve(root,process.argv[2]||'.local/site-v1.0725'),local=path.join(root,'.local');
+const root=fileURLToPath(new URL('..',import.meta.url)),out=path.resolve(root,process.argv[2]||'.local/site-v1.073'),local=path.join(root,'.local');
 if(!out.startsWith(local+path.sep))throw Error('Choose a new output folder inside .local; never package the parent workspace.');
 await mkdir(out,{recursive:false});const files=['index.html'];for(const dir of ['assets','icons'])for(const item of await readdir(path.join(root,dir),{withFileTypes:true}))if(item.isFile()&&/\.(?:js|css|html|png|svg|webp|jpg|jpeg|woff2?)$/i.test(item.name))files.push(dir+'/'+item.name);
 const manifest=[];for(const name of files){const bytes=await readFile(path.join(root,name));await mkdir(path.dirname(path.join(out,name)),{recursive:true});await copyFile(path.join(root,name),path.join(out,name));manifest.push({path:name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')})}
-await writeFile(path.join(out,'deployment-manifest.json'),JSON.stringify({release:'V1.0725',files:manifest},null,2));await writeFile(path.join(out,'.nojekyll'),'');console.log(JSON.stringify({output:out,files:files.length,privateFoldersIncluded:false}));
+await writeFile(path.join(out,'deployment-manifest.json'),JSON.stringify({release:'V1.073',files:manifest},null,2));await writeFile(path.join(out,'.nojekyll'),'');console.log(JSON.stringify({output:out,files:files.length,privateFoldersIncluded:false}));

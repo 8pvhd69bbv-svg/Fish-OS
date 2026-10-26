@@ -1271,7 +1271,46 @@ window.v34FilterCatalog=function(q){const e=document.getElementById('v34FileRows
 window.v34ListFiles=async function(){const e=document.getElementById('v34FileStatus');try{const {client,userId}=clientUser();if(e)e.textContent='Loading private catalog…';const r=await client.from('fishos_files').select('id,user_id,bucket_id,path,original_name,mime_type,size_bytes,category,notes,created_at').eq('user_id',userId).order('created_at',{ascending:false});if(r.error)throw r.error;fileRows=r.data||[];window.v34FilterCatalog(document.getElementById('v34Search')?.value||'');if(e)e.textContent=`${fileRows.length} cataloged private files.`}catch(err){if(e)e.textContent='Catalog error: '+statusText(err)}};
 window.v34UploadFiles=async function(){const e=document.getElementById('v34UploadStatus'),files=[...document.getElementById('v34Files')?.files||[]];try{if(!files.length)throw Error('Select one or more files.');const {client,userId}=clientUser();const category=document.getElementById('v34Category').value,notes=document.getElementById('v34Notes').value;let done=0,skipped=0;const existing=await client.from('fishos_files').select('original_name,size_bytes,category').eq('user_id',userId);if(existing.error)throw existing.error;const known=new Set((existing.data||[]).map(f=>`${f.original_name.toLowerCase()}|${f.size_bytes}|${(f.category||'').toLowerCase()}`));for(const file of files){const key=`${file.name.toLowerCase()}|${file.size}|${category.toLowerCase()}`;if(known.has(key)){skipped++;continue}const basename=file.name.replace(/[^a-zA-Z0-9._-]/g,'_').slice(-140)||'file';const path=`${userId}/research/${crypto.randomUUID()}-${basename}`;if(e)e.textContent=`Uploading ${done+1} / ${files.length}: ${file.name}`;const up=await client.storage.from('fishos-private').upload(path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(up.error)throw new Error(`Upload ${file.name}: ${up.error.message}`);const meta=await client.from('fishos_files').insert({user_id:userId,bucket_id:'fishos-private',path,original_name:file.name,mime_type:file.type||'application/octet-stream',size_bytes:file.size,category,notes});if(meta.error){await client.storage.from('fishos-private').remove([path]);throw new Error('Metadata save: '+meta.error.message)}known.add(key);done++}if(e)e.textContent=`Uploaded ${done} file(s) to private Research; skipped ${skipped} existing filename/size/category matches.`;await window.v34ListFiles()}catch(err){if(e)e.textContent='Upload error: '+statusText(err)}};
 window.v34OpenFile=async function(id){try{const {client,userId}=clientUser(),f=fileRows.find(x=>x.id===id&&x.user_id===userId);if(!f)return;const x=await client.storage.from('fishos-private').createSignedUrl(f.path,60);if(x.error)throw x.error;window.open(x.data.signedUrl,'_blank','noopener,noreferrer')}catch(err){alert('Could not open file: '+statusText(err))}};
-window.v34DeleteFile=async function(id){const f=fileRows.find(x=>x.id===id);if(!f||!confirm(`Permanently delete private file "${f.original_name}"?`))return;try{const {client,userId}=clientUser();if(f.user_id!==userId)throw Error('Not your file.');const del=await client.storage.from('fishos-private').remove([f.path]);if(del.error)throw del.error;const meta=await client.from('fishos_files').delete().eq('id',id).eq('user_id',userId);if(meta.error)throw meta.error;await window.v34ListFiles()}catch(err){alert('Delete error: '+statusText(err))}};
+// Both catalog generations share the same conservative deletion checks.
+window.fishos73DeletePrivateFile=async function(f){
+ if(!f)return false;
+ const client=window.supabaseClient,userId=state.profile?.userId;
+ let storageRemoved=false;
+ const guard=()=>{if(!client||!userId||!state.profile?.loggedIn||!state.privateHydrated||state.profile.userId!==userId||window.supabaseClient!==client)throw Error('Account changed or is still loading. Reopen the Library after signing in and loading your account.');};
+ function unlinked(data){
+  if(!data||typeof data!=='object'||Array.isArray(data))throw Error('Account records could not be checked. Reload and retry.');
+  const links=[],settings=data.field_settings;
+  if(settings!=null&&(typeof settings!=='object'||Array.isArray(settings)))throw Error('Section photo settings could not be checked.');
+  const sections=settings?.section_photos;
+  if(sections!=null&&(typeof sections!=='object'||Array.isArray(sections)))throw Error('Section photo settings could not be checked.');
+  for(const [section,photo] of Object.entries(sections||{}))if(photo?.file_id===f.id)links.push('section '+section+' (EDIT PHOTO → REMOVE SECTION PHOTO)');
+  for(const kind of ['flies','locations']){
+   if(data[kind]!=null&&!Array.isArray(data[kind]))throw Error('Photo records could not be checked.');
+   for(const [i,row] of (data[kind]||[]).entries()){
+    if(row?.photo_file_ids!=null&&!Array.isArray(row.photo_file_ids))throw Error('Photo attachments could not be checked.');
+    const label=(kind==='flies'?'fly pattern ':'location ')+(row?.name||row?.title||'#'+(i+1));
+    if(row?.thumbnail_file_id===f.id)links.push(label+' (REMOVE THUMBNAIL)');
+    if(row?.photo_file_ids?.includes(f.id))links.push(label+' (REMOVE PHOTO)');
+   }
+  }
+  if(links.length)throw Error('This file is still selected in '+links.join('; ')+'. Open those pages, remove these selections, and let the changes save before deleting the file.');
+ }
+ try{
+  guard();if(f.user_id!==userId)throw Error('File ownership mismatch. Refresh the Library.');unlinked(DATA);
+  const catalog=await client.from('fishos_files').select('id,user_id,bucket_id,path,original_name').eq('id',f.id).eq('user_id',userId).maybeSingle();guard();if(catalog.error)throw catalog.error;
+  const row=catalog.data;
+  if(!row||row.id!==f.id||row.user_id!==userId||row.path!==f.path||(row.bucket_id||'fishos-private')!==(f.bucket_id||'fishos-private'))throw Error('File changed or is unavailable. Refresh the Library.');
+  if((row.bucket_id||'fishos-private')!=='fishos-private'||typeof row.path!=='string'||!row.path.startsWith(userId+'/')||row.path.split('/').some(p=>p==='..'||p==='.'||!p))throw Error('File storage ownership could not be verified.');
+  const records=await client.from('fishos_user_data').select('data').eq('user_id',userId).maybeSingle();guard();if(records.error)throw records.error;
+  unlinked(records.data?.data);unlinked(DATA);
+  if(!confirm(`Permanently delete "${row.original_name}" from PRIVATE storage and catalog?`))return false;
+  guard();unlinked(DATA);
+  const removed=await client.storage.from('fishos-private').remove([row.path]);if(!removed.error)storageRemoved=true;guard();if(removed.error)throw removed.error;
+  const meta=await client.from('fishos_files').delete().eq('id',row.id).eq('user_id',userId).eq('path',row.path).select('id');guard();if(meta.error)throw meta.error;if(!meta.data?.some(x=>x.id===row.id))throw Error('Catalog deletion was not confirmed.');
+  await window.v34ListFiles();guard();return true;
+ }catch(err){alert('Delete error: '+statusText(err)+(storageRemoved?' Storage removal completed; catalog cleanup may be incomplete. Refresh the Library before retrying.':''));return false}
+};
+window.v34DeleteFile=async function(id){return window.fishos73DeletePrivateFile(fileRows.find(x=>x.id===id))};
 // Patch only requested routes, leaving all other V33 page functions untouched.
 window.render=function(){const p=state.page;if(p==='fly-inventory'||p==='fly-materials'||p==='fly-tying-materials'||p==='fly-patterns'||p==='flyting-patterns'||p==='fly-pattern-index'||p==='research'){try{if(typeof side==='function')side();if(typeof mobile==='function')mobile();if(typeof topAuth==='function')topAuth();const main=document.getElementById('main');if(!main)return;main.innerHTML=p==='research'?researchPage():p==='fly-patterns'||p==='flyting-patterns'||p==='fly-pattern-index'?patternsPage():materialsPage();if(p==='research')setTimeout(window.v34ListFiles,0)}catch(err){console.error('Fish OS V34',err);document.getElementById('main').innerHTML=`<div class="card"><h3>Page error</h3>${esc(statusText(err))}</div>`}return}return baseRender.apply(this,arguments)};
 window.go=function(p){if(['flyting-patterns','flyting-pattern','fly-tying-patterns','fly-pattern-index'].includes(p))p='fly-patterns';if(['fly-materials','fly-tying-materials'].includes(p))p='fly-inventory';return oldGo(p)};
@@ -1303,7 +1342,7 @@ window.v34FilterCatalog=renderRows35;
 window.v35VerifyFile=async function(id){const f=rows35.find(x=>x.id===id),status=document.getElementById('v35Status-'+id);if(!f)return;try{const {client,userId}=v35Client();if(f.user_id!==userId)throw Error('File ownership mismatch.');if(status)status.textContent='Checking actual Storage object…';const parts=f.path.split('/'),filename=parts.pop(),folder=parts.join('/');const r=await client.storage.from(f.bucket_id||'fishos-private').list(folder,{limit:100,search:filename});if(r.error)throw r.error;const match=(r.data||[]).find(x=>x.name===filename);if(!match)throw Error('Catalog record exists, but private file was not found.');if(status)status.textContent='VERIFIED: Private Storage object exists; catalog record is present.';return true}catch(e){if(status)status.textContent='NOT VERIFIED: '+(e.message||e);return false}};
 window.v35OpenFile=async function(id){const f=rows35.find(x=>x.id===id);if(!f)return;try{const {client}=v35Client();const r=await client.storage.from(f.bucket_id||'fishos-private').createSignedUrl(f.path,60);if(r.error)throw r.error;window.open(r.data.signedUrl,'_blank','noopener,noreferrer')}catch(e){alert('Open error: '+(e.message||e))}};
 window.v35EditFile=async function(id){const f=rows35.find(x=>x.id===id);if(!f)return;const name=prompt('Display filename (catalog only)',f.original_name);if(name===null)return;if(!name.trim())return alert('Filename required.');const category=prompt('Category',f.category||'General');if(category===null)return;const notes=prompt('Notes',f.notes||'');if(notes===null)return;try{const {client,userId}=v35Client();const r=await client.from('fishos_files').update({original_name:name.trim(),category:category.trim()||'General',notes}).eq('id',id).eq('user_id',userId);if(r.error)throw r.error;await window.v34ListFiles()}catch(e){alert('Edit error: '+(e.message||e))}};
-window.v35DeleteFile=async function(id){const f=rows35.find(x=>x.id===id);if(!f||!confirm(`Permanently delete "${f.original_name}" from PRIVATE storage and catalog?`))return;try{const {client,userId}=v35Client();const r=await client.storage.from(f.bucket_id||'fishos-private').remove([f.path]);if(r.error)throw r.error;const x=await client.from('fishos_files').delete().eq('id',id).eq('user_id',userId);if(x.error)throw x.error;await window.v34ListFiles()}catch(e){alert('Delete error: '+(e.message||e))}};
+window.v35DeleteFile=async function(id){return window.fishos73DeletePrivateFile(rows35.find(x=>x.id===id))};
 // Make the catalog report VERIFIED on upload only after a storage read and catalog refresh.
 const oldUpload35=window.v34UploadFiles;
 window.v34UploadFiles=async function(){await oldUpload35();await window.v34ListFiles();const status=document.getElementById('v34UploadStatus');if(status&&!/^Upload error:/.test(status.textContent)){status.textContent+=' Catalog refreshed. Use VERIFY beside each uploaded file to confirm the storage object.'}};
@@ -2021,7 +2060,7 @@ setTimeout(tools,60);
  };
  const prior=window.render;window.render=function(...args){const result=prior.apply(this,args);build();backupCard();return result};setTimeout(()=>{build();backupCard()},150);
 })();
-</script><style id="fishos-v57-release-style">#fishos-release-global{background:#dcebd5;color:#1e4938;border:2px solid #527e99;padding:5px 9px;font:900 11px Tahoma;letter-spacing:.08em;white-space:nowrap;flex:none}@media(max-width:600px){#fishos-release-global{font-size:9px;padding:3px 4px}}</style><script id="fishos-v57-release-chip">(function(){function mark(){var top=document.querySelector('.top');if(!top)return;var el=document.getElementById('fishos-release-global');if(!el){el=document.createElement('span');el.id='fishos-release-global';var brand=top.querySelector('.brand');if(brand)brand.after(el);else top.prepend(el)}el.textContent='FISH OS V1.0725';}mark();setTimeout(mark,150)})();</script><script src="assets/fishos-dashboard-v60.js"></script><script src="assets/fishos-gear-health-v63.js"></script><script src="assets/fishos-destination-import-v61.js"></script><script src="assets/fishos-map-links-v59.js"></script><script src="assets/fishos-flows-v63.js"></script><script src="assets/fishos-species-lock-v61.js"></script><script src="assets/fishos-gear-value-v59.js"></script><script src="assets/fishos-upload-merge-v59.js"></script><script src="assets/fishos-map-lifecycle-v60.js"></script><script src="assets/fishos-calendar-upcoming-v60.js"></script><script src="assets/fishos-research-bridge-v62.js"></script><script id="fishos-private-session-notice">
+</script><style id="fishos-v57-release-style">#fishos-release-global{background:#dcebd5;color:#1e4938;border:2px solid #527e99;padding:5px 9px;font:900 11px Tahoma;letter-spacing:.08em;white-space:nowrap;flex:none}@media(max-width:600px){#fishos-release-global{font-size:9px;padding:3px 4px}}</style><script id="fishos-v57-release-chip">(function(){function mark(){var top=document.querySelector('.top');if(!top)return;var el=document.getElementById('fishos-release-global');if(!el){el=document.createElement('span');el.id='fishos-release-global';var brand=top.querySelector('.brand');if(brand)brand.after(el);else top.prepend(el)}el.textContent='FISH OS V1.073';}mark();setTimeout(mark,150)})();</script><script src="assets/fishos-dashboard-v60.js"></script><script src="assets/fishos-gear-health-v63.js"></script><script src="assets/fishos-destination-import-v61.js"></script><script src="assets/fishos-map-links-v59.js"></script><script src="assets/fishos-flows-v63.js"></script><script src="assets/fishos-species-lock-v61.js"></script><script src="assets/fishos-gear-value-v59.js"></script><script src="assets/fishos-upload-merge-v59.js"></script><script src="assets/fishos-map-lifecycle-v60.js"></script><script src="assets/fishos-calendar-upcoming-v60.js"></script><script src="assets/fishos-research-bridge-v62.js"></script><script id="fishos-private-session-notice">
 (() => {
   const previousRender=window.render;
   window.render=function(){
@@ -2043,8 +2082,8 @@ setTimeout(tools,60);
 <link rel="stylesheet" href="assets/fishos-ui-v1-068.css">
 <link rel="stylesheet" href="assets/fishos-review-v1-069.css">
 <script src="assets/fishos-review-v1-069.js"></script>
-<script src="assets/fishos-tickets-v1-0725.js"></script>
-<style>body:has(#stillwater-game) #fishAIBar{display:none}</style><script id="fishos-release-v1-070">(()=>{const prior=window.render;function mark(){const el=document.getElementById('fishos-release-global');if(el)el.textContent='FISH OS V1.0725'}window.render=function(...args){const result=prior.apply(this,args);mark();return result};mark();setTimeout(mark,200)})();</script>
+<script src="assets/fishos-tickets-v1-073.js"></script>
+<style>body:has(#stillwater-game) #fishAIBar{display:none}</style><script id="fishos-release-v1-070">(()=>{const prior=window.render;function mark(){const el=document.getElementById('fishos-release-global');if(el)el.textContent='FISH OS V1.073'}window.render=function(...args){const result=prior.apply(this,args);mark();return result};mark();setTimeout(mark,200)})();</script>
 <link rel="stylesheet" href="assets/fishos-update-v1-071.css">
 <script src="assets/fishos-upload-v1-071.js"></script>
 <script src="assets/fishos-pages-v1-071.js"></script>
@@ -2058,4 +2097,5 @@ setTimeout(tools,60);
 <script src="assets/fishos-calendar-v1-0725.js"></script>
 <script src="assets/fishos-details-v1-0725.js"></script>
 <script src="assets/fishos-account-v1-0725.js"></script>
+<script id="fishos-release-v1-073">(()=>{function mark(){const el=document.getElementById('fishos-release-global');if(el)el.textContent='FISH OS V1.073';document.querySelectorAll('#main .tag').forEach(el=>{if(/^PAGE V[\d.]+ \/ /.test(el.textContent))el.textContent=el.textContent.replace(/^PAGE V[\d.]+/,'PAGE V1.073')})}window.fishosRender725.register({after:mark});document.addEventListener('DOMContentLoaded',mark,{once:true});mark()})();</script>
 </body></html>

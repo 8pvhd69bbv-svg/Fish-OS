@@ -7,7 +7,7 @@ Largest to smallest within each group. Accepted work remains current for three p
 | Ticket | Feature | Size | Status |
 |---|---|---|---|
 | FISH-009 | Connect verified private research to country pages | Large | BLOCKED / NOT COMPLETE |
-| FISH-034 | Integrated photo/video library, viewer and upload | Large | NEW |
+| FISH-034 | Integrated photo/video library, viewer and upload | Large | PARTIAL — V1.073 protects attached files during deletion; full media library remains planned |
 | FISH-037 | Friend-code invites, messaging, permission-controlled sharing | Large | NEW |
 | FISH-038 | Installable FishOS app (PWA first) | Large | NEW |
 | FISH-039 | Stillwater fishing adventure, collection and growth | Large | ACTIVE — current fishing game; V1.0725 artwork, keyboard controls and viewport improvements; breeding/growth remains planned |
@@ -15,7 +15,7 @@ Largest to smallest within each group. Accepted work remains current for three p
 | FISH-021 | Resource classification | Medium | PARTIAL |
 | FISH-024 | Persistent manually editable resource categories | Medium | IN PROGRESS |
 | FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | Supplied brown trout, rods and Wyatt artwork integrated; owner review pending |
-| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Section controls collapse; per-location and per-fly private photo selection implemented; live photo test pending |
+| FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Photo selection implemented; V1.073 deletion checks local/cloud attachments; live photo test pending |
 | FISH-036 | Gear warranty wizard | Medium | NEW |
 | FISH-056 | Back navigation | Medium | Fixed newer-route Back history; regression checks pass; owner review pending |
 | FISH-063 | Journal-linked editable catches | Medium | Implemented — automatic reported catches; editable in Tracking |
@@ -33,11 +33,11 @@ Largest to smallest within each group. Accepted work remains current for three p
 | Ticket | Feature | Size | Status |
 |---|---|---|---|
 | FISH-014 | Safely consolidate legacy renderers | Large | PARTIAL — current renderer isolated; new page hooks share one dispatcher; legacy inline chain remains |
-| FISH-015 | Automatic current master and future updates | Large | Implemented; master/revision triggers and live snapshot parity rechecked October 18; awaiting acceptance |
+| FISH-015 | Automatic current master and future updates | Large | Implemented; master/revision triggers and live snapshot/manifest parity rechecked October 25; awaiting acceptance |
 | FISH-017 | Historical record reconciliation | Large | Available historical sources reconciled; ambiguous source records retained; awaiting acceptance |
 | FISH-005 | Hosting portability | Medium | Public-only hosting bundle and migration runbook implemented; alternate-host sign-in verification pending |
 | FISH-013 | Account persistence | Medium | RLS and snapshot parity verified; isolation regressions pass; live two-account test remains FISH-030 |
-| FISH-026 | Recurring recovery checks | Medium | Automatic parity/download checks implemented; live master parity rechecked; offline recovery tests pass |
+| FISH-026 | Recurring recovery checks | Medium | Automatic parity/download checks implemented; live snapshot and file-manifest parity rechecked October 25; offline recovery tests pass |
 | FISH-029 | Streamlined FishOS-branded login | Medium | Branded login, inline feedback, duplicate-submit guard, password visibility and keyboard submit implemented; live tester review pending |
 | FISH-030 | Invite and test second user safely | Medium | REQUIRES TESTER — only one account has saved data; second-user sign-in/upload/isolation verification remains |
 
@@ -184,3 +184,9 @@ The 30 browser annotations are tracked in DEVELOPMENT.md. Partial releases use t
 Backend evidence (October 18): all four public application tables have RLS; ownership policies constrain authenticated access; the file bucket is private; master and revision triggers exist and current snapshots match. The advisor flags leaked-password protection as disabled. No backend schema, permissions, credentials or private records were changed. A second account is required for FISH-030 live verification.
 
 Continue remaining work in this order: FISH-030 live test once a tester is available; FISH-014 incremental renderer consolidation; FISH-005 alternate-host verification; FISH-009 source verification; FISH-034 media library; FISH-067 recipe/material matching; FISH-036 warranty flow; FISH-038 PWA; FISH-037 sharing; FISH-039 collection/growth. These remain planned work, not completed features.
+
+## V1.073 maintenance update — October 25
+
+Upload → Delete now checks local and freshly loaded cloud photo references, file ownership and account/client continuity. Attached photos must be removed from their section, fly or location before deletion. Both catalog handlers share the guard. Storage and catalog removal remain separate operations; cross-device changes cannot be made atomic by this client check.
+
+Backend: four application tables retain RLS/ownership policies, private Storage and master/revision triggers. Current snapshot and file manifest match their source. Added `fishos_files_user_id_idx` through migration `fishos_v1073_file_owner_index`; index verified valid/ready and missing-foreign-key-index advisory resolved. New index is initially reported unused; no measured speedup claimed. Leaked-password protection remains disabled. No private records or policies changed. No new owner acceptance was recorded; pending tickets remain open.

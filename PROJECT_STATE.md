@@ -14,6 +14,7 @@ Last documentation update: 2026-10-25 (Pacific time). This is the first-read han
 - **GitHub:** public application code, designs, and development documentation.
 - **Supabase:** authoritative authenticated private application data, uploads and account-scoped persistence. Do not put private records, credentials or service-role keys in GitHub.
 - **This file:** concise handoff, known risks, and development guardrails.
+- **DEVELOPMENT_QUEUE.md:** ordered, backend-first ChatGPT work queue; planning only, not automatic execution.
 - **OPEN_TICKETS.md:** detailed active ticket status; **TICKET_HISTORY.md:** archived/accepted history.
 - **DEVELOPMENT.md:** current release-specific implementation notes and evidence.
 - **DESIGN_IMPLEMENTATION.md:** current composition assets and UI verification requirements.
@@ -66,7 +67,7 @@ The Oct 25 backend review verified four application tables with RLS/ownership po
 7. Do not promote a partial release to a full Update without owner direction.
 
 ## Development workflow
-1. Read `PROJECT_STATE.md`, `OPEN_TICKETS.md` and `DEVELOPMENT.md`; inspect relevant current code before edits.
+1. Read `PROJECT_STATE.md`, `DEVELOPMENT_QUEUE.md`, `OPEN_TICKETS.md` and `DEVELOPMENT.md`; inspect relevant current code before edits.
 2. Check connected Supabase state when backend work requires it; never rely on stale descriptions.
 3. Implement scoped changes, update `index.html` and matching versioned release as appropriate.
 4. Run `node scripts/check.mjs`, `node --test --test-isolation=none scripts/test-*.mjs`; run `node scripts/audit.mjs` and `node scripts/preview.mjs`/browser checks when relevant.
@@ -81,5 +82,6 @@ The Oct 25 backend review verified four application tables with RLS/ownership po
 - All Stillwater work belongs under FISH-039.
 
 ## Changelog
+- **2026-11-01:** Established backend-first `DEVELOPMENT_QUEUE.md` for ChatGPT development sessions; blocked tasks remain pending until prerequisites are available. No application code changed.
 - **2026-10-25:** V1.073 library deletion safety, file-owner database index, ticket refresh and verified private intake receipt. Existing HTML archives preserved; 14 retained, above the minimum target.
 - **2026-10-24:** Established central project state documentation and README separation. Documentation-only change; no new application features or tests claimed.

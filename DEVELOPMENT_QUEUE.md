@@ -30,6 +30,7 @@ Updated 2026-11-01. This is an **ordered planning queue for ChatGPT development 
 | 13 | FISH-038 | PWA feasibility, installability and offline/data-safety design | **PLANNED** |
 | 14 | FISH-037 | Permission-controlled friend codes/sharing/messaging | **PLANNED** — security design required |
 | 15 | FISH-039 | Stillwater collection and growth | **PLANNED** |
+| 16 | — (queue-only task) | Add a Fish OS favicon and verify it displays in browser tabs | **QUEUED** — not implemented; deferred behind existing backend-first priorities |
 
 Other pending work stays in OPEN_TICKETS.md and can be promoted by user priority. The queue order does not change existing ticket status.
 
@@ -55,4 +56,5 @@ Other pending work stays in OPEN_TICKETS.md and can be promoted by user priority
 
 ## Change log
 
+- 2026-11-01: Queued favicon work at priority 16; not implemented. Existing backend-first priorities and ticket statuses preserved. No application code changed.
 - 2026-11-01: Created ChatGPT-first development queue. Prioritized backend and data integrity; marked required human/live verification as blocked or awaiting review. No application code, live data, or acceptance states changed.

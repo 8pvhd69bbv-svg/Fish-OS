@@ -1,14 +1,14 @@
 # FISH OS — Project State
 
-Last documentation update: 2026-10-25 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
+Last documentation update: 2026-11-01 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
 
 ## Current state
-- **Release:** V1.073 (maintenance update; ticket acceptance remains separate).
+- **Release:** V1.074 (navigation artwork update; ticket acceptance remains separate).
 - **GitHub:** https://github.com/8pvhd69bbv-svg/Fish-OS — default branch `main`.
 - **Live app:** https://8pvhd69bbv-svg.github.io/Fish-OS/
-- **Entry files:** `index.html` and `Fish_OS_V1.073.html`, documented as identical.
-- **Last reported tests:** 149 synthetic regressions passing, syntax/static-asset checks and signed-out Upload browser check (see `DEVELOPMENT.md`).
-- **Owner acceptance:** No additional tickets accepted in V1.073.
+- **Entry files:** `index.html` and `Fish_OS_V1.074.html`, documented as identical.
+- **Last reported tests:** 149 synthetic regressions passing, syntax/static-asset checks and signed-out sidebar browser check (see `DEVELOPMENT.md`).
+- **Owner acceptance:** No additional tickets accepted in V1.074.
 
 ## Source of truth
 - **GitHub:** public application code, designs, and development documentation.
@@ -83,5 +83,5 @@ The Oct 25 backend review verified four application tables with RLS/ownership po
 
 ## Changelog
 - **2026-11-01:** Established backend-first `DEVELOPMENT_QUEUE.md` for ChatGPT development sessions; blocked tasks remain pending until prerequisites are available. No application code changed.
-- **2026-10-25:** V1.073 library deletion safety, file-owner database index, ticket refresh and verified private intake receipt. Existing HTML archives preserved; 14 retained, above the minimum target.
+- **2026-10-25:** V1.074 library deletion safety, file-owner database index, ticket refresh and verified private intake receipt. Existing HTML archives preserved; 14 retained, above the minimum target.
 - **2026-10-24:** Established central project state documentation and README separation. Documentation-only change; no new application features or tests claimed.

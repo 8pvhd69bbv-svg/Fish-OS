@@ -1,0 +1,24 @@
+/* Equal icon slots keep every existing sidebar label aligned. */
+#side button.nav > .ico.nav-art74 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #fff;
+}
+#side .nav-art74 > .nav-sprite74 {
+  display: block;
+  flex: none;
+  background-image: url('fishing-icon-pack.png');
+  background-repeat: no-repeat;
+}
+#side button.nav > .nav-art74 > img {
+  width: 30px !important;
+  height: 30px !important;
+  object-fit: contain;
+}

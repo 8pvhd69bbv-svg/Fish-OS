@@ -11,6 +11,7 @@
 - Review diffs and staged paths before commits. Secret-pattern scans do not guarantee privacy.
 - Default for every Fish OS update: complete the checks, commit and push the update, and verify deployment unless the user explicitly says not to publish. This standing user instruction authorizes routine publication without asking again. Verify Pages source before pushing and live behavior afterward. Publish index.html and an identical versioned HTML archive; preserve earlier archives.
 - Keep documentation current and distinguish facts from assumptions.
+- Incoming is a queue for unused inputs. After using an item, move it into its appropriate permanent location: public application assets into assets/ or icons/; private records/research into Private Data; original design references and consumed handoffs into a dated Private Data/Received folder. Verify the destination bytes before clearing the source, retain a private receipt, and leave unprocessed items in Incoming. Never publish private inputs.
 - Preserve existing functions and estimates unless the user approves their removal. Keep recorded fishing distance separate from travel distance and labeled assumptions.
 - Identify requested changes by page reference and exact control name. Close tickets only on user acceptance; a privately checked review box is input for the next ledger update.
 - Keep completed-trip packing read-only; create independent named copies for future trips.

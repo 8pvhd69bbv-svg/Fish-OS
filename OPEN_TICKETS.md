@@ -14,7 +14,7 @@ Largest to smallest within each group. Accepted work remains current for three p
 | FISH-067 | Fly recipes linked to material availability | Large | Planned from user vision |
 | FISH-021 | Resource classification | Medium | PARTIAL |
 | FISH-024 | Persistent manually editable resource categories | Medium | IN PROGRESS |
-| FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | Supplied brown trout, rods and Wyatt artwork integrated; owner review pending |
+| FISH-033 | Improve/install consistent fish, rod, map icon pack | Medium | V1.074 supplied icon-sheet artwork throughout sidebar and brown trout favicon; owner review pending |
 | FISH-035 | Selectable section photos, photography portfolio and fly-tying photos | Medium | Photo selection implemented; V1.073 deletion checks local/cloud attachments; live photo test pending |
 | FISH-036 | Gear warranty wizard | Medium | NEW |
 | FISH-056 | Back navigation | Medium | Fixed newer-route Back history; regression checks pass; owner review pending |

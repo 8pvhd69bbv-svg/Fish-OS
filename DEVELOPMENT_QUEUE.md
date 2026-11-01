@@ -30,7 +30,7 @@ Updated 2026-11-01. This is an **ordered planning queue for ChatGPT development 
 | 13 | FISH-038 | PWA feasibility, installability and offline/data-safety design | **PLANNED** |
 | 14 | FISH-037 | Permission-controlled friend codes/sharing/messaging | **PLANNED** — security design required |
 | 15 | FISH-039 | Stillwater collection and growth | **PLANNED** |
-| 16 | — (queue-only task) | Add a Fish OS favicon and verify it displays in browser tabs | **QUEUED** — not implemented; deferred behind existing backend-first priorities |
+| 16 | — (queue-only task) | Add a Fish OS favicon and verify it displays in browser tabs | **IMPLEMENTED V1.074** — promoted by explicit user request; brown trout favicon and sidebar artwork; owner review pending |
 
 Other pending work stays in OPEN_TICKETS.md and can be promoted by user priority. The queue order does not change existing ticket status.
 

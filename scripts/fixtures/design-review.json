@@ -1,4 +1,5 @@
 {
+  "links": [{"title":"Synthetic river research with a long descriptive title","url":"https://example.com/research","category":"Research","notes":"Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: Synthetic review notes: "}],
   "trips": [
     {"id":"Synthetic river weekend","place":"Sample River","date":"2027-06-12","status":"Upcoming","people":["Test angler"],"country":"United States"},
     {"id":"Synthetic completed trip","place":"Sample River","date":"2026-06-10","status":"Completed","notes":"Synthetic trip log"}

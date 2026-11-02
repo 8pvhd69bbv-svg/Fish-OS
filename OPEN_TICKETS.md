@@ -194,3 +194,13 @@ Backend: four application tables retain RLS/ownership policies, private Storage 
 ## V1.075 owner-requested refinements
 
 Seven navigation, research, packing, map and icon refinements implemented and checked; awaiting owner acceptance. General packing records are preserved. FISH-033 remains awaiting review.
+
+FISH-014 V1.076: map research-tools decorator now uses shared dispatcher; four focused regressions pass. Remaining legacy renderer consolidation stays open.
+
+## November 1 queued requests
+
+| Ticket | Feature | Status |
+|---|---|---|
+| FISH-086 | Search, select and add different USGS stations/rivers to flow panels | QUEUED |
+| FISH-087 | Add Trip location search results cannot be selected | QUEUED — reproduction pending |
+| FISH-088 | Research tab under Resources in References | QUEUED |

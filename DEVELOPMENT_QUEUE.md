@@ -16,7 +16,7 @@ Updated 2026-11-01. This is an **ordered planning queue for ChatGPT development 
 | Priority | Ticket | Scope / next action | Queue state |
 |---|---|---|---|
 | 1 | FISH-030 | Live second-user auth, upload, RLS isolation and cross-device tests | **BLOCKED** — second test account/person needed; do not synthesize production proof |
-| 2 | FISH-014 | Incremental legacy renderer consolidation, preserving account/import/backup/trip behavior | **NEXT READY** — tackle smallest isolated wrapper group and regressions |
+| 2 | FISH-014 | Incremental legacy renderer consolidation, preserving account/import/backup/trip behavior | **IN PROGRESS** — V1.076 map-links decorator migrated to shared dispatcher; four regressions pass; remaining wrappers still pending |
 | 3 | FISH-005 | Verify alternate-host deployment and sign-in without disrupting production | **WAITING** — requires safe alternate-host/test authorization |
 | 4 | FISH-013 | Confirm persistence/isolation in live two-account test | **BLOCKED** — depends on FISH-030; existing synthetic checks reported |
 | 5 | FISH-015 | Review and obtain acceptance of master/revision/manifest parity evidence | **REVIEW** — implementation reported, acceptance pending |
@@ -33,6 +33,16 @@ Updated 2026-11-01. This is an **ordered planning queue for ChatGPT development 
 | 16 | — (queue-only task) | Add a Fish OS favicon and verify it displays in browser tabs | **IMPLEMENTED V1.074** — promoted by explicit user request; brown trout favicon and sidebar artwork; owner review pending |
 
 Other pending work stays in OPEN_TICKETS.md and can be promoted by user priority. The queue order does not change existing ticket status.
+
+## Newly requested — queued November 1, 2026
+
+These requests are queued, not yet implemented. Preserve this order when promoted after the active FISH-014 slice.
+
+| Order | Ticket | Request | State |
+|---|---|---|---|
+| 1 | FISH-086 | Let users search/select and add different USGS stations, locations and rivers to river-flow panels | QUEUED |
+| 2 | FISH-087 | Fix Add Trip location search: matching locations appear but cannot be selected | QUEUED — reproduce selection failure first |
+| 3 | FISH-088 | Move Research navigation to References, immediately below Resources | QUEUED |
 
 ## Task template
 

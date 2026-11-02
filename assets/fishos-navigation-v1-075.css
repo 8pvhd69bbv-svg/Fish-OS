@@ -1,0 +1,4 @@
+/* Render white artwork pixels transparently while retaining their original colors. */
+#side button.nav > .ico.nav-art74 { background: transparent; border-radius: 0; }
+#side .nav-sprite74, #side .nav-art74 > img { filter: url('#fishos-white-alpha75'); }
+

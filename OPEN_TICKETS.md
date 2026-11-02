@@ -190,3 +190,7 @@ Continue remaining work in this order: FISH-030 live test once a tester is avail
 Upload → Delete now checks local and freshly loaded cloud photo references, file ownership and account/client continuity. Attached photos must be removed from their section, fly or location before deletion. Both catalog handlers share the guard. Storage and catalog removal remain separate operations; cross-device changes cannot be made atomic by this client check.
 
 Backend: four application tables retain RLS/ownership policies, private Storage and master/revision triggers. Current snapshot and file manifest match their source. Added `fishos_files_user_id_idx` through migration `fishos_v1073_file_owner_index`; index verified valid/ready and missing-foreign-key-index advisory resolved. New index is initially reported unused; no measured speedup claimed. Leaked-password protection remains disabled. No private records or policies changed. No new owner acceptance was recorded; pending tickets remain open.
+
+## V1.075 owner-requested refinements
+
+Seven navigation, research, packing, map and icon refinements implemented and checked; awaiting owner acceptance. General packing records are preserved. FISH-033 remains awaiting review.

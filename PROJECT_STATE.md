@@ -3,11 +3,11 @@
 Last documentation update: 2026-11-01 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
 
 ## Current state
-- **Release:** V1.074 (navigation artwork update; ticket acceptance remains separate).
+- **Release:** V1.075 (navigation and maps update; ticket acceptance remains separate).
 - **GitHub:** https://github.com/8pvhd69bbv-svg/Fish-OS — default branch `main`.
 - **Live app:** https://8pvhd69bbv-svg.github.io/Fish-OS/
-- **Entry files:** `index.html` and `Fish_OS_V1.074.html`, documented as identical.
-- **Last reported tests:** 149 synthetic regressions passing, syntax/static-asset checks and signed-out sidebar browser check (see `DEVELOPMENT.md`).
+- **Entry files:** `index.html` and `Fish_OS_V1.075.html`, documented as identical.
+- **Last reported tests:** 154 synthetic regressions passing, syntax/static-asset checks and signed-out sidebar browser check (see `DEVELOPMENT.md`).
 - **Owner acceptance:** No additional tickets accepted in V1.074.
 
 ## Source of truth

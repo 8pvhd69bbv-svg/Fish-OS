@@ -1,9 +1,5 @@
-# Fish OS V1.074 — navigation artwork
+# Fish OS V1.075 — navigation and maps
 
-November 1, 2026 (Pacific). Requested brown trout favicon and supplied fishing icon sheet applied throughout the left sidebar. Existing routes, labels, custom icon overrides and data behavior are preserved. FISH-033 remains awaiting owner review.
+November 1, 2026 (Pacific). Invite instructions and Your Reference Tools now appear only in Owner Tools. FishOS AI is first in System for nonowners and follows Owner Tools for owners. Research source links use spaced flex layout. Packing opens New List without General working list; previous items remain intact with explicit named-copy recovery. All Leaflet views offer Streets/Satellite, with Esri World Imagery attribution and existing pins retained. Sidebar white pixels render transparent through an SVG filter; historical artwork is unchanged.
 
-The favicon is a self-contained SVG viewport over the original brown trout illustration. The unmodified embedded source makes it about 2.1 MB; sidebar crops share the existing PNG. New navigation assets leave historical release assets intact.
-
-Incoming is a queue for unused inputs. Consumed public artwork belongs in assets/icons; private originals and handoffs belong in dated Private Data/Received folders, with destination verification before source removal. Incoming was already empty; the supplied original remains in the October 25 received folder. This workflow is now recorded in AGENTS.md.
-
-Verification: synthetic regressions, script syntax, dependency and archive parity checks, and signed-out browser navigation. No production account or private-data changes. Actual iOS and live two-account testing remain outstanding.
+Verification: 154 synthetic tests pass, 74 scripts parse, static audit has no failures, matching HTML archive. Signed-out browser verified satellite selection/attribution with synthetic pins, System order, and colored icons on dark sidebar. Owner gating and packing recovery/locks checked synthetically. Real iOS and live two-account tests remain outstanding. No production data changes. Owner acceptance remains pending.

@@ -1,6 +1,6 @@
 # FISH OS — Development Queue
 
-Updated 2026-11-01. This is an **ordered planning queue for ChatGPT development sessions**, not an automatic background worker or a ChatGPT UI Queue control. Tickets and acceptance statuses remain authoritative in [OPEN_TICKETS.md](OPEN_TICKETS.md); project facts and guardrails live in [PROJECT_STATE.md](PROJECT_STATE.md).
+Updated 2026-11-02. This is an **ordered planning queue for ChatGPT development sessions**, not an automatic background worker or a ChatGPT UI Queue control. Tickets and acceptance statuses remain authoritative in [OPEN_TICKETS.md](OPEN_TICKETS.md); project facts and guardrails live in [PROJECT_STATE.md](PROJECT_STATE.md).
 
 ## Operating rules
 
@@ -36,13 +36,14 @@ Other pending work stays in OPEN_TICKETS.md and can be promoted by user priority
 
 ## Newly requested — queued November 1, 2026
 
-These requests are queued, not yet implemented. Preserve this order when promoted after the active FISH-014 slice.
+Promoted for V1.077 by the November 1 request to execute queued items. Preserve this order; implementation and acceptance are tracked separately.
 
 | Order | Ticket | Request | State |
 |---|---|---|---|
-| 1 | FISH-086 | Let users search/select and add different USGS stations, locations and rivers to river-flow panels | QUEUED |
-| 2 | FISH-087 | Fix Add Trip location search: matching locations appear but cannot be selected | QUEUED — reproduce selection failure first |
-| 3 | FISH-088 | Move Research navigation to References, immediately below Resources | QUEUED |
+| 1 | FISH-086 | Let users search/select and add different USGS stations, locations and rivers to river-flow panels | IMPLEMENTED V1.077 — awaiting owner review |
+| 2 | FISH-087 | Fix Add Trip location search: matching locations appear but cannot be selected | IMPLEMENTED V1.077 — awaiting owner review |
+| 3 | FISH-088 | Move Research navigation to References, immediately below Resources | IMPLEMENTED V1.077 — awaiting owner review |
+| 4 | FISH-089 | Global search result click does not open selected location/record | IMPLEMENTED V1.077 — awaiting owner review |
 
 ## Task template
 

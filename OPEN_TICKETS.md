@@ -201,6 +201,7 @@ FISH-014 V1.076: map research-tools decorator now uses shared dispatcher; four f
 
 | Ticket | Feature | Status |
 |---|---|---|
-| FISH-086 | Search, select and add different USGS stations/rivers to flow panels | QUEUED |
-| FISH-087 | Add Trip location search results cannot be selected | QUEUED — reproduction pending |
-| FISH-088 | Research tab under Resources in References | QUEUED |
+| FISH-086 | Search, select and add different USGS stations/rivers to flow panels | IMPLEMENTED V1.077 — awaiting owner review |
+| FISH-087 | Add Trip location search results cannot be selected | IMPLEMENTED V1.077 — awaiting owner review |
+| FISH-088 | Research tab under Resources in References | IMPLEMENTED V1.077 — awaiting owner review |
+| FISH-089 | Global search result click does not navigate to the selected location/record | IMPLEMENTED V1.077 — awaiting owner review |

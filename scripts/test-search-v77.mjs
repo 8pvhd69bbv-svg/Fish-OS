@@ -15,7 +15,7 @@ function setup(){
   const nodes=Object.fromEntries(['searchResults','nfPlace','nfLat','nfLon','tripLocResults'].map(id=>{const el=new Element();el.id=id;return [id,el]}));
   const listeners={},routes=[],requests=[],journal=[],fish=[];
   const c=vm.createContext({DATA:{locations:[{name:'Sample River',notes:'Sample water'}],flies:[{name:'Sample Fly'}],trips:[{id:'Sample Trip'}],journal:[{title:'Sample Journal'}],links:[{title:'Sample hidden link'}],master_note:'Sample general note'},state:{page:'locations',profile:{userId:'synthetic'}},document:{readyState:'loading',getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener:(type,fn)=>listeners[type]=fn},render(){},go:page=>routes.push(page),fetch:url=>new Promise((resolve,reject)=>requests.push({url,resolve,reject})),fishosEditors68:{editJournal:i=>journal.push(i)},fishos41FishEdit:i=>fish.push(i)});c.window=c;
-  vm.runInContext(source('fishos-review-v1-069.js'),c);vm.runInContext(source('fishos-search-v1-077.js'),c);
+  vm.runInContext(source('fishos-review-v1-069.js'),c);vm.runInContext(source('fishos-search-v1-078.js'),c);
   const reply=(index,rows)=>requests[index].resolve({ok:true,json:async()=>rows});
   return {c,nodes,listeners,routes,requests,reply,journal,fish};
 }
@@ -67,4 +67,11 @@ test('equal truncated result labels retain distinct journal identities',()=>{
   const s=setup(),prefix='A'.repeat(100);s.c.DATA.journal=[{title:prefix+' North'},{title:prefix+' South'}];s.c.search(prefix);
   assert.equal(s.nodes.searchResults.children.length,2);assert.equal(s.nodes.searchResults.children[0].children[1].textContent,s.nodes.searchResults.children[1].children[1].textContent);
   s.nodes.searchResults.children.forEach(b=>b.click());assert.deepEqual(s.journal,[0,1]);
+});
+
+test('private destination search uses country name and opens its country profile',()=>{
+ const s=setup();s.c.DATA.destination_notes=[{country:'Sample Islands (North)',notes:'Rare sample research',rating:'Good'}];
+ s.c.search('Rare sample research');const result=s.nodes.searchResults.children[0];
+ assert.equal(result.children[0].textContent,'Destination');assert.equal(result.children[1].textContent,'Sample Islands (North)');
+ result.click();assert.deepEqual(s.routes,['destination-sample-islands-north']);
 });

@@ -51,3 +51,12 @@ test('a stale result cannot update a detached panel, another route, a new search
   assert.equal(ctx.DATA.field_settings.flow_station_catalog,undefined);
   assert.equal(ctx.saves,0);
 });
+
+test('adding to the shared station catalog preserves all selected panels',()=>{
+ const {ctx,flows,owner}=fixture(),before=Array.from(flows.settings());
+ flows.addStation({id:'01234567',name:'Shared river'},null,owner);
+ assert.deepEqual(Array.from(flows.settings()),before);
+ assert.ok(flows.catalog().some(x=>x.id==='01234567'));
+ assert.equal(ctx.saves,1);
+ assert.ok(!source.includes('Show in panel'));
+});

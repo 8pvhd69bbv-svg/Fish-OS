@@ -205,3 +205,20 @@ FISH-014 V1.076: map research-tools decorator now uses shared dispatcher; four f
 | FISH-087 | Add Trip location search results cannot be selected | IMPLEMENTED V1.077 — awaiting owner review |
 | FISH-088 | Research tab under Resources in References | IMPLEMENTED V1.077 — awaiting owner review |
 | FISH-089 | Global search result click does not navigate to the selected location/record | IMPLEMENTED V1.077 — awaiting owner review |
+
+## November 7 refinements — V1.079, awaiting owner review
+
+| Request | Page / control | Result |
+|---|---|---|
+| 1, 5, 6 | Trips / Journal | Location groups, count/A–Z sorting, Delete and whole-card navigation |
+| 2 | Location / Fly / Knot thumbnails | Drag and slider framing with saved aspect ratio |
+| 3, 4 | Dashboard / USGS | Shared station catalogue, no panel picker; workspace tools always visible |
+| 7 | Maps | Removed duplicate yellow coordinate notice |
+| 8 | Gear Health | Cards open inventory item; Assess retained |
+| 9, 10, 14 | Species Tracker | Unified manager, remove/restore, canonical salmon cards with preserved notes, renamed UI |
+| 11 | Sidebar | Compact vector icons on desktop; mobile artwork retained |
+| 12 | Research | Removed Private uploaded research panel; files retained |
+| 13 | Knots | Editable information, add/remove saved records and attach photos |
+| 99 | Agent workflow | Three focused subagents plus orchestrator, separated file ownership and independent review |
+
+No tickets closed without owner acceptance. Salmon consolidation is a display projection retaining original private source records. Live photo persistence and actual iOS verification remain outstanding.

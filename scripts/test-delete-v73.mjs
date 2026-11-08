@@ -18,6 +18,8 @@ function setup(options={}){
 }
 for(const legacy of [false,true])test(`${legacy?'legacy':'current'} handler deletes an unlinked owned file and refreshes`,async()=>{const x=setup({legacy});assert.equal(await x.run(),true);assert.deepEqual(x.calls,['catalog','records','confirm','storage','delete','refresh']);assert.ok(x.filters.some(([table,k,v])=>table==='fishos_files'&&k==='user_id'&&v==='alice'));assert.deepEqual(x.alerts,[])});
 const references=[
+ ['knot thumbnail',{knot_notes:[{name:'Test knot',thumbnail_file_id:'photo'}]},'REMOVE THUMBNAIL'],
+ ['knot gallery',{knot_notes:[{name:'Test knot',photo_file_ids:['photo']}]},'REMOVE PHOTO'],
  ['section photo',{field_settings:{section_photos:{journal:{file_id:'photo'}}}},'REMOVE SECTION PHOTO'],
  ['fly thumbnail',{flies:[{name:'Test fly',thumbnail_file_id:'photo'}]},'REMOVE THUMBNAIL'],
  ['fly gallery',{flies:[{name:'Test fly',photo_file_ids:['photo']}]},'REMOVE PHOTO'],

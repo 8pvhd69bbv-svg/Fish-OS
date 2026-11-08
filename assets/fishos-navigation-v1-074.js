@@ -20,7 +20,7 @@
     'Map': ['salmon', 'map'], 'Maps': ['salmon', 'map'],
     'Calendar': ['reel', 'map'], 'Tracking': ['net', 'gear'],
     'Gear Health': ['vest', 'gear'], 'Fish Tracker': ['brown', 'fish'],
-    'Fish List': ['brown', 'fish'], 'Fly Tying': ['mayfly', 'fly'],
+    'Species tracker': ['brown', 'fish'], 'Species Tracker': ['brown', 'fish'], 'Fish List': ['brown', 'fish'], 'Fly Tying': ['mayfly', 'fly'],
     'Fly Pattern Index': ['dry', 'fly'], 'Fly Patterns': ['dry', 'fly'],
     'Gear': ['rod', 'gear'], 'Inventory': ['box', 'box'],
     'Research': ['nymph', 'book'], 'Destinations': ['salmon', 'globe'],
@@ -51,6 +51,11 @@
         button.prepend(slot);
       }
       slot.classList.add('nav-art74');
+      const desktop = {home:'compass',trip:'backpack',fish:'fish',map:'map',gear:'rod',fly:'fly',box:'backpack',book:'compass',globe:'map'};
+      const label = button.textContent.trim();
+      const icon = label === 'Calendar' ? 'calendar' : /Tracking|Recap/.test(label) ? 'trophy' : desktop[key] || 'compass';
+      slot.classList.toggle('nav-vector79', !custom);
+      slot.style.setProperty('--nav-vector79', 'url("../icons/' + icon + '.svg")');
       slot.setAttribute('aria-hidden', 'true');
       if (custom) {
         if (slot.children.length !== 1 || slot.firstElementChild?.getAttribute('src') !== custom) {

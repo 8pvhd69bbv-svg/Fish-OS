@@ -1,0 +1,13 @@
+/* Crisp, consistently sized desktop navigation; keep the mobile artwork. */
+@media (min-width: 761px) {
+  #side button.nav > .ico.nav-vector79 {
+    width: 22px; height: 22px; min-width: 22px; flex-basis: 22px;
+    background: var(--nav-vector79) center / 21px 21px no-repeat;
+    filter: brightness(1.6);
+  }
+  #side .nav-vector79 > .nav-sprite74 { display: none; }
+  #side button.nav { gap: 10px; min-height: 36px; }
+}
+[data-ui68-row] { cursor: pointer; }
+[data-ui68-row]:hover { border-color: var(--accent, #79c900); }
+[data-ui68-row]:focus-visible { outline: 2px solid #79c900; outline-offset: 2px; }

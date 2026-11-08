@@ -1,13 +1,13 @@
 # FISH OS — Project State
 
-Last documentation update: 2026-11-05 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
+Last documentation update: 2026-11-07 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
 
 ## Current state
-- **Release:** V1.078 (private atlas destinations; ticket acceptance remains separate).
+- **Release:** V1.079 (workspace refinements; ticket acceptance remains separate).
 - **GitHub:** https://github.com/8pvhd69bbv-svg/Fish-OS — default branch `main`.
 - **Live app:** https://8pvhd69bbv-svg.github.io/Fish-OS/
-- **Entry files:** `index.html` and `Fish_OS_V1.078.html`, documented as identical.
-- **Last reported tests:** 176 synthetic regressions passing, syntax/static-asset checks and a signed-out browser check of adding, finding and opening a private destination (see `DEVELOPMENT.md`).
+- **Entry files:** `index.html` and `Fish_OS_V1.079.html`, documented as identical.
+- **Last reported tests:** 193 synthetic tests passing, 78 script syntax checks, dependency audit and signed-out desktop/mobile browser checks (see `DEVELOPMENT.md`).
 - **Owner acceptance:** No additional tickets accepted in V1.074.
 
 ## Source of truth

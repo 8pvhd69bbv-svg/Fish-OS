@@ -9,8 +9,7 @@ function hub(){
 const doors=[['DESTINATIONS','destinations'],['RESOURCES','resources'],['PODCAST NOTES','podcasts'],['LOCATIONS','locations'],['FLY PATTERNS','fly-patterns'],['MAPS','maps']];
 return shell('Research','Field research, destinations, resources and reference library.',
  '<div class="grid g3">'+doors.map(x=>'<div class="door" data-v60research-page="'+E(x[1])+'" role="button" tabindex="0"><h3>'+x[0]+'</h3><p>Open research collection</p></div>').join('')+'</div>'+
- '<div class="grid g2" style="margin-top:14px">'+links().map(x=>'<div class="card"><h3>'+E(x.title||x.name||x.url||'Resource')+'</h3><p class="muted">'+E([x.notes,x.tags].filter(Boolean).join(' · '))+'</p>'+(typeof x.url==='string'&&/^https:\/\//i.test(x.url)?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+E(x.url)+'">OPEN SOURCE</a>':'')+'</div>').join('')+'</div>'+
- '<div id="v60research-files" class="card" style="margin-top:14px"><h3>Private uploaded research</h3><p class="muted" id="v60research-status">Loading items saved through Uploads…</p><div id="v60research-list"></div></div>');
+ '<div class="grid g2" style="margin-top:14px">'+links().map(x=>'<div class="card"><h3>'+E(x.title||x.name||x.url||'Resource')+'</h3><p class="muted">'+E([x.notes,x.tags].filter(Boolean).join(' · '))+'</p>'+(typeof x.url==='string'&&/^https:\/\//i.test(x.url)?'<a class="btn" target="_blank" rel="noopener noreferrer" href="'+E(x.url)+'">OPEN SOURCE</a>':'')+'</div>').join('')+'</div>');
 }
 function wire(){
 document.querySelectorAll('#main [data-v60research-page]').forEach(el=>{const action=()=>go(el.dataset.v60researchPage);el.onclick=action;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();action()}}});
@@ -59,7 +58,7 @@ window.render=function(...args){
  if(state.page==='research'){
   if(typeof side==='function')side();if(typeof mobile==='function')mobile();if(typeof topAuth==='function')topAuth();
   const root=document.getElementById('main');if(root)root.innerHTML=hub();
-  wire();fetchResearch(++token);return;
+  wire();++token;return;
  }
  const result=prior.apply(this,args);
  setUploadCategory();return result;

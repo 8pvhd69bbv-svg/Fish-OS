@@ -94,17 +94,17 @@ function parseStations(json){
 function addStation(station,panel,owner){
  if(owner!==identity())throw Error('Account changed. Search again.');
  if(state.profile?.loggedIn&&!state.privateHydrated)throw Error('Wait for your account to finish loading.');
- if(!station||!/^\d{8,15}$/.test(station.id)||typeof station.name!=='string'||!Number.isInteger(panel)||panel<0||panel>2)throw Error('Choose a station and panel.');
+ if(!station||!/^\d{8,15}$/.test(station.id)||typeof station.name!=='string'||(panel!=null&&(!Number.isInteger(panel)||panel<0||panel>2)))throw Error('Choose a valid station.');
  const next=settings();DATA.field_settings=DATA.field_settings||{};
  const existing=Array.isArray(DATA.field_settings.flow_station_catalog)?DATA.field_settings.flow_station_catalog:[];
  DATA.field_settings.flow_station_catalog=[...new Map([...existing.filter(x=>x&&/^\d{8,15}$/.test(x.id)),{id:station.id,name:station.name}].map(x=>[x.id,x])).values()];
- next[panel]=station.id;saveSelection(next);
+ if(panel!=null)next[panel]=station.id;saveSelection(next);
 }
 function requestCurrent(token,owner,box){return token===searchSerial&&owner===identity()&&state.page==='home'&&box.isConnected}
 function mountSearch(box){
  if(box.querySelector('#f77-station-search'))return;
  const section=document.createElement('section');section.id='f77-station-search';section.style.marginTop='14px';
- section.innerHTML='<h3>ADD A RIVER / USGS STATION</h3><form id="f77-search-form" class="toolbar"><label>River, place or station number <input id="f77-search-query" maxlength="120" placeholder="Nestucca or 14303600" required></label><label>Show in panel <select id="f77-panel"><option value="0">1 — Left</option><option value="1">2 — Middle</option><option value="2">3 — Right</option></select></label><button class="btn" type="submit">SEARCH USGS</button></form><p class="small muted">Search USGS by name or number, then add a station to your chosen panel. Some stations have no recent discharge data. Signed-out selections are temporary.</p><p id="f77-search-status" role="status" aria-live="polite"></p><div id="f77-search-results" class="list"></div>';
+ section.innerHTML='<h3>ADD A RIVER / USGS STATION</h3><form id="f77-search-form" class="toolbar"><label>River, place or station number <input id="f77-search-query" maxlength="120" placeholder="Nestucca or 14303600" required></label><button class="btn" type="submit">SEARCH USGS</button></form><p class="small muted">Search USGS by name or number, then add a station to every panel’s dropdown. Some stations have no recent discharge data. Signed-out selections are temporary.</p><p id="f77-search-status" role="status" aria-live="polite"></p><div id="f77-search-results" class="list"></div>';
  box.append(section);section.querySelector('form').onsubmit=async event=>{
  event.preventDefault();searchController?.abort();const token=++searchSerial,owner=identity(),status=section.querySelector('#f77-search-status'),results=section.querySelector('#f77-search-results'),button=section.querySelector('button[type="submit"]');
  results.replaceChildren();let timeout;const current=()=>requestCurrent(token,owner,section);
@@ -113,9 +113,9 @@ function mountSearch(box){
  const controller=new AbortController();searchController=controller;timeout=setTimeout(()=>controller.abort(),15000);
  const response=await fetch(url,{signal:controller.signal});if(!current())return;if(!response.ok)throw Error('USGS returned HTTP '+response.status+'. Please retry.');
  const json=await response.json();if(!current())return;const rows=parseStations(json);
- status.textContent=rows.length?'Found '+rows.length+' stations'+(rows.length>=30?' (first 30; refine your search)':'')+'. Choose ADD TO PANEL.':'No matching USGS stations. Try a river name, nearby town or full station number.';
- rows.forEach(station=>{const row=document.createElement('div');row.className='card';row.innerHTML='<b>'+E(station.name)+'</b><p class="small">USGS '+E(station.id)+' · '+E([station.state,station.type].filter(Boolean).join(' · '))+'</p><button type="button" class="btn">ADD TO PANEL</button>';row.querySelector('button').onclick=()=>{
- if(!current())return;try{const panel=Number(section.querySelector('#f77-panel').value);addStation(station,panel,owner);const grid=box.querySelector('#f59gaugegrid');delete grid.dataset.initialized;controls();status.textContent='Added '+station.name+' to panel '+(panel+1)+'.';}catch(error){status.textContent=error.message;}};results.append(row);});
+ status.textContent=rows.length?'Found '+rows.length+' stations'+(rows.length>=30?' (first 30; refine your search)':'')+'. Choose ADD STATION.':'No matching USGS stations. Try a river name, nearby town or full station number.';
+ rows.forEach(station=>{const row=document.createElement('div');row.className='card';row.innerHTML='<b>'+E(station.name)+'</b><p class="small">USGS '+E(station.id)+' · '+E([station.state,station.type].filter(Boolean).join(' · '))+'</p><button type="button" class="btn">ADD STATION</button>';row.querySelector('button').onclick=()=>{
+ if(!current())return;try{addStation(station,null,owner);const grid=box.querySelector('#f59gaugegrid');delete grid.dataset.initialized;controls();status.textContent='Added '+station.name+' to every panel’s station list.';}catch(error){status.textContent=error.message;}};results.append(row);});
  }catch(error){if(current())status.textContent=error.name==='AbortError'?'USGS search timed out. Please retry.':error.message||'USGS search unavailable. Please retry.';}
  finally{clearTimeout(timeout);if(current())button.disabled=false;}
  };

@@ -215,3 +215,15 @@ Rod, reel and line class selectors. User accepted the current implementation; re
 ## Routine release verification
 
 FISH-012 (iOS session, current release and cloud state) left the issue ledger at user direction in V1.069. It is recurring release practice, not a completed fix. Check responsive layout, release identity and cloud/session state each release; report actual iOS and live-account verification limits.
+
+## Archived in V1.0795
+
+FISH-032 and FISH-058 were owner-accepted in V1.071, with archive-after V1.074. This overdue ledger cleanup preserves their acceptance and descriptions.
+
+### FISH-032 — Consolidate HTML release backups
+
+Owner clarified scope: retain current release, 10 previous HTML copies and oldest HTML release. Other recovery snapshots remain private. Verified during V1.071.
+
+### FISH-058 — Add/edit gear and pack health integration
+
+Add/edit gear and pack health integration. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.

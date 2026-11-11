@@ -1,13 +1,13 @@
 # FISH OS — Project State
 
-Last documentation update: 2026-11-07 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
+Last documentation update: 2026-11-10 (Pacific time). This is the first-read handoff for new development chats. See DEVELOPMENT.md for current verification and limits.
 
 ## Current state
-- **Release:** V1.079 (workspace refinements; ticket acceptance remains separate).
+- **Release:** V1.0795 (workspace refinements; ticket acceptance remains separate).
 - **GitHub:** https://github.com/8pvhd69bbv-svg/Fish-OS — default branch `main`.
 - **Live app:** https://8pvhd69bbv-svg.github.io/Fish-OS/
-- **Entry files:** `index.html` and `Fish_OS_V1.079.html`, documented as identical.
-- **Last reported tests:** 193 synthetic tests passing, 78 script syntax checks, dependency audit and signed-out desktop/mobile browser checks (see `DEVELOPMENT.md`).
+- **Entry files:** `index.html` and `Fish_OS_V1.0795.html`, documented as identical.
+- **Last reported tests:** 203 synthetic tests passing, 77 script syntax checks, dependency audit and signed-out desktop/mobile browser checks (see `DEVELOPMENT.md`).
 - **Owner acceptance:** No additional tickets accepted in V1.074.
 
 ## Source of truth
@@ -22,18 +22,18 @@ Last documentation update: 2026-11-07 (Pacific time). This is the first-read han
 
 ## Architecture and design
 HTML/CSS/JavaScript front end on GitHub Pages with Leaflet mapping and Supabase Auth, database and private Storage. Current shared UI assets documented in the repository:
-- `assets/fishos-design-v1-0725.js`
+- `assets/fishos-design-v1-0795.js`
 - `assets/fishos-design-models-v1-068.js`
 - `assets/fishos-ui-v1-068.css`
 
 The Oct 25 backend review verified four application tables with RLS/ownership policies, private media Storage, master/revision triggers and matching current snapshots. **Reinspect the actual schema, policies and data before backend changes.** Added and verified the file-owner index; no private records or ownership policies changed.
 
 ## Current ticket snapshot (not a substitute for OPEN_TICKETS.md)
-**Accepted:** FISH-058 (gear/pack health) and FISH-032 (release backups), accepted V1.071; retain through V1.074 per established ticket policy.
+**Accepted:** FISH-058 (gear/pack health) and FISH-032 (release backups), accepted V1.071; now preserved in TICKET_HISTORY.md after the V1.074 retention boundary.
 
 **Requires attention:**
 - FISH-030: second-account sign-in, upload and isolation test; requires tester.
-- FISH-014: incremental legacy renderer consolidation (26 inherited wrappers remain in the current static audit).
+- FISH-014: incremental legacy renderer consolidation (25 inherited wrappers remain in the current static audit).
 - FISH-005: alternate-host authentication verification.
 - FISH-009: verified private research integration (blocked pending source verification).
 - FISH-034: integrated media library.

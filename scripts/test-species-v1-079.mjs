@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 const hooks=[];
 const context={window:{fishosRender725:{register:x=>hooks.push(x)}},DATA:{field_settings:{}},state:{fishCustom:[],fishCaught:[]},FISH_CATALOG:{Salmon:['Chum Salmon','Dog Salmon','Chinook Salmon','King Salmon','Coho Salmon','Silver Salmon','Pink Salmon','Humpback Salmon','Sockeye Salmon','Kokanee'],Trout:['Rainbow Trout','Steelhead']},FISH_SCI:{},document:{querySelectorAll:()=>[]},fishStorage:{setItem(){},getItem(){return null}},persistData(){},closeModal(){},render(){},alert(){},console};
-vm.createContext(context);vm.runInContext(fs.readFileSync(new URL('../assets/fishos-species-v1-079.js',import.meta.url),'utf8'),context);
+vm.createContext(context);vm.runInContext(fs.readFileSync(new URL('../assets/fishos-species-v1-0795.js',import.meta.url),'utf8'),context);
 const api=context.window.fishosSpecies79;
 assert.equal(api.canonical(' DOG SALMON '),'Chum Salmon');
 const custom=[{name:'Dog Salmon',notes:'Keep this card',photo_file_ids:['synthetic-photo']},{name:'Chum Salmon',scientific:'Oncorhynchus keta',notes:'Other notes'}];
@@ -50,3 +50,36 @@ hosts['species79-notes']=element('div');hosts['species79-actions']=element('div'
 assert.ok(hosts['species79-notes'].querySelectorAll('textarea').some(a=>a.value==='Case-preserved note'));
 context.state.fishCaught=['synthetic fish'];context.DATA.field_settings.species_checklist_locked=false;api.catchSet('Synthetic Fish',false);assert.equal(context.state.fishCaught.length,0);
 console.log('Case-insensitive namecard lookup and caught clearing pass');
+
+// Exercise Rename through the real manager button, including grouped alias state.
+function renameFromManager(oldName,newName){
+ hosts['species79-add']=element('div');hosts['species79-list']=element('div');
+ context.prompt=()=>newName;api.manage();
+ const line=hosts['species79-list'].children.find(row=>row.children[0].textContent===oldName);
+ assert.ok(line,'Manager displays the source species');
+ line.children.find(b=>b.textContent==='RENAME CUSTOM').onclick();
+}
+context.state.fishCustom=[{name:'Synthetic Fish',notes:'Original metadata'}];
+context.state.fishCaught=['SYNTHETIC FISH'];
+context.DATA.field_settings.species_hidden=['synthetic fish'];
+context.DATA.fish=[{id:'rename-catch',species:'SYNTHETIC FISH',notes:'Synthetic Fish caught'}];
+context.DATA.legacy_v21.fish_species_notes={'synthetic fish':'Preserve differently cased notes'};
+renameFromManager('Synthetic Fish','Renamed Fish');
+assert.equal(api.rows().some(r=>r.name==='Renamed Fish'),false,'Rename preserves hidden status');
+assert.equal(api.rows(true).find(r=>r.name==='Renamed Fish').caught,true,'Rename preserves case-insensitive caught status');
+assert.equal(context.state.fishCustom[0].notes,'Original metadata');
+assert.equal(context.state.fishCustom[0].previous_names[0],'Synthetic Fish');
+assert.equal(context.DATA.fish[0].species,'SYNTHETIC FISH','Original catch evidence retained');
+api.setHidden('Renamed Fish',false);
+assert.equal(api.rows().find(r=>r.name==='Renamed Fish').caught,true,'Explicit restore retains caught status');
+hosts['species79-notes']=element('div');hosts['species79-actions']=element('div');api.detail('Renamed Fish');
+assert.ok(hosts['species79-notes'].querySelectorAll('textarea').some(a=>a.value==='Preserve differently cased notes'),'Prior-name notes remain accessible');
+context.state.fishCustom=[{name:'Dog Salmon'}];context.state.fishCaught=['CHUM SALMON'];
+context.DATA.field_settings.species_hidden=['chum salmon'];
+renameFromManager('Chum Salmon','Synthetic Salmon');
+for(const name of ['Chum Salmon','Synthetic Salmon']){
+ assert.equal(api.rows(true).find(r=>r.name===name).caught,true,'Both retained catalog and renamed custom retain caught state');
+ assert.equal(api.rows().some(r=>r.name===name),false,'Rename does not restore either hidden alias projection');
+}
+assert.ok(context.state.fishCaught.includes('CHUM SALMON'),'Raw caught alias survives rename');
+console.log('Manager rename preserves hidden/caught state and prior-name notes');

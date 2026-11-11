@@ -43,12 +43,7 @@ Largest to smallest within each group. Accepted work remains current for three p
 
 ## Recently accepted
 
-| Ticket | Feature | Size | Status |
-|---|---|---|---|
-| FISH-058 | Add/edit gear and pack health integration | Medium | CLOSED — owner accepted V1.071; archive after V1.074 |
-| FISH-032 | Consolidate HTML release backups | Medium | CLOSED — verified oldest + 10 previous copies; V1.071 accepted, archive after V1.074 |
-
-Accepted V1.071; retain through V1.074. FISH-060 is routine maintenance, not a ticket.
+FISH-032 and FISH-058, accepted in V1.071 and retained through V1.074, are now preserved in [ticket history](TICKET_HISTORY.md). No additional tickets have been accepted.
 
 ## Ticket descriptions
 
@@ -104,9 +99,6 @@ Streamlined FishOS-branded login. Preserve current behavior while completing thi
 
 Invite and test second user safely. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
-### FISH-032 — Consolidate HTML release backups
-
-Owner clarified scope: retain current release, 10 previous HTML copies and oldest HTML release. Other recovery snapshots remain private. Verified during V1.071.
 
 ### FISH-033 — Improve/install consistent fish, rod, map icon pack
 
@@ -140,9 +132,6 @@ The current Stillwater game is FISH-039. V1.0725 applies the supplied artwork di
 
 Back navigation. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
-### FISH-058 — Add/edit gear and pack health integration
-
-Add/edit gear and pack health integration. Preserve current behavior while completing this feature. Verify the affected page and cloud persistence before marking it accepted.
 
 ### FISH-063 — Journal-linked editable catches
 
@@ -171,7 +160,7 @@ The prior local candidate reused FISH-068–073. Those IDs remain assigned to th
 | FISH-084 | Water Profile, Year Recap and Pre-trip Check | Medium | Implemented; Year Recap naming corrected in V1.0725; awaiting acceptance |
 | FISH-085 | Cancel backup exports across account changes | Medium | Implemented; delayed-query regression tests pass |
 
-FISH-014 audit: removed conflicting cosmetic layers and superseded UI candidate; established one current design renderer and stylesheet. Current/historical static dependencies have no missing or unreferenced assets. Twenty-five inherited inline renderer wrappers remain; four designed pages now bypass that chain. Further consolidation must preserve existing account/import/backup/trip behavior through incremental tests.
+FISH-014 audit: removed conflicting cosmetic layers and superseded UI candidate; established one current design renderer and stylesheet. Current/historical static dependencies have no missing or unreferenced assets. The current inline renderer-wrapper count is reported in DEVELOPMENT.md; inherited wrappers remain; four designed pages now bypass that chain. Further consolidation must preserve existing account/import/backup/trip behavior through incremental tests.
 
 ## Release practice
 
@@ -222,3 +211,7 @@ FISH-014 V1.076: map research-tools decorator now uses shared dispatcher; four f
 | 99 | Agent workflow | Three focused subagents plus orchestrator, separated file ownership and independent review |
 
 No tickets closed without owner acceptance. Salmon consolidation is a display projection retaining original private source records. Live photo persistence and actual iOS verification remain outstanding.
+
+## V1.0795 follow-up — November 10
+
+Species Tracker rename now preserves case-insensitive caught references, notes and removal state. FISH-014 removes the duplicate release-identity wrapper and retains shared-dispatcher marking, including delayed startup. Both remain awaiting owner acceptance. The in-app ticket list now includes FISH-086–089; previously accepted FISH-032/058 move to history without changing their acceptance. Live photo persistence, actual iOS and second-account checks remain unverified.

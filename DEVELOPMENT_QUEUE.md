@@ -1,6 +1,6 @@
 # FISH OS — Development Queue
 
-Updated 2026-11-02. This is an **ordered planning queue for ChatGPT development sessions**, not an automatic background worker or a ChatGPT UI Queue control. Tickets and acceptance statuses remain authoritative in [OPEN_TICKETS.md](OPEN_TICKETS.md); project facts and guardrails live in [PROJECT_STATE.md](PROJECT_STATE.md).
+Updated 2026-11-07. This is an **ordered planning queue for ChatGPT development sessions**, not an automatic background worker or a ChatGPT UI Queue control. Tickets and acceptance statuses remain authoritative in [OPEN_TICKETS.md](OPEN_TICKETS.md); project facts and guardrails live in [PROJECT_STATE.md](PROJECT_STATE.md).
 
 ## Operating rules
 
@@ -16,7 +16,7 @@ Updated 2026-11-02. This is an **ordered planning queue for ChatGPT development 
 | Priority | Ticket | Scope / next action | Queue state |
 |---|---|---|---|
 | 1 | FISH-030 | Live second-user auth, upload, RLS isolation and cross-device tests | **BLOCKED** — second test account/person needed; do not synthesize production proof |
-| 2 | FISH-014 | Incremental legacy renderer consolidation, preserving account/import/backup/trip behavior | **IN PROGRESS** — V1.076 map-links decorator migrated to shared dispatcher; four regressions pass; remaining wrappers still pending |
+| 2 | FISH-014 | Incremental legacy renderer consolidation, preserving account/import/backup/trip behavior | **IN PROGRESS** — V1.0795 removes duplicate release-identity wrapper; shared-dispatcher startup and route regressions pass; remaining wrappers still pending |
 | 3 | FISH-005 | Verify alternate-host deployment and sign-in without disrupting production | **WAITING** — requires safe alternate-host/test authorization |
 | 4 | FISH-013 | Confirm persistence/isolation in live two-account test | **BLOCKED** — depends on FISH-030; existing synthetic checks reported |
 | 5 | FISH-015 | Review and obtain acceptance of master/revision/manifest parity evidence | **REVIEW** — implementation reported, acceptance pending |
@@ -69,3 +69,5 @@ Promoted for V1.077 by the November 1 request to execute queued items. Preserve 
 
 - 2026-11-01: Queued favicon work at priority 16; not implemented. Existing backend-first priorities and ticket statuses preserved. No application code changed.
 - 2026-11-01: Created ChatGPT-first development queue. Prioritized backend and data integrity; marked required human/live verification as blocked or awaiting review. No application code, live data, or acceptance states changed.
+
+- 2026-11-07: Audited V1.079 against the prior request; fixed Species Tracker rename preservation gaps and continued FISH-014. Updated in-app tickets and overdue accepted-ticket history. Live photo/iOS and tester-dependent work remains blocked; no owner acceptance inferred.
